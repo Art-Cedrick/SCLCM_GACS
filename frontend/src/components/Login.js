@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";  // Import Axios
+import axios from "axios"; // Import Axios
 import {
   Button,
   FormControl,
@@ -17,7 +17,7 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
@@ -33,14 +33,13 @@ function CustomEmailField({ email, setEmail }) {
       fullWidth
       value={email}
       onChange={(e) => setEmail(e.target.value)}
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <AccountCircle fontSize="inherit" />
-          </InputAdornment>
-        ),
+      SlotProps={{
+        startAdornment: <InputAdornment position="start"></InputAdornment>,
       }}
       variant="outlined"
+      InputLabelProps={{
+        required: false, // Remove the asterisk by setting to false
+      }}
     />
   );
 }
@@ -134,7 +133,7 @@ function CustomSignInForm() {
       if (response.data.role === "admin") {
         window.location.href = "/admin-dashboard"; // Example redirect
       } else {
-        window.location.href = "/user-dashboard";  // Example redirect
+        window.location.href = "/user-dashboard"; // Example redirect
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -145,7 +144,7 @@ function CustomSignInForm() {
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit}  // Use handleSubmit here
+      onSubmit={handleSubmit} // Use handleSubmit here
       sx={{
         display: "flex",
         flexDirection: "column",
