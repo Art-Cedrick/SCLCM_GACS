@@ -24,10 +24,6 @@ class LoginView(APIView):
         else:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
-def home(request):
-    return HttpResponse('This is the Home Page')
-
-
 class ProjectViewset(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     queryset = Project.objects.all()

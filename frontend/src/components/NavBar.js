@@ -52,7 +52,7 @@ export default function NavBar(props) {
       <Box sx={{ overflow: "auto" }}>
         <List>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/" selected={"/" === path}>
+            <ListItemButton component={Link} to="/dashboard" selected={"/dashboard" === path}>
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
