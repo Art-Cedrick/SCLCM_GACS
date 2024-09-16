@@ -135,7 +135,7 @@ export default function NavBar(props) {
           </IconButton>
 
           <Typography variant="h6" noWrap component="div">
-            Our Application
+            Student Center for Life and Career Management
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
