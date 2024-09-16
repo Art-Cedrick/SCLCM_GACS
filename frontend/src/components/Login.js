@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";  // Import Axios
 import {
   Button,
   FormControl,
@@ -13,16 +14,14 @@ import {
   Link,
   Container,
   Box,
-  useTheme,
-  Divider, // Import Divider
-  Typography, // Import Typography
+  Divider,
+  Typography,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { AppProvider } from "@toolpad/core";
 
-function CustomEmailField() {
+function CustomEmailField({ email, setEmail }) {
   return (
     <TextField
       id="input-with-icon-textfield"
@@ -32,6 +31,8 @@ function CustomEmailField() {
       size="small"
       required
       fullWidth
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
@@ -44,10 +45,10 @@ function CustomEmailField() {
   );
 }
 
-function CustomPasswordField() {
-  const [showPassword, setShowPassword] = React.useState(false);
+function CustomPasswordField({ password, setPassword }) {
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleClickShowPassword = () => setShowPassword(prev => !prev);
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -60,7 +61,9 @@ function CustomPasswordField() {
         id="outlined-adornment-password"
         type={showPassword ? "text" : "password"}
         name="password"
-        autoComplete="new-password" // Disable autofill for this field
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        autoComplete="new-password"
         endAdornment={
           <InputAdornment position="end">
             <IconButton
@@ -105,26 +108,51 @@ function ForgotPasswordLink() {
 }
 
 function CustomSignInForm() {
-  const [rememberMe, setRememberMe] = React.useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
 
   const handleRememberMeChange = (event) => {
     setRememberMe(event.target.checked);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Make the Axios POST request to your backend login API
+    try {
+      const response = await axios.post("http://localhost:8000/login/", {
+        username: email,
+        password: password,
+      });
+
+      // Store the token and role in local storage
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("role", response.data.role);
+
+      // Handle redirect based on role
+      if (response.data.role === "admin") {
+        window.location.href = "/admin-dashboard"; // Example redirect
+      } else {
+        window.location.href = "/user-dashboard";  // Example redirect
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert("Invalid credentials");
+    }
+  };
+
   return (
     <Box
       component="form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        alert("Form submitted!");
-      }}
+      onSubmit={handleSubmit}  // Use handleSubmit here
       sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        width: "100%", // Full width for better responsiveness
-        padding: "16px", // Add padding for better spacing
-        borderRadius: "8px", // Optional: rounded corners
+        width: "100%",
+        padding: "16px",
+        borderRadius: "8px",
       }}
     >
       <Typography variant="h6" component="div" sx={{ mb: 2 }}>
@@ -134,19 +162,19 @@ function CustomSignInForm() {
         sx={{
           width: "100%",
           mb: 5,
-          bgcolor: "skyblue", // Change divider color to sky blue
-          height: "2px", // Increase the thickness of the divider
+          bgcolor: "skyblue",
+          height: "2px",
         }}
       />
-      <CustomEmailField />
-      <CustomPasswordField />
+      <CustomEmailField email={email} setEmail={setEmail} />
+      <CustomPasswordField password={password} setPassword={setPassword} />
       <FormGroup
         sx={{
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          mt: 2, // Margin top
+          mt: 2,
         }}
       >
         <FormControlLabel
@@ -159,7 +187,7 @@ function CustomSignInForm() {
             />
           }
           label="Remember me"
-          sx={{ mr: 8 }} // Margin right to add space between checkbox and link
+          sx={{ mr: 8 }}
         />
         <ForgotPasswordLink />
       </FormGroup>
@@ -169,53 +197,50 @@ function CustomSignInForm() {
 }
 
 export default function SlotsSignIn() {
-  const theme = useTheme();
   return (
-    <AppProvider theme={theme}>
-      <Container
-        component="main"
-        maxWidth="xs"
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "80vh",
+        px: 2,
+        backgroundColor: "background.paper",
+        border: `1px solid`,
+        borderRadius: "8px",
+        boxShadow: 3,
+        padding: "20px",
+      }}
+    >
+      <Box
+        component="img"
+        src="your-image-url-here"
+        alt="Auth Header"
         sx={{
+          width: "100%",
+          height: "auto",
+          mb: 10,
+        }}
+      />
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "400px",
+          padding: "10px",
+          backgroundColor: "background.default",
+          borderRadius: "20px",
+          minHeight: "300px",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "80vh",
-          px: 2, // Optional: add horizontal padding
-          backgroundColor: "background.paper", // Set to theme background color
-          border: `1px solid ${theme.palette.divider}`, // Border color
-          borderRadius: "8px", // Rounded corners
-          boxShadow: 3, // Shadow for depth
-          padding: "20px", // Padding inside the container
+          justifyContent: "space-between",
+          border: "2px solid skyblue",
         }}
       >
-        <Box
-          component="img"
-          src="your-image-url-here" // Replace with your image URL
-          alt="Auth Header"
-          sx={{
-            width: "100%",
-            height: "auto",
-            mb: 10, // Margin bottom to separate image from the form box
-          }}
-        />
-        <Box
-          sx={{
-            width: "100%",
-            maxWidth: "400px", // Max width for the box
-            padding: "10px", // Adjust padding inside the box
-            backgroundColor: "background.default", // Background color of the box
-            borderRadius: "20px", // Rounded corners
-            minHeight: "300px", // Adjust the height of the box
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between", // Distribute space between elements
-            border: "2px solid skyblue", // Set the border color to sky blue
-          }}
-        >
-          <CustomSignInForm />
-        </Box>
-      </Container>
-    </AppProvider>
+        <CustomSignInForm />
+      </Box>
+    </Container>
   );
 }
