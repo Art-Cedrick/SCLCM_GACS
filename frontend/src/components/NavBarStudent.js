@@ -15,12 +15,10 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import NotesIcon from '@mui/icons-material/Notes';
 import MenuIcon from "@mui/icons-material/Menu";
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 
-export default function NavBar(props) {
+export default function NavBarStudent(props) {
   const { drawerWidth, content } = props;
   const location = useLocation();
   const path = location.pathname;
@@ -56,49 +54,22 @@ export default function NavBar(props) {
       <Box sx={{ overflow: "auto" }}>
         <List>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/counselor/dashboard" selected={"/counselor/dashboard" === path}>
+            <ListItemButton component={Link} to="/student/forms" selected={"/student/forms" === path}>
               <ListItemIcon>
                 <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Dashboard"} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton
-              component={Link}
-              to="/counselor/resourcesharing"
-              selected={"/counselor/resourcesharing" === path}
-            >
-              <ListItemIcon>
-                <NotesIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Resource Sharing"} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton
-              component={Link}
-              to="/counselor/forms"
-              selected={"/counselor/forms" === path}
-            >
-              <ListItemIcon>
-                <AssignmentIcon />
               </ListItemIcon>
               <ListItemText primary={"Forms"} />
             </ListItemButton>
           </ListItem>
-        </List>
 
-        <ListItem disablePadding>
+          <ListItem disablePadding>
             <ListItemButton
               component={Link}
-              to="/counselor/appointment"
-              selected={"/counselor/appointment" === path}
+              to="/student/appointment"
+              selected={"/student/appointment" === path}
             >
               <ListItemIcon>
-                <CalendarMonthIcon />
+                <NotesIcon />
               </ListItemIcon>
               <ListItemText primary={"Appointment"} />
             </ListItemButton>
@@ -107,16 +78,16 @@ export default function NavBar(props) {
           <ListItem disablePadding>
             <ListItemButton
               component={Link}
-              to="/counselor/records"
-              selected={"/counselor/records" === path}
+              to="/student/records"
+              selected={"/student/records" === path}
             >
               <ListItemIcon>
-                <FileCopyIcon />
+                <AssignmentIcon />
               </ListItemIcon>
               <ListItemText primary={"Records"} />
             </ListItemButton>
           </ListItem>
-
+        </List>
         
       </Box>
     </div>

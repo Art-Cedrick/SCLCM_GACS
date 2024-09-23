@@ -6,7 +6,6 @@ router = DefaultRouter()
 router.register('project', ProjectViewset, basename='project')
 
 urlpatterns = [
-    path('', home),
     path('', include(router.urls)),
     path('login/', LoginView.as_view(), name='login')
 ]

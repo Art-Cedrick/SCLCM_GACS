@@ -130,10 +130,14 @@ function CustomSignInForm() {
       localStorage.setItem("role", response.data.role);
 
       // Handle redirect based on role
-      if (response.data.role === "admin") {
-        window.location.href = "/admin-dashboard"; // Example redirect
+      if (response.data.role === "counselor") {
+        window.location.href = "/counselor"; // Redirect for Counselor
+      } else if (response.data.role === "psychometrician") {
+        window.location.href = "/psychometrician"; // Redirect for Psychometrician
+      } else if (response.data.role === "student") {
+        window.location.href = "/student"; // Redirect for Student
       } else {
-        window.location.href = "/user-dashboard"; // Example redirect
+        console.error("Unknown role:", response.data.role);
       }
     } catch (error) {
       console.error("Login failed:", error);
