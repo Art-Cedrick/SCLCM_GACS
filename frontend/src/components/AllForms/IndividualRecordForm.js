@@ -167,7 +167,7 @@ const IndividualRecordForm = () => {
               <Typography variant="h6" gutterBottom>
                 Parents:
               </Typography>
-              <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="flex-start">
+              <Stack direction="row" spacing={2} alignItems="center">
                 <CheckboxLabels
                   control={control}
                   name="livingTogether"
@@ -187,7 +187,7 @@ const IndividualRecordForm = () => {
               <Typography variant="h6" gutterBottom>
                 Living With:
               </Typography>
-              <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems="flex-start">
+              <Stack direction="row" spacing={1} alignItems="center">
                 <CheckboxLabels
                   control={control}
                   name="bothParents"

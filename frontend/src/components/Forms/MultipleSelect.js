@@ -1,82 +1,80 @@
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import * as React from "react";
+import { useTheme } from "@mui/material/styles";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
-const ITEM_HEIGHT = 48;
+const ITEM_HEIGHT = 30;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      width: 300,
     },
   },
 };
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
-
-function getStyles(name, personName, theme) {
+function getStyles(option, selectedOptions, theme) {
   return {
     fontWeight:
-      personName.indexOf(name) === -1
+      selectedOptions.indexOf(option) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
 }
 
-export default function MultipleSelect() {
+export default function MultipleSelect({
+  label,
+  value,
+  onChange,
+  options = [],
+  sx,
+}) {
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
+  const [selectedOptions, setSelectedOptions] = React.useState(value || []);
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    setSelectedOptions(typeof value === "string" ? value.split(",") : value);
+    if (onChange) {
+      onChange(selectedOptions);
+    }
   };
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-name-label">Name</InputLabel>
-        <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<OutlinedInput label="Name" />}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
+    <FormControl sx={{  width: "100%", ...sx }}>
+      <InputLabel id="multiple-select-label">{label}</InputLabel>
+      <Select
+        labelId="multiple-select-label"
+        id="multiple-select"
+        multiple
+        value={selectedOptions}
+        onChange={handleChange}
+        input={<OutlinedInput label={label} />}
+        MenuProps={MenuProps}
+        renderValue={(selected) => selected.join(", ")}
+      >
+        {options.length > 0 ? (
+          options.map((option) => (
             <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
+              key={option}
+              value={option}
+              style={getStyles(option, selectedOptions, theme)}
             >
-              {name}
+              {option}
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+          ))
+        ) : (
+          <MenuItem disabled>No options available</MenuItem>
+        )}
+      </Select>
+    </FormControl>
   );
 }
+
+
