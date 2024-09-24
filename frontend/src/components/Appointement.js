@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   Stack,
+  Button, // Import Button here
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import DatePicker from "./Forms/DatePicker"; // Ensure this path is correct
@@ -14,7 +15,13 @@ import TextFields from "./Forms/TextFields"; // Ensure this path is correct
 import CheckboxLabels from "./Forms/CheckboxLabels"; // Ensure this path is correct
 
 const Appointement = () => {
-  const { control } = useForm();
+  const { control, handleSubmit } = useForm();
+
+  // Submit handler
+  const onSubmit = (data) => {
+    console.log(data);
+    // Handle form submission logic here
+  };
 
   return (
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
@@ -86,7 +93,7 @@ const Appointement = () => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: { xs: "column", sm: "row" }, // Responsive direction
+                  flexDirection: { xs: "column", sm: "row" },
                   gap: 2,
                 }}
               >
@@ -101,7 +108,13 @@ const Appointement = () => {
                   )
                 )}
               </Box>
-              <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
+                  gap: 2,
+                }}
+              >
                 <CheckboxLabels
                   control={control}
                   name="checkboxCounseling"
@@ -117,33 +130,23 @@ const Appointement = () => {
                   control={control}
                   placeholder=""
                   variant="standard"
-                  sx={{ width: "auto" }} // Adjust margin as needed
+                  sx={{ width: "auto" }}
                 />
               </Box>
             </Box>
 
-            {/* Guidance Counselor Section */}
+            {/* Submit Button */}
             <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-                marginTop: "16px",
-              }}
+              sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}
             >
-              <TextField
-                name="guidanceCounselor"
-                control={control}
-                placeholder=""
-                variant="standard"
-                sx={{ width: "auto" }} // Adjust width as needed
-              />
-              <Typography
-                variant="subtitle1"
-                sx={{ marginTop: "8px", fontSize: "18px" }}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit(onSubmit)}
+                sx={{ marginTop: "10px" }} // Adjusted margin
               >
-                Guidance Counselor
-              </Typography>
+                Submit
+              </Button>
             </Box>
           </Stack>
         </Paper>

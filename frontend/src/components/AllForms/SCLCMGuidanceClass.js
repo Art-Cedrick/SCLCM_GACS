@@ -9,13 +9,19 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
+  Button,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import TextFields from "./Forms/TextFields"; // Ensure this path is correct
 import DatePicker from "./Forms/DatePicker";
 
 const SCLCMGuidanceClass = () => {
-  const { control, register } = useForm();
+  const { control, register, handleSubmit } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+    // Handle form submission logic here
+  };
 
   return (
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
@@ -59,7 +65,7 @@ const SCLCMGuidanceClass = () => {
               1. How much of the Guidance Class content was new to you?
             </Typography>
             <RadioGroup
-              {...register("guidanceContent")}
+              {...register("guidanceContent1")}
               sx={{ display: "flex", flexDirection: "column" }}
             >
               <FormControlLabel
@@ -88,7 +94,7 @@ const SCLCMGuidanceClass = () => {
               2. Is the Guidance Class important to you?
             </Typography>
             <RadioGroup
-              {...register("guidanceContent")}
+              {...register("guidanceContent2")}
               sx={{ display: "flex", flexDirection: "column" }}
             >
               <FormControlLabel
@@ -109,7 +115,7 @@ const SCLCMGuidanceClass = () => {
               <FormControlLabel
                 value="extremely"
                 control={<Radio />}
-                label="Extemely relevant"
+                label="Extremely relevant"
               />
             </RadioGroup>
             <Divider sx={{ marginY: 2 }} />
@@ -117,7 +123,7 @@ const SCLCMGuidanceClass = () => {
               3. How easy were the written materials to understand?
             </Typography>
             <RadioGroup
-              {...register("guidanceContent")}
+              {...register("guidanceContent3")}
               sx={{ display: "flex", flexDirection: "column" }}
             >
               <FormControlLabel
@@ -146,7 +152,7 @@ const SCLCMGuidanceClass = () => {
               4. How effective was the counselor?
             </Typography>
             <RadioGroup
-              {...register("guidanceContent")}
+              {...register("guidanceContent4")}
               sx={{ display: "flex", flexDirection: "column" }}
             >
               <FormControlLabel
@@ -176,7 +182,7 @@ const SCLCMGuidanceClass = () => {
               have learned into practice?
             </Typography>
             <RadioGroup
-              {...register("guidanceContent")}
+              {...register("guidanceContent5")}
               sx={{ display: "flex", flexDirection: "column" }}
             >
               <FormControlLabel
@@ -205,7 +211,7 @@ const SCLCMGuidanceClass = () => {
               6. What is your overall assessment of the Guidance Class?
             </Typography>
             <RadioGroup
-              {...register("guidanceContent")}
+              {...register("guidanceContent6")}
               sx={{ display: "flex", flexDirection: "column" }}
             >
               <FormControlLabel value="poor" control={<Radio />} label="Poor" />
@@ -221,6 +227,17 @@ const SCLCMGuidanceClass = () => {
                 label="Excellent"
               />
             </RadioGroup>
+
+            {/* Submit Button */}
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              sx={{ marginTop: 2 }}
+            >
+              <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+                Submit
+              </Button>
+            </Stack>
           </Stack>
         </Paper>
       </CardContent>

@@ -6,7 +6,8 @@ import {
   Stack,
   Divider,
   IconButton,
-  TextField
+  TextField,
+  Button,
 } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import MultilineTextFields from "./Forms/MultilineTextField";
@@ -18,11 +19,8 @@ const PageOne = ({ control }) => (
   <Box>
     <Stack spacing={6}>
       <Divider sx={{ my: 3 }} />
-
-      {/* Two-column layout */}
       <Stack direction="row" spacing={3}>
         <Stack spacing={6} sx={{ flex: 1 }}>
-          {/* Input for Name */}
           <TextField
             label="Name"
             name="name"
@@ -30,8 +28,6 @@ const PageOne = ({ control }) => (
             variant="outlined"
             sx={{ width: "100%" }}
           />
-
-          {/* Input for Grade */}
           <TextField
             label="Grade"
             name="grade"
@@ -40,9 +36,7 @@ const PageOne = ({ control }) => (
             sx={{ width: "100%" }}
           />
         </Stack>
-
         <Stack spacing={6} sx={{ flex: 1 }}>
-          {/* Input for Section */}
           <TextField
             label="Section"
             name="section"
@@ -50,8 +44,6 @@ const PageOne = ({ control }) => (
             variant="outlined"
             sx={{ width: "100%" }}
           />
-
-          {/* Input for Date */}
           <TextField
             label="Date"
             name="date"
@@ -69,8 +61,6 @@ const PageOne = ({ control }) => (
   </Box>
 );
 
-
-
 const PageTwo = ({ control }) => (
   <Box>
     <Stack spacing={3}>
@@ -79,18 +69,29 @@ const PageTwo = ({ control }) => (
         variant="h7"
         sx={{ color: "#3f3f3f", marginBottom: 2, fontWeight: "bold" }}
       >
-        PERSONAL SOCIAL DEVELOPMENT
+        PERSONAL - SOCIAL DEVELOPMENT (PSD)
+      </Typography>
+
+      <Typography
+        variant="h7"
+        sx={{
+          color: "#3f3f3f",
+          marginBottom: 2,
+          textAlign: "left",
+        }}
+      >
+        Family:
       </Typography>
       <Stack spacing={2}>
         <MultipleSelect
-          name="categories"
+          name="healthCategories"
           control={control}
           label="Problems Encountered:"
           options={[
             "Lack of Quality Time",
             "Parental Pressure",
             "Sibling Rivalry",
-            "Finacial Discomfort",
+            "Financial Discomfort",
             "Parent-child Misunderstanding",
             "Others",
           ]}
@@ -106,28 +107,25 @@ const PageTwo = ({ control }) => (
       >
         <MultilineTextFields
           label="Details:"
-          name="details"
+          name="healthDetails"
           control={control}
           sx={{ width: "100%" }}
         />
       </Box>
-    </Stack>
-  </Box>
-);
 
-const PageThree = ({ control }) => (
-  <Box>
-    <Stack spacing={3}>
-      <Divider sx={{ my: 3 }} />
       <Typography
         variant="h7"
-        sx={{ color: "#3f3f3f", marginBottom: 2, fontWeight: "bold" }}
+        sx={{
+          color: "#3f3f3f",
+          marginBottom: 2,
+          textAlign: "left",
+        }}
       >
-        FRIENDS/ PEERS/ INTERPERSONAL RELATIONSHIP
+        Friends/Peers/Interpersonal Relationship:
       </Typography>
       <Stack spacing={2}>
         <MultipleSelect
-          name="categories"
+          name="friendsCategories"
           control={control}
           label="Problems Encountered:"
           options={[
@@ -152,28 +150,25 @@ const PageThree = ({ control }) => (
       >
         <MultilineTextFields
           label="Details:"
-          name="details"
+          name="friendsDetails"
           control={control}
           sx={{ width: "100%" }}
         />
       </Box>
-    </Stack>
-  </Box>
-);
 
-const PageFour = ({ control }) => (
-  <Box>
-    <Stack spacing={3}>
-      <Divider sx={{ my: 3 }} />
       <Typography
         variant="h7"
-        sx={{ color: "#3f3f3f", marginBottom: 2, fontWeight: "bold" }}
+        sx={{
+          color: "#3f3f3f",
+          marginBottom: 2,
+          textAlign: "left",
+        }}
       >
-        PERSONAL & HEALTH
+        Personal & Health:
       </Typography>
       <Stack spacing={2}>
         <MultipleSelect
-          name="categories"
+          name="socialDevelopmentCategories"
           control={control}
           label="Problems Encountered:"
           options={[
@@ -198,7 +193,7 @@ const PageFour = ({ control }) => (
       >
         <MultilineTextFields
           label="Details:"
-          name="details"
+          name="socialDevelopmentDetails"
           control={control}
           sx={{ width: "100%" }}
         />
@@ -207,7 +202,7 @@ const PageFour = ({ control }) => (
   </Box>
 );
 
-const PageFive = ({ control }) => (
+const PageThree = ({ control }) => (
   <Box>
     <Stack spacing={3}>
       <Divider sx={{ my: 3 }} />
@@ -215,22 +210,32 @@ const PageFive = ({ control }) => (
         variant="h7"
         sx={{ color: "#3f3f3f", marginBottom: 2, fontWeight: "bold" }}
       >
-        ACADEMIC DEVELOPMENT
+        ACADEMIC DEVELOPMENT (AD)
+      </Typography>
+      <Typography
+        variant="h7"
+        sx={{
+          color: "#3f3f3f",
+          marginBottom: 2,
+          textAlign: "left",
+        }}
+      >
+        Academics/School:
       </Typography>
       <Stack spacing={2}>
         <MultipleSelect
-          name="categories"
+          name="academicCategories"
           control={control}
           label="Problems Encountered:"
           options={[
             "Failing Marks",
-            "Misbehaviour",
+            "Misbehavior",
             "Transition to School Life",
             "Learning Difficulties",
             "Low Motivation",
             "Teachers",
             "Laziness",
-            "Difficulties Subjects",
+            "Difficult Subjects",
             "Frequent D.O. Client",
             "Failed to Comply Requirements",
             "Others",
@@ -247,7 +252,7 @@ const PageFive = ({ control }) => (
       >
         <MultilineTextFields
           label="Details:"
-          name="details"
+          name="academicDetails"
           control={control}
           sx={{ width: "100%" }}
         />
@@ -256,7 +261,7 @@ const PageFive = ({ control }) => (
   </Box>
 );
 
-const PageSix = ({ control }) => (
+const PageFour = ({ control }) => (
   <Box>
     <Stack spacing={3}>
       <Divider sx={{ my: 3 }} />
@@ -264,11 +269,21 @@ const PageSix = ({ control }) => (
         variant="h7"
         sx={{ color: "#3f3f3f", marginBottom: 2, fontWeight: "bold" }}
       >
-        CAREER DEVELOPMENT
+        CAREER DEVELOPMENT (AC)
+      </Typography>
+      <Typography
+        variant="h7"
+        sx={{
+          color: "#3f3f3f",
+          marginBottom: 2,
+          textAlign: "left",
+        }}
+      >
+        Academics/School:
       </Typography>
       <Stack spacing={2}>
         <MultipleSelect
-          name="categories"
+          name="careerCategories"
           control={control}
           label="Problems Encountered:"
           options={[
@@ -291,7 +306,7 @@ const PageSix = ({ control }) => (
       >
         <MultilineTextFields
           label="Details:"
-          name="details"
+          name="careerDetails"
           control={control}
           sx={{ width: "100%" }}
         />
@@ -300,13 +315,23 @@ const PageSix = ({ control }) => (
   </Box>
 );
 
-const PageSeven = ({ control }) => (
+const PageFive = ({ control }) => (
   <Box>
     <Stack spacing={3}>
       <Divider sx={{ my: 3 }} />
+      <Typography
+        variant="h7"
+        sx={{
+          color: "#3f3f3f",
+          marginBottom: 2,
+          fontWeight: "bold",
+          textAlign: "left",
+        }}
+      >
+        GENERAL IMPRESSION/ COUNSELOR'S REMARKS
+      </Typography>
       <Stack spacing={2}>
         <MultilineTextFields
-          label="General Impression/ Counselor's Remarks:"
           name="counselorRemark"
           control={control}
           sx={{ width: "100%" }}
@@ -314,14 +339,30 @@ const PageSeven = ({ control }) => (
       </Stack>
       <Typography
         variant="h7"
-        sx={{ color: "#3f3f3f", marginTop: 2, fontWeight: "bold" }}
+        sx={{
+          color: "#3f3f3f",
+          marginTop: 2,
+          fontWeight: "bold",
+          textAlign: "left",
+        }}
       >
-        Recommendation/s:
+        Recommendations:
       </Typography>
-      
-      {/* Checkboxes for Recommendations */}
-      <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
-        {['For Follow-up', 'Conference with parent/guardian', 'Conference with adviser/subject teachers', 'For Assessment'].map((label, index) => (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          gap: 2,
+          alignItems: "center",
+        }}
+      >
+        {[
+          "For Follow-up",
+          "Conference with parent/guardian",
+          "Conference with adviser/subject teachers",
+          "For Assessment",
+        ].map((label, index) => (
           <CheckboxLabels
             key={index}
             control={control}
@@ -329,48 +370,48 @@ const PageSeven = ({ control }) => (
             label={label}
           />
         ))}
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <CheckboxLabels
             control={control}
             name="recommendation5"
             label="Others:"
           />
           <TextField
-            name="othersRemark"
+            name="otherRecommendationDetails"
             control={control}
             variant="standard"
-            placeholder=""
-            sx={{ ml: 1 }} // Margin left for spacing
+            sx={{ width: "200px" }}
           />
         </Box>
       </Box>
-
-      {/* New TextField for Guidance Associate/Date */}
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', mt: 2 }}>
-        <TextField
-          name="guidanceAssociateDate"
-          control={control}
-          variant="standard"
-          sx={{ width: 'auto', mb: 1 }} // Margin bottom for spacing
-        />
-        <Typography
-          variant="body2"
-          sx={{ color: "#3f3f3f", fontWeight: "bold" }}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          marginTop: 2,
+        }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            /* handle submit logic */
+          }}
         >
-          Guidance Associate/Date
-        </Typography>
+          Submit
+        </Button>
       </Box>
     </Stack>
   </Box>
 );
-
 
 const RoutineInterview = () => {
   const { control } = useForm();
   const [page, setPage] = useState(1);
 
   const handleNext = () => {
-    setPage((prevPage) => Math.min(prevPage + 1, 7)); // Set the maximum page number to 6
+    setPage((prevPage) => Math.min(prevPage + 1, 5)); // Maximum page remains 5
   };
 
   const handleBack = () => {
@@ -386,9 +427,9 @@ const RoutineInterview = () => {
         padding: 4,
         backgroundColor: "#fafafa",
         borderRadius: 2,
-        margin: "auto", // This centers the Paper horizontally
-        mt: 4, // Margin top
-        mb: 4, // Margin bottom (same value as mt)
+        margin: "auto",
+        mt: 4,
+        mb: 4,
         boxShadow: 3,
       }}
     >
@@ -409,8 +450,6 @@ const RoutineInterview = () => {
       {page === 3 && <PageThree control={control} />}
       {page === 4 && <PageFour control={control} />}
       {page === 5 && <PageFive control={control} />}
-      {page === 6 && <PageSix control={control} />}
-      {page === 7 && <PageSeven control={control} />}
 
       <Stack
         direction="row"
@@ -421,7 +460,7 @@ const RoutineInterview = () => {
         <IconButton onClick={handleBack} disabled={page === 1}>
           <ArrowBack />
         </IconButton>
-        <IconButton onClick={handleNext} disabled={page === 7}>
+        <IconButton onClick={handleNext} disabled={page === 5}>
           <ArrowForward />
         </IconButton>
       </Stack>
