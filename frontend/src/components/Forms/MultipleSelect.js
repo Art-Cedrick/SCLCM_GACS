@@ -17,16 +17,16 @@ const MenuProps = {
   },
 };
 
-function getStyles(option, selectedOptions, theme) {
+function getStyles(option, selectedOption, theme) {
   return {
     fontWeight:
-      selectedOptions.indexOf(option) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
+      selectedOption === option
+        ? theme.typography.fontWeightMedium
+        : theme.typography.fontWeightRegular,
   };
 }
 
-export default function MultipleSelect({
+export default function SingleSelect({
   label,
   value,
   onChange,
@@ -34,37 +34,36 @@ export default function MultipleSelect({
   sx,
 }) {
   const theme = useTheme();
-  const [selectedOptions, setSelectedOptions] = React.useState(value || []);
+  const [selectedOption, setSelectedOption] = React.useState(value || "");
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setSelectedOptions(typeof value === "string" ? value.split(",") : value);
+    setSelectedOption(value);
     if (onChange) {
-      onChange(selectedOptions);
+      onChange(value);
     }
   };
 
   return (
-    <FormControl sx={{  width: "100%", ...sx }}>
-      <InputLabel id="multiple-select-label">{label}</InputLabel>
+    <FormControl sx={{ width: "100%", ...sx }}>
+      <InputLabel id="single-select-label">{label}</InputLabel>
       <Select
-        labelId="multiple-select-label"
-        id="multiple-select"
-        multiple
-        value={selectedOptions}
+        labelId="single-select-label"
+        id="single-select"
+        value={selectedOption}
         onChange={handleChange}
         input={<OutlinedInput label={label} />}
         MenuProps={MenuProps}
-        renderValue={(selected) => selected.join(", ")}
+        renderValue={(selected) => (selected ? selected : "Select an option")}
       >
         {options.length > 0 ? (
           options.map((option) => (
             <MenuItem
               key={option}
               value={option}
-              style={getStyles(option, selectedOptions, theme)}
+              style={getStyles(option, selectedOption, theme)}
             >
               {option}
             </MenuItem>
@@ -76,5 +75,3 @@ export default function MultipleSelect({
     </FormControl>
   );
 }
-
-

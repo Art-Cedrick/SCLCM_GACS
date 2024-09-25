@@ -5,15 +5,22 @@ import {
   Card,
   CardContent,
   Stack,
+  TextField,
+  Button,
   Divider,
-  TextField
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import TextFields from "./Forms/TextFields"; // Ensure this path is correct
 import CheckboxLabels from "./Forms/CheckboxLabels";
+import MultipleSelect from "./Forms/MultipleSelect"; // Ensure this path is correct
 
 const IndividualRecordForm = () => {
-  const { control } = useForm();
+  const { control, handleSubmit } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+    // Add your form submission logic here
+  };
 
   return (
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
@@ -21,6 +28,24 @@ const IndividualRecordForm = () => {
         <Typography variant="h5" gutterBottom align="center">
           INDIVIDUAL RECORD FORM
         </Typography>
+
+        {/* Stack for School Year Typography and Select */}
+        <Stack
+          direction="row"
+          spacing={2}
+          alignItems="center"
+          sx={{ marginBottom: 2, justifyContent: "center" }}
+        >
+          <Typography variant="h7">School Year</Typography>
+          <MultipleSelect
+            label=""
+            value={[]} // Provide initial value or state
+            onChange={() => {}} // Handle selection change
+            options={[]} // Add your options here
+            sx={{ width: "200px" }} // Adjust width to make it smaller
+          />
+        </Stack>
+
         <Paper
           elevation={3}
           sx={{
@@ -81,12 +106,11 @@ const IndividualRecordForm = () => {
               />
             </Stack>
 
-            {/* Divider */}
             <Divider sx={{ marginY: 2 }} />
 
             {/* Father's Information Section */}
-            <Typography variant="h6" gutterBottom>
-              Father
+            <Typography variant="h7" gutterBottom textAlign={"left"}>
+              Father:
             </Typography>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
               <TextFields
@@ -124,8 +148,8 @@ const IndividualRecordForm = () => {
             <Divider sx={{ marginY: 2 }} />
 
             {/* Mother's Information Section */}
-            <Typography variant="h6" gutterBottom>
-              Mother
+            <Typography variant="h7" gutterBottom textAlign={"left"}> 
+              Mother:
             </Typography>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
               <TextFields
@@ -164,10 +188,14 @@ const IndividualRecordForm = () => {
 
             {/* Parents Section */}
             <Stack direction="row" spacing={2} alignItems="flex-start">
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h7" gutterBottom>
                 Parents:
               </Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={2}
+                alignItems="flex-start"
+              >
                 <CheckboxLabels
                   control={control}
                   name="livingTogether"
@@ -184,40 +212,76 @@ const IndividualRecordForm = () => {
 
             {/* Living With Section */}
             <Stack direction="row" spacing={2} alignItems="flex-start">
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h7" gutterBottom>
                 Living With:
               </Typography>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <CheckboxLabels
-                  control={control}
-                  name="bothParents"
-                  label="Both Parents"
-                />
-                <CheckboxLabels
-                  control={control}
-                  name="motherOnly"
-                  label="Mother Only"
-                />
-                <CheckboxLabels
-                  control={control}
-                  name="fatherOnly"
-                  label="Father Only"
-                />
-                <CheckboxLabels
-                  control={control}
-                  name="relatives"
-                  label="Relatives:"
-                />
+              <Stack direction="column" spacing={1} alignItems="flex-start">
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <CheckboxLabels
+                    control={control}
+                    name="bothParents"
+                    label="Both Parents"
+                  />
+                </Stack>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <CheckboxLabels
+                    control={control}
+                    name="motherOnly"
+                    label="Mother Only"
+                  />
+                </Stack>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <CheckboxLabels
+                    control={control}
+                    name="fatherOnly"
+                    label="Father Only"
+                  />
+                </Stack>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <CheckboxLabels
+                    control={control}
+                    name="relatives"
+                    label="Relatives:"
+                  />
+                  <TextField
+                    name="relationship"
+                    control={control}
+                    placeholder="relationship"
+                    variant="standard"
+                    sx={{ flex: 1 }} // Adjust width as needed
+                  />
+                </Stack>
               </Stack>
-              <TextField
-                name="relationship"
-                control={control}
-                placeholder="relationship"
-                variant="standard"
-                sx={{ flex: 1 }} // Adjust width as needed
-              />
             </Stack>
+
             <Divider sx={{ marginY: 2 }} />
+            <Typography variant="h7" gutterBottom align="center" textAlign={"left"}>
+            Club Membership / Position Handled:
+        </Typography>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextFields
+                label=""
+                name="Club membership/posistion handled"
+                control={control}
+                placeholder=""
+                sx={{ flex: 1 }}
+              />
+              </Stack>
+
+            {/* Submit Button at the end of Living With section, aligned to flex-end */}
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              sx={{ marginTop: 10 }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit(onSubmit)}
+              >
+                Submit
+              </Button>
+            </Stack>
           </Stack>
         </Paper>
       </CardContent>
