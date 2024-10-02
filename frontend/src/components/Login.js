@@ -154,7 +154,7 @@ function CustomSignInForm() {
         flexDirection: "column",
         alignItems: "center",
         width: "100%",
-        padding: "16px",
+        padding: "1px",
         borderRadius: "8px",
       }}
     >
@@ -216,6 +216,7 @@ export default function SlotsSignIn() {
         borderRadius: "8px",
         boxShadow: 3,
         padding: "20px",
+        marginTop: "60px",
       }}
     >
       <Box

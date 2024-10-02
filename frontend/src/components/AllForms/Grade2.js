@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import TextFields from "./Forms/TextFields"; // Ensure this path is correct
 import MultipleSelect from "./Forms/MultipleSelect"; // Ensure this path is correct
 
-const Grade3 = () => {
+const Grade2 = () => {
   const { control, handleSubmit } = useForm();
 
   // Submit handler
@@ -25,7 +25,7 @@ const Grade3 = () => {
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
       <CardContent>
         <Typography variant="h5" gutterBottom align="center">
-          Grade 3
+          Grade 2
         </Typography>
         <Paper
           elevation={3}
@@ -38,11 +38,7 @@ const Grade3 = () => {
         >
           <Stack spacing={2}>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Student Name:"
-                name="studentname"
-                control={control}
-              />
+              <TextFields label="Name:" name="name" control={control} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
               <TextFields label="Age:" name="age" control={control} />
@@ -63,43 +59,28 @@ const Grade3 = () => {
                 label="Section:"
                 name="section"
                 control={control}
-                options={[
-                  "Gabriel",
-                  "Michael",
-                  "Judiel",
-                  "Raphael",
-                  "Sealtiel",
-                  "Uriel",
-                ]}
+                options={["Bridget", "Bernadette", "Gertrude"]}
               />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextFields label="Total EQ:" name="totalEQ" control={control} />
               <TextFields
-                label="Raw Score:"
-                name="raw score"
-                control={control}
-              />
-              <TextFields
-                label="Percentile:"
-                name="percentile"
+                label="Verbal Interpretation:"
+                name="verbalInterpretation"
                 control={control}
               />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
               <TextFields label="Stanine:" name="stanine" control={control} />
-              <MultipleSelect
-                label="Verbal Interpretation:"
-                name="verbal interpretation"
-                control={control}
-                options={[
-                  "Superior",
-                  "Above Average",
-                  "Average",
-                  "Below Average",
-                  "Low",
-                  "Poor",
-                ]}
-              />
+              <TextFields label="SA:" name="sa" control={control} />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextFields label="MME:" name="mme" control={control} />
+              <TextFields label="SM:" name="sm" control={control} />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextFields label="E:" name="e" control={control} />
+              <TextFields label="HR:" name="hr" control={control} />
             </Stack>
           </Stack>
 
@@ -122,4 +103,4 @@ const Grade3 = () => {
   );
 };
 
-export default Grade3;
+export default Grade2;

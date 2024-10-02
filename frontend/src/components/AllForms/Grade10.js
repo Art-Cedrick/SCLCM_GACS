@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import TextFields from "./Forms/TextFields"; // Ensure this path is correct
 import MultipleSelect from "./Forms/MultipleSelect"; // Ensure this path is correct
 
-const Grade3 = () => {
+const Grade10 = () => {
   const { control, handleSubmit } = useForm();
 
   // Submit handler
@@ -25,7 +25,7 @@ const Grade3 = () => {
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
       <CardContent>
         <Typography variant="h5" gutterBottom align="center">
-          Grade 3
+          Grade 10
         </Typography>
         <Paper
           elevation={3}
@@ -40,7 +40,7 @@ const Grade3 = () => {
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
               <TextFields
                 label="Student Name:"
-                name="studentname"
+                name="student name"
                 control={control}
               />
             </Stack>
@@ -122,4 +122,4 @@ const Grade3 = () => {
   );
 };
 
-export default Grade3;
+export default Grade10;

@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import TextFields from "./Forms/TextFields"; // Ensure this path is correct
 import MultipleSelect from "./Forms/MultipleSelect"; // Ensure this path is correct
 
-const Grade3 = () => {
+const Grade4 = () => {
   const { control, handleSubmit } = useForm();
 
   // Submit handler
@@ -25,7 +25,7 @@ const Grade3 = () => {
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
       <CardContent>
         <Typography variant="h5" gutterBottom align="center">
-          Grade 3
+          Grade 4
         </Typography>
         <Paper
           elevation={3}
@@ -40,7 +40,7 @@ const Grade3 = () => {
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
               <TextFields
                 label="Student Name:"
-                name="studentname"
+                name="student name"
                 control={control}
               />
             </Stack>
@@ -74,32 +74,67 @@ const Grade3 = () => {
               />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Raw Score:"
-                name="raw score"
+              <MultipleSelect
+                label="Conduct:"
+                name="conduct"
                 control={control}
+                options={["Below Average", "Average", "Above Average "]}
               />
-              <TextFields
-                label="Percentile:"
-                name="percentile"
+              <MultipleSelect
+                label="Self Image:"
+                name="self image"
                 control={control}
+                options={["Below Average", "Average", "Above Average "]}
               />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Stanine:" name="stanine" control={control} />
               <MultipleSelect
-                label="Verbal Interpretation:"
-                name="verbal interpretation"
+                label="Worry:"
+                name="worry"
                 control={control}
-                options={[
-                  "Superior",
-                  "Above Average",
-                  "Average",
-                  "Below Average",
-                  "Low",
-                  "Poor",
-                ]}
+                options={["Below Average", "Average", "Above Average "]}
               />
+              <MultipleSelect
+                label="Neg.Perl.Rel:"
+                name="neg.perl.rel"
+                control={control}
+                options={["Below Average", "Average", "Above Average "]}
+              />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <MultipleSelect
+                label="AntiSocial:"
+                name="antisocial"
+                control={control}
+                options={["Below Average", "Average", "Above Average "]}
+              />
+              <MultipleSelect
+                label="Lie:"
+                name="lie"
+                control={control}
+                options={["Tapat", "Medya - Medya", "Sinungaling "]}
+              />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <MultipleSelect
+                label="Problem Index:"
+                name="problem index"
+                control={control}
+                options={["Below Average", "Average", "Above Average "]}
+              />
+              <TextFields label="C:" name="c" control={control} />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextFields label="SI:" name="si" control={control} />
+              <TextFields label="W:" name="w" control={control} />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextFields label="NPR:" name="npr" control={control} />
+              <TextFields label="AS:" name="as" control={control} />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextFields label="L:" name="L" control={control} />
+              <TextFields label="PI:" name="pi" control={control} />
             </Stack>
           </Stack>
 
@@ -122,4 +157,4 @@ const Grade3 = () => {
   );
 };
 
-export default Grade3;
+export default Grade4;
