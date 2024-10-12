@@ -1,124 +1,110 @@
-import React, { useState } from "react";
-import { Container, Box, Paper, Typography, IconButton } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import React, { useMemo } from "react";
+import { MaterialReactTable } from "material-react-table";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton } from "@mui/material";
 
-const Records = () => {
-  const [rows, setRows] = useState([]);
+// Sample data
+const data = [
+  {
+    name: { firstName: "John", lastName: "Doe" },
+    address: "261 Erdman Ford",
+    city: "East Daphne",
+    state: "Kentucky",
+  },
+  {
+    name: { firstName: "Jane", lastName: "Doe" },
+    address: "769 Dominic Grove",
+    city: "Columbus",
+    state: "Ohio",
+  },
+  {
+    name: { firstName: "Joe", lastName: "Doe" },
+    address: "566 Brakus Inlet",
+    city: "South Linda",
+    state: "West Virginia",
+  },
+  {
+    name: { firstName: "Kevin", lastName: "Vandy" },
+    address: "722 Emie Stream",
+    city: "Lincoln",
+    state: "Nebraska",
+  },
+  {
+    name: { firstName: "Joshua", lastName: "Rolluffs" },
+    address: "32188 Larkin Turnpike",
+    city: "Charleston",
+    state: "South Carolina",
+  },
+];
 
-  
-  const columns = [
-    {
-      field: "studentID",
-      headerName: "Student ID",
-      width: 120,
-      headerAlign: "center",
-      flex: 1,
-    },
-    {
-      field: "name",
-      headerName: "Full Name",
-      width: 200,
-      headerAlign: "center",
-      flex: 2,
-    },
-    {
-      field: "yearLevel",
-      headerName: "Year Level",
-      type: "number",
-      width: 120,
-      headerAlign: "center",
-      flex: 1,
-    },
-    {
-      field: "email",
-      headerName: "Email Address",
-      width: 250,
-      headerAlign: "center",
-      flex: 2,
-    },
-    {
-      field: "contact",
-      headerName: "Contact No.",
-      width: 150,
-      headerAlign: "center",
-      flex: 1,
-    },
-    {
-      field: "action",
-      headerName: "Actions",
-      width: 120,
-      sortable: false,
-      renderCell: (params) => (
-        <IconButton onClick={() => handleDelete(params.id)} color="error">
-          <DeleteIcon />
-        </IconButton>
-      ),
-      headerAlign: "center",
-      flex: 1,
-    },
-  ];
+const Example = () => {
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "name.firstName",
+        header: "First Name",
+        size: 150,
+      },
+      {
+        accessorKey: "name.lastName",
+        header: "Last Name",
+        size: 150,
+      },
+      {
+        accessorKey: "address",
+        header: "Address",
+        size: 200,
+      },
+      {
+        accessorKey: "city",
+        header: "City",
+        size: 150,
+      },
+      {
+        accessorKey: "state",
+        header: "State",
+        size: 150,
+      },
+      {
+        accessorKey: "actions",
+        header: "Actions",
+        size: 100,
+        // Render action buttons
+        Cell: ({ row }) => (
+          <div>
+            <IconButton
+              size="small"
+              onClick={() => handleEdit(row.original)}
+              aria-label="edit"
+            >
+              <EditIcon fontSize="small" />
+            </IconButton>
+            <IconButton
+              size="small"
+              onClick={() => handleDelete(row.original)}
+              aria-label="delete"
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
 
-  // Handle row deletion
-  const handleDelete = (id) => {
-    setRows(rows.filter((row) => row.id !== id));
+  const handleEdit = (rowData) => {
+    console.log("Edit:", rowData);
+    // Implement your edit logic here
   };
 
-  return (
-    <Container maxWidth="xl" sx={{ mt: 1 }}>
-      <Typography variant="h5" gutterBottom align="center">
-        Records
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          bgcolor: "background.paper",
-          boxShadow: 3,
-          borderRadius: 2,
-          p: 2,
-          mt: 1,
-        }}
-      >
-        {/* DataGrid */}
-        <Paper
-          sx={{
-            flexGrow: 1,
-            height: "calc(100vh - 200px)",
-            overflow: "hidden",
-            pt: 2,
-          }}
-        >
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10, 20]}
-            disableSelectionOnClick
-            autoHeight
-            sx={{
-              border: "none",
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#f5f5f5",
-                color: "#333",
-              },
-              "& .MuiDataGrid-columnHeaderTitle": {
-                textAlign: "center",
-              },
-              "& .MuiDataGrid-cell": {
-                borderBottom: "1px solid #ddd",
-                textAlign: "center",
-              },
-              "& .MuiDataGrid-footerContainer": {
-                backgroundColor: "#f5f5f5",
-              },
-            }}
-          />
-        </Paper>
-      </Box>
-    </Container>
-  );
+  const handleDelete = (rowData) => {
+    console.log("Delete:", rowData);
+    // Implement your delete logic here
+  };
+
+  return <MaterialReactTable columns={columns} data={data} />;
 };
 
-export default Records
+export default Example;

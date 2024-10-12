@@ -61,7 +61,7 @@ const FirstYear = () => {
               />
               <MultipleSelect
                 label="Course:"
-                name="coures"
+                name="course"
                 control={control}
                 options={["", "", "", "", ""]}
               />

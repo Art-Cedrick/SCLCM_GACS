@@ -9,7 +9,10 @@ export default function TextFields(props) {
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) => (
+      render={({
+        field: { onChange, onBlur, value, ref },
+        fieldState: { error },
+      }) => (
         <TextField
           label={label}
           variant="outlined"

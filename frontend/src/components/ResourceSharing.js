@@ -77,16 +77,23 @@ const ResourceSharing = () => {
               control={control}
               name="search"
               placeholder="Search..."
-              sx={{ marginRight: 1 }}
+              sx={{ 
+                marginRight: 1, 
+                height: '30px', // Adjust height
+                '& input': { 
+                  padding: '5px', // Adjust padding for input
+                  lineHeight: '1.2' // Adjust line height
+                } 
+              }} 
             />
-            <IconButton>
-              <SearchIcon />
+            <IconButton size="small">
+              <SearchIcon fontSize="small" />
             </IconButton>
-            <IconButton>
-              <DeleteIcon />
+            <IconButton size="small">
+              <DeleteIcon fontSize="small" />
             </IconButton>
-            <IconButton>
-              <FilterListIcon />
+            <IconButton size="small">
+              <FilterListIcon fontSize="small" />
             </IconButton>
           </Box>
         </Stack>
@@ -139,13 +146,14 @@ const ResourceSharing = () => {
                   alignItems="center"
                   sx={{ mt: 1 }}
                 >
-                  <IconButton>
-                    <AttachFileIcon />
+                  <IconButton size="small">
+                    <AttachFileIcon fontSize="small" />
                   </IconButton>
                   <Button
                     variant="contained"
                     color="primary"
                     sx={{ ml: 1 }}
+                    size="small" // Make the button smaller
                     onClick={handleSubmit(onSubmit)}
                   >
                     Post

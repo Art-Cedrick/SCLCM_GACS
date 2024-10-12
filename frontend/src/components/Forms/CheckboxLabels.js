@@ -27,4 +27,3 @@ export default function CheckboxLabels({ control, name, label }) {
     </FormGroup>
   );
 }
-
