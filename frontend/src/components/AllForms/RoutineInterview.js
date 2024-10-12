@@ -12,8 +12,8 @@ import {
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import MultilineTextFields from "./Forms/MultilineTextField";
 import MultipleSelect from "./Forms/MultipleSelect";
-import CheckboxLabels from "./Forms/CheckboxLabels";
 import { useForm } from "react-hook-form";
+import AxiosInstance from "./Axios";
 
 const PageOne = ({ control }) => (
   <Box>
@@ -84,7 +84,7 @@ const PageTwo = ({ control }) => (
       </Typography>
       <Stack spacing={2}>
         <MultipleSelect
-          name="healthCategories"
+          name="family_problem"
           control={control}
           label="Problems Encountered:"
           options={[
@@ -107,7 +107,7 @@ const PageTwo = ({ control }) => (
       >
         <MultilineTextFields
           label="Details:"
-          name="healthDetails"
+          name="family_details"
           control={control}
           sx={{ width: "100%" }}
         />
@@ -125,7 +125,7 @@ const PageTwo = ({ control }) => (
       </Typography>
       <Stack spacing={2}>
         <MultipleSelect
-          name="friendsCategories"
+          name="friends_problems"
           control={control}
           label="Problems Encountered:"
           options={[
@@ -150,7 +150,7 @@ const PageTwo = ({ control }) => (
       >
         <MultilineTextFields
           label="Details:"
-          name="friendsDetails"
+          name="friends_details"
           control={control}
           sx={{ width: "100%" }}
         />
@@ -168,7 +168,7 @@ const PageTwo = ({ control }) => (
       </Typography>
       <Stack spacing={2}>
         <MultipleSelect
-          name="socialDevelopmentCategories"
+          name="health_problem"
           control={control}
           label="Problems Encountered:"
           options={[
@@ -193,7 +193,7 @@ const PageTwo = ({ control }) => (
       >
         <MultilineTextFields
           label="Details:"
-          name="socialDevelopmentDetails"
+          name="health_details"
           control={control}
           sx={{ width: "100%" }}
         />
@@ -224,7 +224,7 @@ const PageThree = ({ control }) => (
       </Typography>
       <Stack spacing={2}>
         <MultipleSelect
-          name="academicCategories"
+          name="academic_problem"
           control={control}
           label="Problems Encountered:"
           options={[
@@ -252,7 +252,7 @@ const PageThree = ({ control }) => (
       >
         <MultilineTextFields
           label="Details:"
-          name="academicDetails"
+          name="academic_details"
           control={control}
           sx={{ width: "100%" }}
         />
@@ -283,7 +283,7 @@ const PageFour = ({ control }) => (
       </Typography>
       <Stack spacing={2}>
         <MultipleSelect
-          name="careerCategories"
+          name="career_problem"
           control={control}
           label="Problems Encountered:"
           options={[
@@ -306,7 +306,7 @@ const PageFour = ({ control }) => (
       >
         <MultilineTextFields
           label="Details:"
-          name="careerDetails"
+          name="career_details"
           control={control}
           sx={{ width: "100%" }}
         />
@@ -332,7 +332,7 @@ const PageFive = ({ control }) => (
       </Typography>
       <Stack spacing={2}>
         <MultilineTextFields
-          name="counselorRemark"
+          name="remarks"
           control={control}
           sx={{ width: "100%" }}
         />
@@ -348,6 +348,20 @@ const PageFive = ({ control }) => (
       >
         Recommendations:
       </Typography>
+      <Stack spacing={2}>
+        <MultipleSelect
+          name="recommendation"
+          control={control}
+          label="Recommendation"
+          options={[
+            "For Follow-up",
+            "Conference with parent/guardian",
+            "Conference with adviser/subject teachers",
+            "For Assessment",
+          ]}
+          sx={{ width: "50%" }}
+        />
+      </Stack>
       <Box
         sx={{
           display: "flex",
@@ -357,28 +371,11 @@ const PageFive = ({ control }) => (
           alignItems: "center",
         }}
       >
-        {[
-          "For Follow-up",
-          "Conference with parent/guardian",
-          "Conference with adviser/subject teachers",
-          "For Assessment",
-        ].map((label, index) => (
-          <CheckboxLabels
-            key={index}
-            control={control}
-            name={`recommendation${index + 1}`}
-            label={label}
-          />
-        ))}
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <CheckboxLabels
-            control={control}
-            name="recommendation5"
-            label="Others:"
-          />
           <TextField
-            name="otherRecommendationDetails"
+            name="other_recommendation"
             control={control}
+            label="Other"
             variant="standard"
             sx={{ width: "200px" }}
           />
@@ -394,11 +391,8 @@ const PageFive = ({ control }) => (
       >
         <Button
           variant="contained"
-          color="primary"
-          onClick={() => {
-            /* handle submit logic */
-          }}
-        >
+          type="submit"
+          color="primary">
           Submit
         </Button>
       </Box>
@@ -407,7 +401,51 @@ const PageFive = ({ control }) => (
 );
 
 const RoutineInterview = () => {
-  const { control } = useForm();
+
+  const defaultvalues = {
+    name: '',
+    section: '',
+    grade: '',
+    date: '',
+    family_probelm: '',
+    family_details: '',
+    friends_problem: '',
+    friends_details: '',
+    health_problem: '',
+    health_details: '',
+    academic_problem: '',
+    academic_details: '',
+    career_problem: '',
+    career_details: '',
+    remarks: '',
+    recommendation: '',
+    other_recommendation: '',
+     }
+
+  const { handleSubmit, reset, setValue, control } = useForm({defaultvalues:defaultvalues});
+  const submission = (data) => {
+    AxiosInstance.post(`forms/`,{
+      name: data.name,
+      section: data.section,
+      grade: data.grade,
+      date: data.date,
+      family_probelm: data.family_probelm,
+      family_details: data.family_details,
+      friends_problem: data.friends_problem,
+      friends_details: data.friends_details,
+      health_problem: data.health_problem,
+      health_details: data.health_details,
+      academic_problem: data.academic_problem,
+      academic_details: data.academic_details,
+      career_problem: data.career_problem,
+      career_details: data.career_details,
+      remarks: data.remarks,
+      recommendation: data.recommendation,
+      other_recommendation: data.other_recommendation,
+    }
+
+    )
+  }
   const [page, setPage] = useState(1);
 
   const handleNext = () => {
@@ -419,6 +457,7 @@ const RoutineInterview = () => {
   };
 
   return (
+    <form onSubmit={handleSubmit(submission)}>
     <Paper
       elevation={3}
       sx={{
@@ -465,6 +504,7 @@ const RoutineInterview = () => {
         </IconButton>
       </Stack>
     </Paper>
+    </form>
   );
 };
 
