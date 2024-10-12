@@ -26,13 +26,10 @@ function getStyles(option, selectedOption, theme) {
   };
 }
 
-export default function SingleSelect({
-  label,
-  value,
-  onChange,
-  options = [],
-  sx,
-}) {
+const SingleSelect = React.forwardRef(function SingleSelect(
+  { label, value, onChange, options = [], sx },
+  ref
+) {
   const theme = useTheme();
   const [selectedOption, setSelectedOption] = React.useState(value || "");
 
@@ -54,7 +51,7 @@ export default function SingleSelect({
         id="single-select"
         value={selectedOption}
         onChange={handleChange}
-        input={<OutlinedInput label={label} />}
+        input={<OutlinedInput label={label} inputRef={ref} />} // Passing ref to input
         MenuProps={MenuProps}
         renderValue={(selected) => (selected ? selected : "Select an option")}
       >
@@ -74,4 +71,6 @@ export default function SingleSelect({
       </Select>
     </FormControl>
   );
-}
+});
+
+export default SingleSelect;
