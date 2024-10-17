@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   Box,
@@ -11,9 +10,9 @@ import {
   Button,
 } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import SingleSelect from "./Forms/SingleSelect";
+import SingleSelect from "./AllForms/Forms/SingleSelect";
 import { useForm, Controller } from "react-hook-form";
-import AxiosInstance from "./Axios";
+import AxiosInstance from "./AllForms/Axios";
 
 const PageOne = ({ control }) => (
   <Box>

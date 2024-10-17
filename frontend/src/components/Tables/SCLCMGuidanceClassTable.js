@@ -1,12 +1,10 @@
 import React, { useMemo } from "react";
 import { MaterialReactTable } from "material-react-table";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton } from "@mui/material";
 
 const SCLCMGuidanceClassTable = () => {
   const columns = useMemo(
     () => [
+      { accessorKey: "name", header: "Name", size: 150 },
       { accessorKey: "grade", header: "Grade", size: 150 },
       { accessorKey: "section", header: "Section", size: 150 },
       { accessorKey: "date", header: "Date", size: 200 },
@@ -16,42 +14,9 @@ const SCLCMGuidanceClassTable = () => {
       { accessorKey: "four", header: "Question 4", size: 200 },
       { accessorKey: "five", header: "Question 5", size: 200 },
       { accessorKey: "six", header: "Question 6", size: 200 }, // Corrected accessorKey
-      {
-        accessorKey: "actions",
-        header: "Actions",
-        size: 100,
-        Cell: ({ row }) => (
-          <div>
-            <IconButton
-              size="small"
-              onClick={() => handleEdit(row.original)}
-              aria-label="edit"
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              size="small"
-              onClick={() => handleDelete(row.original)}
-              aria-label="delete"
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </div>
-        ),
-      },
     ],
     []
   );
-
-  const handleEdit = (rowData) => {
-    console.log("Edit:", rowData);
-    // Implement your edit logic here
-  };
-
-  const handleDelete = (rowData) => {
-    console.log("Delete:", rowData);
-    // Implement your delete logic here
-  };
 
   return (
     <div
@@ -59,11 +24,13 @@ const SCLCMGuidanceClassTable = () => {
         display: "flex",
         justifyContent: "center",
         width: "100%",
-        overflowX: "auto",
-        marginTop: "50px",
+        height: "60vh",
+        overflow: "auto",
+        marginTop: "1in",
+        marginBottom: "16px",
       }}
     >
-      <div style={{ width: "900px", height: "300px" }}>
+      <div style={{ maxWidth: "1000px", width: "100%", height: "100%" }}>
         <MaterialReactTable columns={columns} data={[]} />
       </div>
     </div>

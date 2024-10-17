@@ -30,11 +30,13 @@ const Grade6Table = () => {
         display: "flex",
         justifyContent: "center",
         width: "100%",
-        overflowX: "auto",
-        marginTop: "50px",
+        height: "60vh",
+        overflow: "auto",
+        marginTop: "1in",
+        marginBottom: "16px",
       }}
     >
-      <div style={{ width: "900px", height: "300px" }}>
+      <div style={{ maxWidth: "1000px", width: "100%", height: "100%" }}>
         <MaterialReactTable columns={columns} data={[]} />
       </div>
     </div>
