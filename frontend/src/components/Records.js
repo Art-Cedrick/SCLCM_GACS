@@ -1,110 +1,248 @@
-import React, { useMemo } from "react";
-import { MaterialReactTable } from "material-react-table";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton } from "@mui/material";
+import React from "react";
+import {
+  Typography,
+  Paper,
+  Box,
+  Card,
+  CardContent,
+  Stack,
+  Button,
+  TextField
+} from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
+import SingleSelect from "./AllForms/Forms/SingleSelect"; // Ensure this path is correct
+import AxiosInstance from "./AllForms/Axios";
 
-// Sample data
-const data = [
-  {
-    name: { firstName: "John", lastName: "Doe" },
-    address: "261 Erdman Ford",
-    city: "East Daphne",
-    state: "Kentucky",
-  },
-  {
-    name: { firstName: "Jane", lastName: "Doe" },
-    address: "769 Dominic Grove",
-    city: "Columbus",
-    state: "Ohio",
-  },
-  {
-    name: { firstName: "Joe", lastName: "Doe" },
-    address: "566 Brakus Inlet",
-    city: "South Linda",
-    state: "West Virginia",
-  },
-  {
-    name: { firstName: "Kevin", lastName: "Vandy" },
-    address: "722 Emie Stream",
-    city: "Lincoln",
-    state: "Nebraska",
-  },
-  {
-    name: { firstName: "Joshua", lastName: "Rolluffs" },
-    address: "32188 Larkin Turnpike",
-    city: "Charleston",
-    state: "South Carolina",
-  },
-];
+const Grade2 = () => {
 
-const Example = () => {
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: "name.firstName",
-        header: "First Name",
-        size: 150,
-      },
-      {
-        accessorKey: "name.lastName",
-        header: "Last Name",
-        size: 150,
-      },
-      {
-        accessorKey: "address",
-        header: "Address",
-        size: 200,
-      },
-      {
-        accessorKey: "city",
-        header: "City",
-        size: 150,
-      },
-      {
-        accessorKey: "state",
-        header: "State",
-        size: 150,
-      },
-      {
-        accessorKey: "actions",
-        header: "Actions",
-        size: 100,
-        // Render action buttons
-        Cell: ({ row }) => (
-          <div>
-            <IconButton
-              size="small"
-              onClick={() => handleEdit(row.original)}
-              aria-label="edit"
+  const defaultValues = {
+    name: '',
+    age: '',
+    sex: '',
+    gradeLevel: '',
+    section: '',
+    totalEQ: '',
+    verbalInterpretation: '',
+    stanine: '',
+    sa: '',
+    mme: '',
+    sm: '',
+    e: '',
+    hr: '',
+  }
+
+  const { control, handleSubmit, reset, setValue } = useForm({defaultValues:defaultValues});
+
+  // Submit handler
+  const submission = (data) => {
+    AxiosInstance.post(`/grade_two/`, {
+      name: data.name,
+      age: data.age,
+      sex: data.sex,
+      gradeLevel: data.gradeLevel,
+      section: data.section,
+      totalEQ: data.totalEQ,
+      verbalInterpretation: data.verbalInterpretation,
+      stanine: data.stanine,
+      sa: data.sa,
+      mme: data.mme,
+      sm: data.sm,
+      e: data.e,
+      hr: data.hr,
+    }).then(response => {
+      console.log("Data submitted successfully:", response.data);
+      reset(); // Reset form after successful submission
+    })
+    .catch(error => {
+      console.error("Error submitting data:", error);
+    });
+  }
+
+  return (
+    <form onSubmit={handleSubmit(submission)}>
+    <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
+      <CardContent>
+        <Typography variant="h5" gutterBottom align="center">
+          Grade 2
+        </Typography>
+        <Paper
+          elevation={3}
+          sx={{
+            padding: "40px",
+            borderRadius: "8px",
+            backgroundColor: "#f7f9fc",
+            minHeight: "50vh",
+          }}
+        >
+          <Stack spacing={2}>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller
+                name="name" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="Name:"
+                {...field}
+                placeholder=""
+                />
+                )}
+                />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller
+                name="age" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="Age:"
+                {...field}
+                placeholder=""
+                />
+                )}
+                />
+              <Controller
+                name="sex"
+                control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Sex:"
+                {...field}
+                options={["M", "F"]}
+                sx={{width: "100px" }}
+              />
+                )}
+                />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller
+                name="gradeLevel"
+                control={control}
+                render={({field}) => (
+              <TextField
+                label="Grade Level:"
+                {...field}
+              />
+                )}
+                />
+              <Controller
+                name="section"
+                control={control}
+                render={({field}) => (
+              <TextField
+                label="Section:"
+                {...field}
+              />
+                )}
+                />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller
+                name="totalEQ" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="Total EQ:" 
+                {...field}
+               />
+                )}
+                />
+              <Controller
+                name="verbalInterpretation"
+                control={control}
+                render={({field}) => (  
+              <TextField
+                label="Verbal Interpretation:"
+                {...field}
+              />
+                )}
+                />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller
+                name="stanine" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="Stanine:" 
+                {...field}
+                />
+                )}
+                />
+              <Controller
+                name="sa" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="SA:" 
+                 {...field}
+                />
+                )}
+                />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller
+                name="mme" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+              label="MME:" 
+               {...field}
+              />
+                )}
+                />
+              <Controller
+                name="sm" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="SM:" 
+                {...field}
+                />
+                )}
+                />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller
+                name="e" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="E:" 
+                 {...field}
+                />
+                )}
+                />
+              <Controller
+                name="hr" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="HR:" 
+                {...field} 
+                />
+                )}
+                />
+            </Stack>
+          </Stack>
+
+          {/* Submit Button */}
+          <Box
+            sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              sx={{ marginTop: "10px" }}
             >
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              size="small"
-              onClick={() => handleDelete(row.original)}
-              aria-label="delete"
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </div>
-        ),
-      },
-    ],
-    []
+              Submit
+            </Button>
+          </Box>
+        </Paper>
+      </CardContent>
+    </Card>
+    </form>
   );
-
-  const handleEdit = (rowData) => {
-    console.log("Edit:", rowData);
-    // Implement your edit logic here
-  };
-
-  const handleDelete = (rowData) => {
-    console.log("Delete:", rowData);
-    // Implement your delete logic here
-  };
-
-  return <MaterialReactTable columns={columns} data={data} />;
 };
 
-export default Example;
+export default Grade2;

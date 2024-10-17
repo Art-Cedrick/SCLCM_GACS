@@ -10,9 +10,8 @@ import {
   Button, // Import Button here
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import DatePicker from "./Forms/DatePicker"; // Ensure this path is correct
-import TextFields from "./Forms/TextFields"; // Ensure this path is correct
-import CheckboxLabels from "./Forms/CheckboxLabels"; // Ensure this path is correct
+import DatePicker from "./AllForms/Forms/DatePicker";
+import CheckboxLabels from "./AllForms/Forms/CheckboxLabels"; // Ensure this path is correct
 
 const Appointement = () => {
   const { control, handleSubmit } = useForm();
@@ -41,14 +40,14 @@ const Appointement = () => {
           <Stack spacing={2}>
             {/* First Row: Grade, Section, and Date Picker */}
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
+              <TextField
                 label="Grade"
                 name="grade"
                 control={control}
                 placeholder="Enter Grade"
                 sx={{ flex: 1 }}
               />
-              <TextFields
+              <TextField
                 label="Section"
                 name="section"
                 control={control}

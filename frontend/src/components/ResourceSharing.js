@@ -6,6 +6,7 @@ import {
   Container,
   Stack,
   IconButton,
+  TextField
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -15,8 +16,6 @@ import {
   AttachFile as AttachFileIcon,
 } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
-import TextFields from "./Forms/TextFields";
-import MultilineTextField from "./Forms/MultilineTextField"; // Import the new component
 
 const ResourceSharing = () => {
   const { control, handleSubmit } = useForm();
@@ -73,7 +72,7 @@ const ResourceSharing = () => {
             <IconButton onClick={toggleVisibility}>
               <AddIcon />
             </IconButton>
-            <TextFields
+            <TextField
               control={control}
               name="search"
               placeholder="Search..."
@@ -133,7 +132,7 @@ const ResourceSharing = () => {
             >
               <Box className="box" sx={{ mb: 2 }}>
                 <Box display="flex" alignItems="flex-start">
-                  <TextFields
+                  <TextField
                     control={control}
                     name="title"
                     label="Title:"
@@ -161,11 +160,13 @@ const ResourceSharing = () => {
                 </Box>
               </Box>
 
-              <MultilineTextField
+              <TextField
                 control={control}
                 name="content" // Update the name as needed
                 label="Content"
-                sx={{ mb: 2 }}
+                multiline
+                rows={5}
+                sx={{ mb: 2, width: '100%'}}
               />
             </Box>
           </>

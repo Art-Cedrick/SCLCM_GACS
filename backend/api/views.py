@@ -60,6 +60,414 @@ class RoutineInterviewViewset(viewsets.ModelViewSet):
         project = self.queryset.get(pk=pk)
         project.delete()
         return Response(status=204)
+    
+class IndividualRecordFormViewset(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    queryset = IndividualRecordForm.objects.all()
+    serializer_class = IndividualRecordFormSerializer
+
+    def list(self, request):
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        project.delete()
+        return Response(status=204)  
+    
+class CareerTrackingViewset(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    queryset = CareerTracking.objects.all()
+    serializer_class = CareerTrackingSerializer
+
+    def list(self, request):
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        project.delete()
+        return Response(status=204)  
+
+class Grade_TwoViewset(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    queryset = Grade_Two.objects.all()
+    serializer_class = Grade_TwoSerializer
+
+    def list(self, request):
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        project.delete()
+        return Response(status=204)   
+    
+class Grade_ThreeViewset(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    queryset = Grade_Three.objects.all()
+    serializer_class = Grade_ThreeSerializer
+
+    def list(self, request):
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        project.delete()
+        return Response(status=204) 
+
+class Grade_FourViewset(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    queryset = Grade_Four.objects.all()
+    serializer_class = Grade_FourSerializer
+
+    def list(self, request):
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        project.delete()
+        return Response(status=204)   
+
+class Grade_FiveViewset(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    queryset = Grade_Five.objects.all()
+    serializer_class = Grade_FiveSerializer
+
+    def list(self, request):
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        project.delete()
+        return Response(status=204) 
+
+class Grade_SixViewset(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    queryset = Grade_Six.objects.all()
+    serializer_class = Grade_SixSerializer
+
+    def list(self, request):
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        project.delete()
+        return Response(status=204)      
+
+class Grade_SevenViewset(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    queryset = Grade_Seven.objects.all()
+    serializer_class = Grade_SevenSerializer
+
+    def list(self, request):
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        project.delete()
+        return Response(status=204)        
+
+class Grade_EightViewset(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    queryset = Grade_Eight.objects.all()
+    serializer_class = Grade_EightSerializer
+
+    def list(self, request):
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        project.delete()
+        return Response(status=204)        
+
+class Grade_NineViewset(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    queryset = Grade_Nine.objects.all()
+    serializer_class = Grade_NineSerializer
+
+    def list(self, request):
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        project.delete()
+        return Response(status=204)        
+
+class Grade_TenViewset(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    queryset = Grade_Ten.objects.all()
+    serializer_class = Grade_TenSerializer
+
+    def list(self, request):
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        serializer = self.serializer_class(project, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        project = self.queryset.get(pk=pk)
+        project.delete()
+        return Response(status=204)        
+
 
 class ProjectViewset(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]

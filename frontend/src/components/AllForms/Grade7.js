@@ -7,21 +7,68 @@ import {
   CardContent,
   Stack,
   Button,
+  TextField
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import TextFields from "./Forms/TextFields"; // Ensure this path is correct
-import MultipleSelect from "./Forms/MultipleSelect"; // Ensure this path is correct
+import { useForm, Controller } from "react-hook-form";
+import SingleSelect from "./Forms/SingleSelect"; // Ensure this path is correct
+import AxiosInstance from "./Axios";
 
 const Grade7 = () => {
-  const { control, handleSubmit } = useForm();
 
-  // Submit handler
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle form submission logic here
+  const defaultValues = {
+    name: '',
+    age: '',
+    sex: '',
+    gradeLevel: '',
+    section: '',
+    tot: '',
+    beh: '',
+    inte: '',
+    phy: '',
+    fre: '',
+    popularity: '',
+    hap: '',
+    beh_num: '',
+    int_num: '',
+    phy_num: '',
+    fre_num: '',
+    popularity_num: '',
+    hap_num: '',
+  }
+
+  const { control, handleSubmit, reset, setValue } = useForm({defaultValues:defaultValues});
+
+  const submission = (data) => {
+    AxiosInstance.post(`/grade_seven/`,{
+      name: data.name,
+      age: data.age,
+      sex: data.sex,
+      gradeLevel: data.gradeLevel,
+      section: data.section,
+      tot: data.tot,
+      beh: data.beh,
+      inte: data.inte,
+      phy: data.phy,
+      fre: data.fre,
+      popularity: data.popularity,
+      hap: data.hap,
+      beh_num: data.beh_num,
+      int_num: data.int_num,
+      phy_num: data.phy_num,
+      fre_num: data.fre_num,
+      popularity_num: data.popularity_num,
+      hap_num: data.hap_num,
+    }).then(response => {
+      console.log("Data submitted successfully:", response.data);
+      reset(); // Reset form after successful submission
+    })
+    .catch(error => {
+      console.error("Error submitting data:", error);
+    });
   };
 
   return (
+    <form onSubmit={handleSubmit(submission)}>
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
       <CardContent>
         <Typography variant="h5" gutterBottom align="center">
@@ -38,31 +85,64 @@ const Grade7 = () => {
         >
           <Stack spacing={2}>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Student Name:"
-                name="student name"
+              <Controller
+                name="name"
                 control={control}
-              />
+                render={({field}) => (
+              <TextField
+                label="Student Name:"
+                {...field}
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Age:" name="age" control={control} />
-              <MultipleSelect
-                label="Sex:"
+              <Controller
+                name="age" control={control}
+                render={({field}) => (
+              <TextField label="Age:" {...field} /> )} />
+              <Controller
                 name="sex"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Sex:"
+                {...field}
                 options={["M", "F"]}
-              />
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Grade Level:"
+              <Controller
                 name="gradeLevel"
                 control={control}
-              />
-              <MultipleSelect
-                label="Section:"
+                render={({field}) => (
+              <SingleSelect
+                label="Grade Level:"
+                {...field}
+                options={[
+                  "Grade 1",
+                  "Grade 2",
+                  "Grade 3",
+                  "Grade 4",
+                  "Grade 5",
+                  "Grade 6",
+                  "Grade 7",
+                  "Grade 8",
+                  "Grade 9",
+                  "Grade 10",
+                  "Grade 11",
+                  "Grade 12",
+                  "1st Year",
+                  "2nd Year",
+                  "3rd Year",
+                  "4th Year",
+                ]}
+              /> )} />
+              <Controller
                 name="section"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Section:"
+                {...field}
                 options={[
                   "Gabriel",
                   "Michael",
@@ -71,129 +151,167 @@ const Grade7 = () => {
                   "Sealtiel",
                   "Uriel",
                 ]}
-              />
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <MultipleSelect
-                label="Total Score:"
+              <Controller 
                 name="tot"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Total Score:"
+                {...field}
                 options={[
                   "Low Range",
                   " Low Average Range",
                   "High Average Range ",
                   "High Range",
                 ]}
-              />
-              <MultipleSelect
+              /> )} />
+              <Controller
+                name="beh"
+                control={control}
+                render={({field}) => (
+              <SingleSelect
                 label="Behavioral Adjustment:"
-                name="beh"
-                control={control}
+                {...field}
                 options={[
                   "Low Range",
                   " Low Average Range",
                   "High Average Range ",
                   "High Range",
                 ]}
-              />
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <MultipleSelect
+              <Controller
+                name="inte"
+                control={control}
+                render={({field}) => (
+              <SingleSelect
                 label="Intellectual and School Status:"
-                name="int"
-                control={control}
+                {...field}
                 options={[
                   "Low Range",
                   " Low Average Range",
                   "High Average Range ",
                   "High Range",
                 ]}
-              />
-              <MultipleSelect
-                label="Physical Appearance and Attributes:"
-                name="phv"
-                control={control}
-                options={[
-                  "Low Range",
-                  " Low Average Range",
-                  "High Average Range ",
-                  "High Range",
-                ]}
-              />
-            </Stack>
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <MultipleSelect
-                label="Freedom from Anxiety:"
-                name="Fre"
-                control={control}
-                options={[
-                  "Low Range",
-                  " Low Average Range",
-                  "High Average Range ",
-                  "High Range",
-                ]}
-              />
-              <MultipleSelect
-                label="Popularity:"
-                name="pop"
-                control={control}
-                options={[
-                  "Low Range",
-                  " Low Average Range",
-                  "High Average Range ",
-                  "High Range",
-                ]}
-              />
-            </Stack>
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <MultipleSelect
-                label="Happiness and Satisfaction:"
-                name="hap"
-                control={control}
-                options={[
-                  "Low Range",
-                  " Low Average Range",
-                  "High Average Range ",
-                  "High Range",
-                ]}
-              />
-              <TextFields label="PY(Numerical):" name="py" control={control} />
-            </Stack>
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="BEH (Numerical):"
-                name="beh"
-                control={control}
-              />
-              <TextFields
-                label=" INT(Numerical):"
-                name="int"
-                control={control}
-              />
-            </Stack>
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="PHY (Numerical):"
+              /> )} />
+              <Controller
                 name="phy"
                 control={control}
-              />
-              <TextFields
-                label="FRE (Numerical):"
-                name="fre"
-                control={control}
-              />
+                render={({field}) => (
+              <SingleSelect
+                label="Physical Appearance and Attributes:"
+                {...field}
+                options={[
+                  "Low Range",
+                  " Low Average Range",
+                  "High Average Range ",
+                  "High Range",
+                ]}
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="POP (Numerical):"
-                name="pop"
+              <Controller
+                name="fre"
                 control={control}
-              />
-              <TextFields
-                label="HAP (Numerical):"
+                render={({field}) => (
+              <SingleSelect
+                label="Freedom from Anxiety:"
+                {...field}
+                options={[
+                  "Low Range",
+                  " Low Average Range",
+                  "High Average Range ",
+                  "High Range",
+                ]}
+              /> )} />
+              <Controller
+                name="popularity"
+                control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Popularity:"
+                {...field}
+                options={[
+                  "Low Range",
+                  " Low Average Range",
+                  "High Average Range ",
+                  "High Range",
+                ]}
+              /> )} />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller
                 name="hap"
                 control={control}
-              />
+                render={({field}) => (
+              <SingleSelect
+                label="Happiness and Satisfaction:"
+                {...field}
+                options={[
+                  "Low Range",
+                  " Low Average Range",
+                  "High Average Range ",
+                  "High Range",
+                ]}
+              /> )} />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller
+                name="beh_num"
+                control={control}
+                render={({field})=> (
+              <TextField
+                label="BEH (Numerical):"
+                {...field}
+              /> )} />
+              <Controller
+                name="int_num"
+                control={control}
+                render={({field}) => (
+              <TextField
+                label=" INT(Numerical):"
+                {...field}
+              /> )} />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller 
+                name="phy_num"
+                control={control}
+                render={({field}) => (
+              <TextField
+                label="PHY (Numerical):"
+                {...field}
+              /> )} />
+              <Controller
+                name="fre_num"
+                control={control}
+                render={({field}) => (
+              <TextField
+                label="FRE (Numerical):"
+                {...field}
+              /> )} />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Controller
+                name="popularity_num"
+                control={control}
+                render={({field}) => (
+              <TextField
+                label="POP (Numerical):"
+                {...field}
+              /> )} />
+              <Controller 
+                name="hap_num"
+                control={control}
+                render={({field}) => (
+              <TextField
+                label="HAP (Numerical):"
+                {...field}
+              /> )} />
             </Stack>
           </Stack>
 
@@ -204,7 +322,7 @@ const Grade7 = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSubmit(onSubmit)}
+              type="submit"
               sx={{ marginTop: "10px" }}
             >
               Submit
@@ -213,6 +331,7 @@ const Grade7 = () => {
         </Paper>
       </CardContent>
     </Card>
+    </form>
   );
 };
 

@@ -7,21 +7,50 @@ import {
   CardContent,
   Stack,
   Button,
+  TextField
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import TextFields from "./Forms/TextFields"; // Ensure this path is correct
-import MultipleSelect from "./Forms/MultipleSelect"; // Ensure this path is correct
+import { useForm, Controller } from "react-hook-form";
+import SingleSelect from "./Forms/SingleSelect"; // Ensure this path is correct
+import AxiosInstance from "./Axios";
 
 const Grade5 = () => {
-  const { control, handleSubmit } = useForm();
 
-  // Submit handler
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle form submission logic here
+  const defaultValues = {
+    name: '',
+    age: '',
+    sex: '',
+    gradeLevel: '',
+    section: '',
+    raw_score: '',
+    percentile: '',
+    stanine: '',
+    verbal_interpretation: '',
+  }
+
+  const { control, handleSubmit, reset, setValue } = useForm({defaultValues:defaultValues});
+
+  const submission = (data) => {
+    AxiosInstance.post(`/grade_five/`,{
+      name: data.name,
+      age: data.age,
+      sex: data.sex,
+      gradeLevel: data.gradeLevel,
+      section: data.section,
+      raw_score: data.raw_score,
+      percentile: data.percentile,
+      stanine: data.stanine,
+      verbal_interpretation: data.verbal_interpretation,
+    }).then(response => {
+      console.log("Data submitted successfully:", response.data);
+      reset(); // Reset form after successful submission
+    })
+    .catch(error => {
+      console.error("Error submitting data:", error);
+    });
   };
 
   return (
+    <form onSubmit={handleSubmit(submission)}>
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
       <CardContent>
         <Typography variant="h5" gutterBottom align="center">
@@ -38,31 +67,48 @@ const Grade5 = () => {
         >
           <Stack spacing={2}>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Student Name:"
-                name="student name"
+              <Controller
+                name="name"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Student Name:"
+                {...field}
               />
+                )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Age:" name="age" control={control} />
-              <MultipleSelect
-                label="Sex:"
+              <Controller
+                name="age" control={control}
+                render={({field}) => (
+              <TextField label="Age:" {...field} /> )} />
+              <Controller
                 name="sex"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Sex:"
+                {...field}
                 options={["M", "F"]}
               />
+                )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Grade Level:"
+              <Controller
                 name="gradeLevel"
                 control={control}
-              />
-              <MultipleSelect
-                label="Section:"
+                render={({field}) => (
+              <TextField
+                label="Grade Level:"
+                {...field}
+              /> )} />
+              <Controller
                 name="section"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Section:"
+                {...field}
                 options={[
                   "Gabriel",
                   "Michael",
@@ -71,26 +117,38 @@ const Grade5 = () => {
                   "Sealtiel",
                   "Uriel",
                 ]}
-              />
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Raw Score:"
-                name="raw score"
+              <Controller
+                name="raw_score"
                 control={control}
-              />
-              <TextFields
-                label="Percentile:"
+                render={({field}) => (
+              <TextField
+                label="Raw Score:"
+                {...field}
+              /> )} />
+              <Controller
                 name="percentile"
                 control={control}
-              />
+                render={({field}) => (
+              <TextField
+                label="Percentile:"
+                {...field}
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Stanine:" name="stanine" control={control} />
-              <MultipleSelect
-                label="Verbal Interpretation:"
-                name="verbal interpretation"
+              <Controller
+                name="stanine" control={control}
+                render={({field}) => (
+              <TextField label="Stanine:" {...field} /> )} />
+              <Controller
+                name="verbal_interpretation"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Verbal Interpretation:"
+                {...field}
                 options={[
                   "Superior",
                   "Above Average",
@@ -99,7 +157,7 @@ const Grade5 = () => {
                   "Low",
                   "Poor",
                 ]}
-              />
+              /> )} />
             </Stack>
           </Stack>
 
@@ -110,7 +168,7 @@ const Grade5 = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSubmit(onSubmit)}
+              type="submit"
               sx={{ marginTop: "10px" }}
             >
               Submit
@@ -119,6 +177,7 @@ const Grade5 = () => {
         </Paper>
       </CardContent>
     </Card>
+    </form>
   );
 };
 

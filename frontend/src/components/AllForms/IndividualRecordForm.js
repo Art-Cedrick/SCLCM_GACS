@@ -9,42 +9,71 @@ import {
   Button,
   Divider,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import TextFields from "./Forms/TextFields"; // Ensure this path is correct
-import CheckboxLabels from "./Forms/CheckboxLabels";
-import MultipleSelect from "./Forms/MultipleSelect"; // Ensure this path is correct
+import { useForm, Controller } from "react-hook-form";
+import SingleSelect from './Forms/SingleSelect';
+import AxiosInstance from "./Axios";
 
 const IndividualRecordForm = () => {
-  const { control, handleSubmit } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Add your form submission logic here
-  };
+  const defaultValues = {
+    lastname: '',
+    firstname: '',
+    middlename: '',
+    year: '',
+    section: '',
+    completeAddress: '',
+    fatherName: '',
+    fatherOccupation: '',
+    fatherContactNumber: '',
+    fatherEmailAddress: '',
+    motherName: '',
+    motherOccupation: '',
+    motherContactNumber: '',
+    motherEmailAddress: '',
+    parents: '',
+    living_with: '',
+    relationship: '',
+    club: '',
+  }
+
+  const { control, handleSubmit, reset, setValue } = useForm({defaultValues:defaultValues});
+
+  const submission = (data) => {
+    AxiosInstance.post(`/individual_record_form/`, {
+      lastname: data.lastname,
+      firstname: data.firstname,
+      middlename: data.middlename,
+      year: data.year,
+      section: data.section,
+      completeAddress: data.completeAddress,
+      fatherName: data.fatherName,
+      fatherOccupation: data.fatherOccupation,
+      fatherContactNumber: data.fatherContactNumber,
+      fatherEmailAddress: data.fatherEmailAddress,
+      motherName: data.motherName,
+      motherOccupation: data.motherOccupation,
+      motherContactNumber: data.motherContactNumber,
+      motherEmailAddress: data.motherEmailAddress,
+      parents: data.parents,
+      living_with: data.living_with,
+      relationship: data.relationship,
+      club: data.club,
+    }).then(response => {
+      console.log("Data submitted successfully:", response.data);
+      reset(); // Reset form after successful submission
+    })
+    .catch(error => {
+      console.error("Error submitting data:", error);
+    });
+  }
 
   return (
+    <form onSubmit={handleSubmit(submission)} noValidate>
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
       <CardContent>
         <Typography variant="h5" gutterBottom align="center">
           INDIVIDUAL RECORD FORM
         </Typography>
-
-        {/* Stack for School Year Typography and Select */}
-        <Stack
-          direction="row"
-          spacing={2}
-          alignItems="center"
-          sx={{ marginBottom: 2, justifyContent: "center" }}
-        >
-          <Typography variant="h7">School Year</Typography>
-          <MultipleSelect
-            label=""
-            value={[]} // Provide initial value or state
-            onChange={() => {}} // Handle selection change
-            options={[]} // Add your options here
-            sx={{ width: "200px" }} // Adjust width to make it smaller
-          />
-        </Stack>
 
         <Paper
           elevation={3}
@@ -58,52 +87,82 @@ const IndividualRecordForm = () => {
           <Stack spacing={2}>
             {/* First Row: Last Name, First Name, and Middle Name */}
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Last Name"
+              <Controller
                 name="lastname"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Last Name"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
-              <TextFields
+                )}
+                />
+              <Controller
+                name="firstname"
+                control={control}
+                render={({field}) => (  
+              <TextField
                 label="First Name"
-                name="firstName"
-                control={control}
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
-              <TextFields
+              )}
+              />
+              <Controller
+                name="middlename"
+                control={control}
+                render={({field}) => (
+              <TextField
                 label="Middle Name"
-                name="middleName"
-                control={control}
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
+                )}
+                />
             </Stack>
 
             {/* Second Row: Year, Section, and Complete Address */}
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Year"
+              <Controller
                 name="year"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Year"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
-              <TextFields
-                label="Section"
+                )}
+                />
+              <Controller
                 name="section"
                 control={control}
+                render={({field}) => (  
+              <TextField
+                label="Section"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
-              <TextFields
-                label="Complete Address"
+                )}
+                />
+              <Controller
                 name="completeAddress"
                 control={control}
+                render={({field}) => (  
+              <TextField
+                label="Complete Address"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
+                )}
+                />
             </Stack>
 
             <Divider sx={{ marginY: 2 }} />
@@ -113,36 +172,56 @@ const IndividualRecordForm = () => {
               Father:
             </Typography>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Name"
+              <Controller
                 name="fatherName"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Name"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
-              <TextFields
-                label="Occupation"
+                )}
+                />
+              <Controller
                 name="fatherOccupation"
                 control={control}
+                render={({field}) => (  
+              <TextField
+                label="Occupation"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
+                )}
+                />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Contact Number"
+              <Controller
                 name="fatherContactNumber"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Contact Number"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
-              <TextFields
-                label="Email Address"
+                )}
+                />
+              <Controller
                 name="fatherEmailAddress"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Email Address"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
+                )}
+                />
             </Stack>
 
             <Divider sx={{ marginY: 2 }} />
@@ -152,36 +231,56 @@ const IndividualRecordForm = () => {
               Mother:
             </Typography>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Name"
+              <Controller
                 name="motherName"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Name"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
-              <TextFields
-                label="Occupation"
+                )}
+                />
+              <Controller  
                 name="motherOccupation"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Occupation"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
+                )}
+                />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Contact Number"
+              <Controller
                 name="motherContactNumber"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Contact Number"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
-              <TextFields
-                label="Email Address"
+                )}
+                />
+              <Controller
                 name="motherEmailAddress"
                 control={control}
+                render={({field}) => (  
+              <TextField
+                label="Email Address"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
+                )}
+                />
             </Stack>
 
             <Divider sx={{ marginY: 2 }} />
@@ -196,16 +295,23 @@ const IndividualRecordForm = () => {
                 spacing={2}
                 alignItems="flex-start"
               >
-                <CheckboxLabels
+                <Controller
+                  name="parents"
                   control={control}
-                  name="livingTogether"
-                  label="Living Together"
+                  render={({field}) => (
+                <SingleSelect
+                  label="Parents"
+                  {...field}
+                  options={[
+                    "Living Together",
+                    "Separated"
+                  ]}
+                  sx={{
+                    width: "200px", height: "50px"
+                  }}
                 />
-                <CheckboxLabels
-                  control={control}
-                  name="separated"
-                  label="Separated"
-                />
+                  )}
+                  />
               </Stack>
             </Stack>
             <Divider sx={{ marginY: 2 }} />
@@ -217,41 +323,39 @@ const IndividualRecordForm = () => {
               </Typography>
               <Stack direction="column" spacing={1} alignItems="flex-start">
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <CheckboxLabels
-                    control={control}
-                    name="bothParents"
-                    label="Both Parents"
+                  <Controller
+                    name="living_with"
+                    control={control} 
+                    render={({field}) => (
+                  <SingleSelect
+                    {...field}
+                    label="Living With"
+                    options= {[
+                      "Both Parents",
+                      "Mother Only",
+                      "Father Only",
+                      "Relatives"
+                    ]}
+                    sx = {{width: "200px", height: "50px"}}
                   />
+                    )}
+                    />
                 </Stack>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <CheckboxLabels
-                    control={control}
-                    name="motherOnly"
-                    label="Mother Only"
-                  />
-                </Stack>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <CheckboxLabels
-                    control={control}
-                    name="fatherOnly"
-                    label="Father Only"
-                  />
-                </Stack>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <CheckboxLabels
-                    control={control}
-                    name="relatives"
-                    label="Relatives:"
-                  />
-                  <TextField
-                    name="relationship"
-                    control={control}
-                    placeholder="relationship"
+              </Stack>
+              <Stack direction="column" spacing={2} alignItems="center">
+                <Controller
+                  name="relationship"
+                  control={control}
+                  render={({field}) => (
+                <TextField
+                    {...field}
+                    placeholder="Relationship"
                     variant="standard"
                     sx={{ flex: 1 }} // Adjust width as needed
                   />
+                  )}
+                  />
                 </Stack>
-              </Stack>
             </Stack>
 
             <Divider sx={{ marginY: 2 }} />
@@ -259,13 +363,18 @@ const IndividualRecordForm = () => {
             Club Membership / Position Handled:
         </Typography>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label=""
-                name="Club membership/posistion handled"
+              <Controller
+                name="club"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Club membership/posistion handled"
+                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
+                )}
+                />
               </Stack>
 
             {/* Submit Button at the end of Living With section, aligned to flex-end */}
@@ -277,8 +386,7 @@ const IndividualRecordForm = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleSubmit(onSubmit)}
-              >
+                type="submit">
                 Submit
               </Button>
             </Stack>
@@ -286,6 +394,7 @@ const IndividualRecordForm = () => {
         </Paper>
       </CardContent>
     </Card>
+    </form>
   );
 };
 

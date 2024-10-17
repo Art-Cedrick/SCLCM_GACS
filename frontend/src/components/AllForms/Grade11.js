@@ -7,10 +7,10 @@ import {
   CardContent,
   Stack,
   Button,
+  TextField
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import TextFields from "./Forms/TextFields"; // Ensure this path is correct
-import MultipleSelect from "./Forms/MultipleSelect"; // Ensure this path is correct
+import SingleSelect from "./Forms/SingleSelect"; // Ensure this path is correct
 
 const Grade11 = () => {
   const { control, handleSubmit } = useForm();
@@ -38,15 +38,15 @@ const Grade11 = () => {
         >
           <Stack spacing={2}>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
+              <TextField
                 label="Student Name:"
-                name="student name"
+                name="name"
                 control={control}
               />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Age:" name="age" control={control} />
-              <MultipleSelect
+              <TextField label="Age:" name="age" control={control} />
+              <SingleSelect
                 label="Sex:"
                 name="sex"
                 control={control}
@@ -54,12 +54,12 @@ const Grade11 = () => {
               />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
+              <TextField
                 label="Grade Level:"
                 name="gradeLevel"
                 control={control}
               />
-              <MultipleSelect
+              <SingleSelect
                 label="Section:"
                 name="section"
                 control={control}
@@ -79,86 +79,86 @@ const Grade11 = () => {
               />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Top 1:" name="top 1" control={control} />
-              <TextFields label="Top 2:" name="top 2" control={control} />
+              <TextField label="Top 1:" name="top 1" control={control} />
+              <TextField label="Top 2:" name="top 2" control={control} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Top 3:" name="top 3" control={control} />
-              <TextFields label="Warmth:" name="warmth" control={control} />
+              <TextField label="Top 3:" name="top 3" control={control} />
+              <TextField label="Warmth:" name="warmth" control={control} />
             </Stack>
 
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
+              <TextField
                 label="Reasoning:"
                 name="reasoning"
                 control={control}
               />
-              <TextFields label="Emotion:" name="emotion" control={control} />
+              <TextField label="Emotion:" name="emotion" control={control} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
+              <TextField
                 label="Dominance:"
                 name="dominance"
                 control={control}
               />
-              <TextFields
+              <TextField
                 label="Liveliness:"
                 name="liveliness"
                 control={control}
               />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
+              <TextField
                 label="Rule - Consciousness:"
                 name="rule - consciousness"
                 control={control}
               />
-              <TextFields
+              <TextField
                 label="Social Boldness:"
                 name="social boldness"
                 control={control}
               />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
+              <TextField
                 label="Sensitivity:"
                 name="sensitivity"
                 control={control}
               />
-              <TextFields
+              <TextField
                 label="Vigilance:"
                 name="vigilance"
                 control={control}
               />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Abstract:" name="Abstract" control={control} />
-              <TextFields
+              <TextField label="Abstract:" name="Abstract" control={control} />
+              <TextField
                 label="Privateness:"
                 name="privateness"
                 control={control}
               />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
+              <TextField
                 label="Apprehension:"
                 name="apprehension"
                 control={control}
               />
-              <TextFields label="Openness:" name="openness" control={control} />
+              <TextField label="Openness:" name="openness" control={control} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
+              <TextField
                 label="Self Reliance:"
                 name="self reliance"
                 control={control}
               />
-              <TextFields
+              <TextField
                 label="Pefectionism:"
                 name="perfectionism"
                 control={control}
               />
-              <TextFields label="Tension:" name="tension" control={control} />
+              <TextField label="Tension:" name="tension" control={control} />
             </Stack>
           </Stack>
 

@@ -7,21 +7,59 @@ import {
   CardContent,
   Stack,
   Button,
+  TextField
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import TextFields from "./Forms/TextFields"; // Ensure this path is correct
-import MultipleSelect from "./Forms/MultipleSelect"; // Ensure this path is correct
+import { useForm, Controller } from "react-hook-form";
+import SingleSelect from "./Forms/SingleSelect"; // Ensure this path is correct
+import AxiosInstance from "./Axios";
 
 const Grade2 = () => {
-  const { control, handleSubmit } = useForm();
+
+  const defaultValues = {
+    name: '',
+    age: '',
+    sex: '',
+    gradeLevel: '',
+    section: '',
+    totalEQ: '',
+    verbalInterpretation: '',
+    stanine: '',
+    sa: '',
+    mme: '',
+    sm: '',
+    e: '',
+    hr: '',
+  }
+
+  const { control, handleSubmit, reset, setValue } = useForm({defaultValues:defaultValues});
 
   // Submit handler
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle form submission logic here
-  };
+  const submission = (data) => {
+    AxiosInstance.post(`/grade_two/`, {
+      name: data.name,
+      age: data.age,
+      sex: data.sex,
+      gradeLevel: data.gradeLevel,
+      section: data.section,
+      totalEQ: data.totalEQ,
+      verbalInterpretation: data.verbalInterpretation,
+      stanine: data.stanine,
+      sa: data.sa,
+      mme: data.mme,
+      sm: data.sm,
+      e: data.e,
+      hr: data.hr,
+    }).then(response => {
+      console.log("Data submitted successfully:", response.data);
+      reset(); // Reset form after successful submission
+    })
+    .catch(error => {
+      console.error("Error submitting data:", error);
+    });
+  }
 
   return (
+    <form onSubmit={handleSubmit(submission)}>
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
       <CardContent>
         <Typography variant="h5" gutterBottom align="center">
@@ -38,49 +76,152 @@ const Grade2 = () => {
         >
           <Stack spacing={2}>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Name:" name="name" control={control} />
+              <Controller
+                name="name" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="Name:"
+                {...field}
+                placeholder=""
+                />
+                )}
+                />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Age:" name="age" control={control} />
-              <MultipleSelect
-                label="Sex:"
+              <Controller
+                name="age" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="Age:"
+                {...field}
+                placeholder=""
+                />
+                )}
+                />
+              <Controller
                 name="sex"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Sex:"
+                {...field}
                 options={["M", "F"]}
+                sx={{width: "100px" }}
               />
+                )}
+                />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Grade Level:"
+              <Controller
                 name="gradeLevel"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Grade Level:"
+                {...field}
               />
-              <MultipleSelect
-                label="Section:"
+                )}
+                />
+              <Controller
                 name="section"
                 control={control}
-                options={["Bridget", "Bernadette", "Gertrude"]}
+                render={({field}) => (
+              <TextField
+                label="Section:"
+                {...field}
               />
+                )}
+                />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Total EQ:" name="totalEQ" control={control} />
-              <TextFields
-                label="Verbal Interpretation:"
+              <Controller
+                name="totalEQ" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="Total EQ:" 
+                {...field}
+               />
+                )}
+                />
+              <Controller
                 name="verbalInterpretation"
                 control={control}
+                render={({field}) => (  
+              <TextField
+                label="Verbal Interpretation:"
+                {...field}
               />
+                )}
+                />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Stanine:" name="stanine" control={control} />
-              <TextFields label="SA:" name="sa" control={control} />
+              <Controller
+                name="stanine" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="Stanine:" 
+                {...field}
+                />
+                )}
+                />
+              <Controller
+                name="sa" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="SA:" 
+                 {...field}
+                />
+                )}
+                />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="MME:" name="mme" control={control} />
-              <TextFields label="SM:" name="sm" control={control} />
+              <Controller
+                name="mme" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+              label="MME:" 
+               {...field}
+              />
+                )}
+                />
+              <Controller
+                name="sm" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="SM:" 
+                {...field}
+                />
+                )}
+                />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="E:" name="e" control={control} />
-              <TextFields label="HR:" name="hr" control={control} />
+              <Controller
+                name="e" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="E:" 
+                 {...field}
+                />
+                )}
+                />
+              <Controller
+                name="hr" 
+                control={control}
+                render={({field}) => (
+              <TextField 
+                label="HR:" 
+                {...field} 
+                />
+                )}
+                />
             </Stack>
           </Stack>
 
@@ -91,7 +232,7 @@ const Grade2 = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSubmit(onSubmit)}
+              type="submit"
               sx={{ marginTop: "10px" }}
             >
               Submit
@@ -100,6 +241,7 @@ const Grade2 = () => {
         </Paper>
       </CardContent>
     </Card>
+    </form>
   );
 };
 
