@@ -27,21 +27,10 @@ function getStyles(option, selectedOption, theme) {
 }
 
 const SingleSelect = React.forwardRef(function SingleSelect(
-  { label, value, onChange, options = [], sx },
+  { label, value = "", onChange, options = [], sx }, // Ensure value defaults to an empty string
   ref
 ) {
   const theme = useTheme();
-  const [selectedOption, setSelectedOption] = React.useState(value || "");
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setSelectedOption(value);
-    if (onChange) {
-      onChange(value);
-    }
-  };
 
   return (
     <FormControl sx={{ width: "100%", ...sx }}>
@@ -49,18 +38,18 @@ const SingleSelect = React.forwardRef(function SingleSelect(
       <Select
         labelId="single-select-label"
         id="single-select"
-        value={selectedOption}
-        onChange={handleChange}
-        input={<OutlinedInput label={label} inputRef={ref} />} // Passing ref to input
+        value={value || ""} // Prevent undefined value
+        onChange={(e) => onChange?.(e.target.value)} // Safely handle onChange
+        input={<OutlinedInput label={label} inputRef={ref} />}
         MenuProps={MenuProps}
-        renderValue={(selected) => (selected ? selected : "Select an option")}
+        renderValue={(selected) => selected || <em>Select an option</em>}
       >
         {options.length > 0 ? (
           options.map((option) => (
             <MenuItem
               key={option}
               value={option}
-              style={getStyles(option, selectedOption, theme)}
+              style={getStyles(option, value, theme)}
             >
               {option}
             </MenuItem>

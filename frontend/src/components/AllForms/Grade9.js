@@ -7,21 +7,80 @@ import {
   CardContent,
   Stack,
   Button,
+  TextField
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import TextFields from "./Forms/TextFields"; // Ensure this path is correct
-import MultipleSelect from "./Forms/MultipleSelect"; // Ensure this path is correct
+import { useForm, Controller } from "react-hook-form";
+import AxiosInstance from "./Axios";
+import SingleSelect from "./Forms/SingleSelect"; // Ensure this path is correct
 
 const Grade9 = () => {
-  const { control, handleSubmit } = useForm();
 
-  // Submit handler
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle form submission logic here
+  const defaultValues ={
+    name: '',
+    age: '',
+    sex: '',
+    gradeLevel: '',
+    section: '',
+    top_one: '',
+    top_two: '',
+    top_three: '',
+    self_control: '',
+    mas_fem: '',
+    status: '',
+    infrequency: '',
+    acquiescence: '',
+    r: '',
+    i: '',
+    a: '',
+    s: '',
+    e: '',
+    c: '',
+    se: '',
+    mf: '', 
+    st: '', 
+    inf: '',
+    ac: '',
+  }
+
+  const { control, handleSubmit, reset, setValue } = useForm({defaultValues:defaultValues});
+
+  const submission = (data) => {
+    AxiosInstance.post(`/grade_nine/`,{
+      name: data.name,
+      age: data.age,
+      sex: data.sex,
+      gradeLevel: data.gradeLevel,
+      section: data.section,
+      top_one: data.top_one,
+      top_two: data.top_two,
+      top_three: data.top_three,
+      self_control: data.self_control,
+      mas_fem: data.mas_fem,
+      status: data.status,
+      infrequency: data.infrequency,
+      acquiescence: data.acquiescence,
+      r: data.r,
+      i: data.i,
+      a: data.a,
+      s: data.s,
+      e: data.e,
+      c: data.c,
+      se: data.se,
+      mf: data.mf, 
+      st: data.st, 
+      inf: data.inf,
+      ac: data.ac,
+    }).then(response => {
+      console.log("Data submitted successfully:", response.data);
+      reset(); // Reset form after successful submission
+    })
+    .catch(error => {
+      console.error("Error submitting data:", error);
+    });
   };
 
   return (
+    <form onSubmit={handleSubmit(submission)}>
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
       <CardContent>
         <Typography variant="h5" gutterBottom align="center">
@@ -38,31 +97,46 @@ const Grade9 = () => {
         >
           <Stack spacing={2}>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Student Name:"
-                name="student name"
+              <Controller
+                name="name"
                 control={control}
-              />
+                render={({field}) => (
+              <TextField
+                label="Student Name:"
+                {...field}
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Age:" name="age" control={control} />
-              <MultipleSelect
-                label="Sex:"
+              <Controller
+                name="age" control={control}
+                render={({field}) => (
+              <TextField label="Age:" {...field} /> )} />
+              <Controller
                 name="sex"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Sex:"
+                {...field}
                 options={["M", "F"]}
-              />
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields
-                label="Grade Level:"
+              <Controller
                 name="gradeLevel"
                 control={control}
-              />
-              <MultipleSelect
-                label="Section:"
+                render={({field}) => (
+              <TextField
+                label="Grade Level:"
+                {...field}
+              /> )} />
+              <Controller
                 name="section"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Section:"
+                {...field}
                 options={[
                   "Gabriel",
                   "Michael",
@@ -71,13 +145,16 @@ const Grade9 = () => {
                   "Sealtiel",
                   "Uriel",
                 ]}
-              />
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <MultipleSelect
+              <Controller
+                name="top_one"
+                control={control}
+                render={({field}) => (
+              <SingleSelect
                 label="Top 1:"
-                name="top 1"
-                control={control}
+                {...field}
                 options={[
                   "Realistic",
                   "Investigative",
@@ -86,11 +163,14 @@ const Grade9 = () => {
                   "Enterprising",
                   "Conventional",
                 ]}
-              />
-              <MultipleSelect
+              /> )} />
+              <Controller 
+                name="top_two"
+                control={control}
+                render={({field}) => (
+              <SingleSelect
                 label="Top 2:"
-                name="top 2"
-                control={control}
+                {...field}
                 options={[
                   "Realistic",
                   "Investigative",
@@ -99,13 +179,16 @@ const Grade9 = () => {
                   "Enterprising",
                   "Conventional",
                 ]}
-              />
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <MultipleSelect
+              <Controller
+                name="top_three"
+                control={control}
+                render={({field}) => (
+              <SingleSelect
                 label="Top 3:"
-                name="top 3"
-                control={control}
+                {...field}
                 options={[
                   "Realistic",
                   "Investigative",
@@ -114,62 +197,110 @@ const Grade9 = () => {
                   "Enterprising",
                   "Conventional",
                 ]}
-              />
-              <MultipleSelect
-                label="Self Control:"
-                name="self control"
+              /> )} />
+              <Controller
+                name="self_control"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Self Control:"
+                {...field}
                 options={["High", "Low"]}
-              />
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <MultipleSelect
-                label="Masculinity-Femininity:"
-                name="mas-fem"
+              <Controller
+                name="mas_fem"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Masculinity-Femininity:"
+                {...field}
                 options={["High", "Low"]}
-              />
-              <MultipleSelect
-                label="Status:"
+              /> )} />
+              <Controller
                 name="status"
                 control={control}
-                options={[" ", " ", " "]}
-              />
+                render={({field}) => (
+              <SingleSelect
+                label="Status:"
+                {...field}
+                options={["1 ", " 2", " 3"]}
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <MultipleSelect
-                label="Infrequency:"
+              <Controller
                 name="infrequency"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Infrequency:"
+                {...field}
                 options={["High", "Low"]}
-              />
-              <MultipleSelect
-                label="Acquiescence:"
+              /> )} />
+              <Controller
                 name="acquiescence"
                 control={control}
+                render={({field}) => (
+              <SingleSelect
+                label="Acquiescence:"
+                {...field}
                 options={["High", "Low"]}
-              />
+              /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="R:" name="r" control={control} />
-              <TextFields label="I:" name="i" control={control} />
+              <Controller
+                name="r" control={control}
+                render={({field}) => (
+              <TextField label="R:" {...field} /> )} />
+              <Controller
+                name="i" control={control}
+                render={({field}) => (
+              <TextField label="I:" {...field} /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="A:" name="a" control={control} />
-              <TextFields label="S:" name="s" control={control} />
+              <Controller
+                name="a" control={control}
+                render={({field}) => (
+              <TextField label="A:" {...field} /> )} />
+              <Controller
+                name="s" control={control}
+                render={({field}) => (
+              <TextField label="S:" {...field} /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="E:" name="e" control={control} />
-              <TextFields label="C:" name="c" control={control} />
+              <Controller
+                name="e" control={control}
+                render={({field}) => (
+              <TextField label="E:" {...field} /> )} />
+              <Controller
+                name="c" control={control}
+                render={({field}) => (
+              <TextField label="C:" {...field} /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="Sc:" name="se" control={control} />
-              <TextFields label="Mf:" name="mf" control={control} />
+              <Controller
+                name="se" control={control}
+                render={({field}) => (
+              <TextField label="Sc:" {...field} /> )} />
+              <Controller
+                name="mf" control={control}
+                render={({field}) => (
+              <TextField label="Mf:" {...field} /> )} />
             </Stack>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <TextFields label="St:" name="st" control={control} />
-              <TextFields label="Inf:" name="inf" control={control} />
-              <TextFields label="Ac:" name="ac" control={control} />
+              <Controller
+                name="st" control={control}
+                render={({field}) => (
+              <TextField label="St:" {...field} /> )} />
+              <Controller
+                name="inf" control={control}
+                render={({field}) => (
+              <TextField label="Inf:" {...field} /> )} />
+              <Controller
+                name="ac" control={control}
+                render={({field}) => (
+              <TextField label="Ac:" {...field} /> )} />
             </Stack>
           </Stack>
 
@@ -180,7 +311,7 @@ const Grade9 = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSubmit(onSubmit)}
+              type="submit"
               sx={{ marginTop: "10px" }}
             >
               Submit
@@ -189,6 +320,7 @@ const Grade9 = () => {
         </Paper>
       </CardContent>
     </Card>
+    </form>
   );
 };
 

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {
   Box,
@@ -10,9 +11,8 @@ import {
   Button,
 } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import MultilineTextFields from "./Forms/MultilineTextField";
-import MultipleSelect from "./Forms/MultipleSelect";
-import { useForm } from "react-hook-form";
+import SingleSelect from "./Forms/SingleSelect";
+import { useForm, Controller } from "react-hook-form";
 import AxiosInstance from "./Axios";
 
 const PageOne = ({ control }) => (
@@ -21,40 +21,77 @@ const PageOne = ({ control }) => (
       <Divider sx={{ my: 3 }} />
       <Stack direction="row" spacing={3}>
         <Stack spacing={6} sx={{ flex: 1 }}>
-          <TextField
-            label="Name"
+          <Controller
             name="name"
             control={control}
+            render={({field}) => (
+          <TextField
+            {...field}
+            label="Name"
             variant="outlined"
             sx={{ width: "100%" }}
           />
-          <TextField
-            label="Grade"
+            )}
+            />
+          <Controller
             name="grade"
             control={control}
-            variant="outlined"
+            render={({field}) => (
+          <SingleSelect
+            label="Grade"
+            {...field}
+            options={[
+              "Grade 1",
+              "Grade 2",
+              "Grade 3",
+              "Grade 4",
+              "Grade 5",
+              "Grade 6",
+              "Grade 7",
+              "Grade 8",
+              "Grade 9",
+              "Grade 10",
+              "Grade 11",
+              "Grade 12",
+              "1st Year",
+              "2nd Year",
+              "3rd Year",
+              "4th Year",
+            ]}
             sx={{ width: "100%" }}
           />
+            )}
+            />
         </Stack>
         <Stack spacing={6} sx={{ flex: 1 }}>
-          <TextField
-            label="Section"
+          <Controller
             name="section"
             control={control}
+            render={({field}) => (
+          <TextField
+            label="Section"
+            {...field}
             variant="outlined"
             sx={{ width: "100%" }}
           />
+            )}
+            />
+          <Controller
+            name="date"
+            control={control}
+            render={({field}) => (
           <TextField
             label="Date"
-            name="date"
+            {...field}
             type="date"
-            control={control}
             variant="outlined"
             InputLabelProps={{
               shrink: true,
             }}
             sx={{ width: "100%" }}
           />
+            )}
+            />
         </Stack>
       </Stack>
     </Stack>
@@ -83,10 +120,13 @@ const PageTwo = ({ control }) => (
         Family:
       </Typography>
       <Stack spacing={2}>
-        <MultipleSelect
-          name="family_problem"
+        <Controller
           control={control}
+          name="family_problem"
+          render={({field}) => (
+        <SingleSelect
           label="Problems Encountered:"
+          {...field}
           options={[
             "Lack of Quality Time",
             "Parental Pressure",
@@ -97,6 +137,8 @@ const PageTwo = ({ control }) => (
           ]}
           sx={{ width: "50%" }}
         />
+          )}
+          />
       </Stack>
       <Box
         sx={{
@@ -105,12 +147,19 @@ const PageTwo = ({ control }) => (
           alignItems: "flex-start",
         }}
       >
-        <MultilineTextFields
-          label="Details:"
+        <Controller
           name="family_details"
           control={control}
+          render={({field}) => (
+        <TextField
+          label="Details:"
+          {...field}
+          multiline
+          rows={4}
           sx={{ width: "100%" }}
         />
+          )}
+          />
       </Box>
 
       <Typography
@@ -124,9 +173,12 @@ const PageTwo = ({ control }) => (
         Friends/Peers/Interpersonal Relationship:
       </Typography>
       <Stack spacing={2}>
-        <MultipleSelect
+        <Controller
           name="friends_problems"
           control={control}
+          render={({field}) => (
+        <SingleSelect
+          {...field}
           label="Problems Encountered:"
           options={[
             "Incompatibilities",
@@ -140,6 +192,8 @@ const PageTwo = ({ control }) => (
           ]}
           sx={{ width: "50%" }}
         />
+          )}
+          />
       </Stack>
       <Box
         sx={{
@@ -148,12 +202,19 @@ const PageTwo = ({ control }) => (
           alignItems: "flex-start",
         }}
       >
-        <MultilineTextFields
-          label="Details:"
+        <Controller
           name="friends_details"
           control={control}
+          render={({field}) => (
+        <TextField
+          label="Details:"
+          {...field}
+          multiline
+          rows={4}
           sx={{ width: "100%" }}
         />
+          )}
+          />
       </Box>
 
       <Typography
@@ -167,9 +228,12 @@ const PageTwo = ({ control }) => (
         Personal & Health:
       </Typography>
       <Stack spacing={2}>
-        <MultipleSelect
+        <Controller
           name="health_problem"
           control={control}
+          render={({field}) => (
+        <SingleSelect
+          {...field}
           label="Problems Encountered:"
           options={[
             "Physical Disabilities",
@@ -183,6 +247,8 @@ const PageTwo = ({ control }) => (
           ]}
           sx={{ width: "50%" }}
         />
+          )}
+          />
       </Stack>
       <Box
         sx={{
@@ -191,12 +257,19 @@ const PageTwo = ({ control }) => (
           alignItems: "flex-start",
         }}
       >
-        <MultilineTextFields
-          label="Details:"
+        <Controller
           name="health_details"
           control={control}
+          render={({field}) => (
+        <TextField
+          label="Details:"
+          {...field}
+          multiline
+          rows={4}
           sx={{ width: "100%" }}
         />
+          )}
+          />
       </Box>
     </Stack>
   </Box>
@@ -223,9 +296,12 @@ const PageThree = ({ control }) => (
         Academics/School:
       </Typography>
       <Stack spacing={2}>
-        <MultipleSelect
+        <Controller
           name="academic_problem"
           control={control}
+          render={({field}) => (
+        <SingleSelect
+          {...field}
           label="Problems Encountered:"
           options={[
             "Failing Marks",
@@ -242,6 +318,8 @@ const PageThree = ({ control }) => (
           ]}
           sx={{ width: "50%" }}
         />
+          )}
+          />
       </Stack>
       <Box
         sx={{
@@ -250,12 +328,19 @@ const PageThree = ({ control }) => (
           alignItems: "flex-start",
         }}
       >
-        <MultilineTextFields
-          label="Details:"
+        <Controller
           name="academic_details"
           control={control}
+          render={({field}) => (
+        <TextField
+          label="Details:"
+          {...field}
+          multiline
+          rows={4}
           sx={{ width: "100%" }}
         />
+          )}
+          />
       </Box>
     </Stack>
   </Box>
@@ -282,9 +367,12 @@ const PageFour = ({ control }) => (
         Academics/School:
       </Typography>
       <Stack spacing={2}>
-        <MultipleSelect
+        <Controller
           name="career_problem"
           control={control}
+          render={({field}) => (
+        <SingleSelect
+          {...field}
           label="Problems Encountered:"
           options={[
             "Undecided",
@@ -296,6 +384,8 @@ const PageFour = ({ control }) => (
           ]}
           sx={{ width: "50%" }}
         />
+          )}
+          />
       </Stack>
       <Box
         sx={{
@@ -304,12 +394,19 @@ const PageFour = ({ control }) => (
           alignItems: "flex-start",
         }}
       >
-        <MultilineTextFields
-          label="Details:"
+        <Controller
           name="career_details"
           control={control}
+          render={({field}) => (
+        <TextField
+          label="Details:"
+          {...field}
+          multiline
+          rows={4}
           sx={{ width: "100%" }}
         />
+          )}
+          />
       </Box>
     </Stack>
   </Box>
@@ -331,11 +428,18 @@ const PageFive = ({ control }) => (
         GENERAL IMPRESSION/ COUNSELOR'S REMARKS
       </Typography>
       <Stack spacing={2}>
-        <MultilineTextFields
+        <Controller
           name="remarks"
           control={control}
+          render={({field}) => (
+        <TextField
+          {...field}
+          multiline
+          rows={4}
           sx={{ width: "100%" }}
         />
+          )}
+          />
       </Stack>
       <Typography
         variant="h7"
@@ -349,9 +453,12 @@ const PageFive = ({ control }) => (
         Recommendations:
       </Typography>
       <Stack spacing={2}>
-        <MultipleSelect
+        <Controller
           name="recommendation"
           control={control}
+          render={({field}) => (
+        <SingleSelect
+          {...field}
           label="Recommendation"
           options={[
             "For Follow-up",
@@ -361,6 +468,8 @@ const PageFive = ({ control }) => (
           ]}
           sx={{ width: "50%" }}
         />
+          )}
+          />
       </Stack>
       <Box
         sx={{
@@ -372,13 +481,18 @@ const PageFive = ({ control }) => (
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <TextField
+          <Controller
             name="other_recommendation"
             control={control}
+            render={({field}) => (
+          <TextField
+            {...field}
             label="Other"
             variant="standard"
             sx={{ width: "200px" }}
           />
+            )}
+            />
         </Box>
       </Box>
       <Box
@@ -402,12 +516,12 @@ const PageFive = ({ control }) => (
 
 const RoutineInterview = () => {
 
-  const defaultvalues = {
+  const defaultValues = {
     name: '',
     section: '',
     grade: '',
     date: '',
-    family_probelm: '',
+    family_problem: '',
     family_details: '',
     friends_problem: '',
     friends_details: '',
@@ -422,14 +536,14 @@ const RoutineInterview = () => {
     other_recommendation: '',
      }
 
-  const { handleSubmit, reset, setValue, control } = useForm({defaultvalues:defaultvalues});
+  const { handleSubmit, reset, setValue, control } = useForm({defaultValues:defaultValues});
   const submission = (data) => {
-    AxiosInstance.post(`forms/`,{
+    AxiosInstance.post(`/routine_interview/`,{
       name: data.name,
       section: data.section,
       grade: data.grade,
       date: data.date,
-      family_probelm: data.family_probelm,
+      family_problem: data.family_problem,
       family_details: data.family_details,
       friends_problem: data.friends_problem,
       friends_details: data.friends_details,
@@ -442,9 +556,13 @@ const RoutineInterview = () => {
       remarks: data.remarks,
       recommendation: data.recommendation,
       other_recommendation: data.other_recommendation,
-    }
-
-    )
+    }).then(response => {
+      console.log("Data submitted successfully:", response.data);
+      reset(); // Reset form after successful submission
+    })
+    .catch(error => {
+      console.error("Error submitting data:", error);
+    });
   }
   const [page, setPage] = useState(1);
 
@@ -509,3 +627,4 @@ const RoutineInterview = () => {
 };
 
 export default RoutineInterview;
+
