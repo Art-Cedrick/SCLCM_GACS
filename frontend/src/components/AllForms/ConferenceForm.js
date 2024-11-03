@@ -1,15 +1,77 @@
-import React from "react";
-import { Box, Typography, Paper, TextField } from "@mui/material";
-import TextFields from "./Forms/TextFields";
-import DatePicker from "./Forms/DatePicker";
-import CheckboxLabels from "./Forms/CheckboxLabels";
-import MultilineTextFields from "./Forms/MultilineTextField";
-import { useForm } from "react-hook-form";
+import React, { useEffect } from "react";
+import { Box, Typography, Paper, TextField, Button, Select, FormControl, InputLabel, MenuItem } from "@mui/material";
+import SingleSelect from "./Forms/SingleSelect";
+import { useForm, Controller } from "react-hook-form";
+import AxiosInstance from "./Axios";
+import { useMutation, useQueryClient } from "react-query";
 
-const ConferenceForm = () => {
-  const { control } = useForm(); // Only destructure control since we are not using form submission
+const ConferenceForm = ({initialData, onClose}) => {
+
+  const queryClient = useQueryClient();
+
+  const defaultValues = {
+    type: '',
+    name: '',
+    date: '',
+    grade: '',
+    section: '',
+    teachers: '',
+    purpose: '',
+    others: '',
+    note: '',
+    recommendations: '',
+  }
+
+  const { control, handleSubmit, reset } = useForm({defaultValues: initialData || defaultValues}); // Only destructure control since we are not using form submission
+
+  useEffect(() => {
+    if (initialData) reset(initialData);
+  }, [initialData, reset]);
+
+  const mutation = useMutation(
+    (data) => 
+      initialData
+      ? AxiosInstance.put(`/conferenceform/${initialData.id}/`, {
+        type: data.type,
+        name: data.name,
+        date: data.date,
+        grade: data.grade,
+        section: data.section,
+        teachers: data.teachers,
+        purpose: data.purpose,
+        others: data.others,
+        note: data.note,
+        recommendations: data.recommendations,})
+      : AxiosInstance.post(`/conferenceform/`, {
+        type: data.type,
+        name: data.name,
+        date: data.date,
+        grade: data.grade,
+        section: data.section,
+        teachers: data.teachers,
+        purpose: data.purpose,
+        others: data.others,
+        note: data.note,
+        recommendations: data.recommendations,
+    }), {
+      onSuccess: () => {
+        queryClient.invalidateQueries('conferenceData');
+        console.log("Data invalidated");
+        queryClient.refetchQueries('conferenceData');
+        console.log("Data refetched");
+        reset();
+        onClose();
+        console.log("Data submitted and table refreshed");
+      }, onError: (error) => {
+        console.error("Error submitting data", error);
+      },
+    }
+  )
+
+  const submission = (data) => mutation.mutate(data);
 
   return (
+    <form onSubmit={handleSubmit(submission)}>
     <Paper
       elevation={3}
       sx={{
@@ -33,6 +95,18 @@ const ConferenceForm = () => {
       >
         CONFERENCE FORM
       </Typography>
+      <Controller
+          name = "type"
+          control={control}
+          render={({field}) => (
+          <FormControl fullWidth>
+          <InputLabel>Type of Conference</InputLabel>
+          <Select
+            label = "Type of Conference"
+            {...field} >
+            <MenuItem value={"Teacher's Conference"}>Teacher's Conference</MenuItem>
+            <MenuItem value={"Parent's Conference"}>Parent's Conference</MenuItem>
+          </Select> </FormControl> )} />
 
       <Box
         sx={{
@@ -42,32 +116,38 @@ const ConferenceForm = () => {
           justifyContent: "space-between",
           gap: 2,
           mb: 2,
+          mt: 2
         }}
       >
-        <TextFields
-          label="Name of Student"
+        <Controller
           name="name"
           control={control}
-          placeholder="Enter name"
+          render={({field}) => (
+        <TextField
+          label="Name of Student"
+          {...field}
           sx={{
             flex: 1,
             "& .MuiInputBase-input": {
               fontSize: "16px",
             },
           }}
-        />
-        <DatePicker
-          label="Date"
-          name="date"
-          control={control}
-          sx={{
-            flex: "0 0 auto",
-            width: "150px",
-            "& .MuiInputBase-input": {
-              fontSize: "16px",
-            },
-          }}
-        />
+        /> )} />
+        <Controller
+            name="date"
+            control={control}
+            render={({field}) => (
+          <TextField
+            label="Date"
+            {...field}
+            type="date"
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+            )}
+            />
       </Box>
 
       <Box
@@ -76,23 +156,43 @@ const ConferenceForm = () => {
           mb: 2,
         }}
       >
-        <TextFields
-          label="Grade & Section"
-          name="section"
+        <Controller
+          name="grade"
           control={control}
-          placeholder="Enter grade and section"
+          render={({field}) => (
+        <TextField
+          label="Grade"
+          {...field}
           sx={{
             width: "100%",
             "& .MuiInputBase-input": {
               fontSize: "16px",
             },
           }}
-        />
-
-        {/* Add the new TextField here */}
+        />)} />
+        <Controller
+          name="section"
+          control={control}
+          render={({field}) => (
         <TextField
-          label="Name of Parent's/Guardian"
-          name=""
+          label="Section"
+          {...field}
+          sx={{
+            width: "100%",
+            mt: 2,
+            "& .MuiInputBase-input": {
+              fontSize: "16px",
+            },
+          }}
+        /> )} />
+        {/* Add the new TextField here */}
+        <Controller
+          name="teachers"
+          control={control}
+          render={({field}) => (
+        <TextField
+          label="Name of Teacher/s or Parent/s"
+          {...field}
           variant="outlined"
           sx={{
             width: "100%",
@@ -101,7 +201,7 @@ const ConferenceForm = () => {
               fontSize: "16px",
             },
           }}
-        />
+        /> )} />
 
         <Typography
           variant="body1"
@@ -124,17 +224,27 @@ const ConferenceForm = () => {
             mt: 1,
           }}
         >
-          <CheckboxLabels control={control} name="academic" label="Academic" />
-          <CheckboxLabels
-            control={control}
-            name="behavioral"
-            label="Behavioral"
-          />
+          <Controller
+          name = "purpose"
+          control={control}
+          render={({field}) => (
+        <SingleSelect
+          label = "Purpose of Conference"
+          {...field}
+          options = {[
+            "Academic", 
+            "Behavioral", 
+            "Others"
+          ]}
+        /> )} />
           <Box sx={{ display: "flex" }}>
-            <CheckboxLabels control={control} name="others" label="Others:" />
+            <Controller
+              name="others"
+              control={control}
+              render={({field}) => (
             <TextField
-              label=""
-              name="otherDetails"
+              label="Others"
+              {...field}
               variant="standard"
               sx={{
                 width: "200px",
@@ -142,7 +252,7 @@ const ConferenceForm = () => {
                   fontSize: "16px",
                 },
               }}
-            />
+            /> )} />
           </Box>
         </Box>
       </Box>
@@ -153,14 +263,19 @@ const ConferenceForm = () => {
           mb: 2,
         }}
       >
-        <MultilineTextFields
-          label="Counselor's Note:"
-          name="counselorsNote"
+        <Controller
+          name="note"
           control={control}
+          render={({field}) => (
+        <TextField
+          label="Counselor's Note:"
+          {...field}
+          multiline
+          rows={4}
           sx={{
             width: "100%", // Ensures the field takes up the full width of the container
           }}
-        />
+        /> )} />
       </Box>
 
       <Box
@@ -169,45 +284,35 @@ const ConferenceForm = () => {
           mb: 2,
         }}
       >
-        <MultilineTextFields
-          label="Recommendation/s:"
+        <Controller
           name="recommendations"
           control={control}
+          render={({field}) => (
+        <TextField
+          label="Recommendation/s:"
+          {...field}
+          multiline
+          rows={4}
           sx={{
             width: "100%", // Ensures the field takes up the full width of the container
           }}
-        />
+        /> )} />
       </Box>
 
       <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center", // Align items vertically centered
-          mb: 2,
-        }}
+        sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}
       >
-        <Typography
-          variant="body1"
-          sx={{
-            color: "#3f3f3f",
-            fontWeight: "medium",
-            width: "200px", // Fixed width for the label
-          }}
-        >
-          Guidance Counselor:
-        </Typography>
-        <TextField
-          name="guidanceCounselor"
-          variant="standard"
-          sx={{
-            "& .MuiInputBase-input": {
-              fontSize: "16px",
-            },
-          }}
-        />
+        <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              sx={{ marginTop: "10px" }}
+            >
+              Submit
+            </Button>
       </Box>
     </Paper>
+    </form>
   );
 };
 

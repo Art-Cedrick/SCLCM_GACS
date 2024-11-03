@@ -2,17 +2,22 @@ import React, { useState } from "react";
 import {
   Box,
   Typography,
+  Card,
   Paper,
   Stack,
   Divider,
   IconButton,
   TextField,
   Button,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl
 } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import SingleSelect from "./Forms/SingleSelect";
 import { useForm, Controller } from "react-hook-form";
 import AxiosInstance from "./Axios";
+import { useMutation, useQueryClient } from "react-query";
 
 const PageOne = ({ control }) => {
   const subjects = [
@@ -28,13 +33,65 @@ const PageOne = ({ control }) => {
     { label: "FL", name: "fl" },
   ];
 
+  const grades = ["Grade 10", "Grade 11", "Grade 12"];
+  const sections = ["Section A", "Section B", "Section C"];
+
   return (
     <Box>
       <Stack spacing={6}>
-        <Divider sx={{ my: 3 }} />
         <Typography variant="h6" sx={{ mb: 3 }}>
           Final Grade Summary
         </Typography>
+        
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: 3,
+          }}
+        >
+          {/* Name TextField */}
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Name"
+                {...field}
+                sx={{ width: "100%" }}
+              />
+            )}
+          />
+
+          {/* Grade SingleSelect */}
+          <Controller
+            name="grade"
+            control={control}
+            render={({ field }) => (
+              <SingleSelect
+                label="Grade"
+                {...field}
+                options={grades}
+                sx={{ width: "100%" }}
+              />
+            )}
+          />
+
+          {/* Section SingleSelect */}
+          <Controller
+            name="section"
+            control={control}
+            render={({ field }) => (
+              <SingleSelect
+                label="Section"
+                {...field}
+                options={sections}
+                sx={{ width: "100%" }}
+              />
+            )}
+          />
+        </Box>
+
         <Box
           sx={{
             display: "grid",
@@ -42,17 +99,20 @@ const PageOne = ({ control }) => {
             gap: 3,
           }}
         >
+          {/* Subjects TextFields */}
           {subjects.map((subject) => (
             <Controller
               name={subject.name}
               key={subject.name}
               control={control}
-              render={({field}) => (
-            <TextField
-              label={subject.label}
-              {...field}
-              sx={{ width: "100%" }}
-            /> )} />
+              render={({ field }) => (
+                <TextField
+                  label={subject.label}
+                  {...field}
+                  sx={{ width: "100%" }}
+                />
+              )}
+            />
           ))}
         </Box>
       </Stack>
@@ -113,13 +173,15 @@ const PageTwo = ({ control }) => (
           <Controller
             name="other_track"
             control={control}
-            render={({field}) => (
-          <TextField
-            {...field}
-            label="Other"
-            variant="standard"
-            sx={{ width: "200px", marginTop: "-10px" }}
-          /> )} />
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Other"
+                variant="standard"
+                sx={{ width: "200px", marginTop: "-10px" }}
+              />
+            )}
+          />
         </Box>
       </Box>
 
@@ -159,13 +221,15 @@ const PageTwo = ({ control }) => (
           <Controller
             name="other_techvoc"
             control={control}
-            render={({field}) => (
-          <TextField
-            {...field}
-            variant="standard"
-            label="Other"
-            sx={{ width: "200px", marginTop: "-10px" }}
-          /> )} />
+            render={({ field }) => (
+              <TextField
+                {...field}
+                variant="standard"
+                label="Other"
+                sx={{ width: "200px", marginTop: "-10px" }}
+              />
+            )}
+          />
         </Box>
       </Box>
 
@@ -243,13 +307,15 @@ const PageThree = ({ control }) => (
           <Controller
             name="specify"
             control={control}
-            render={({field}) => (
-          <TextField
-            label="Specify:"
-            {...field}
-            variant="standard"
-            sx={{ width: "200px" }}
-          /> )} />
+            render={({ field }) => (
+              <TextField
+                label="Specify:"
+                {...field}
+                variant="standard"
+                sx={{ width: "200px" }}
+              />
+            )}
+          />
         </Box>
       </Box>
 
@@ -274,7 +340,7 @@ const PageThree = ({ control }) => (
         }}
       >
         <Controller
-          name = "academic_status"
+          name="academic_status"
           control={control}
           render={({field}) => (
         <SingleSelect
@@ -302,12 +368,14 @@ const PageThree = ({ control }) => (
       <Controller
         name="psych_results"
         control={control}
-        render={({field}) => (
-      <TextField
-        label="Psychological Test Results"
-        {...field}
-        sx={{ mt: 1 }} // Optional margin for spacing
-      /> )} />
+        render={({ field }) => (
+          <TextField
+            label="Psychological Test Results"
+            {...field}
+            sx={{ mt: 1 }} // Optional margin for spacing
+          />
+        )}
+      />
 
       <Box
         sx={{
@@ -317,11 +385,7 @@ const PageThree = ({ control }) => (
           marginTop: 2,
         }}
       >
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-        >
+        <Button variant="contained" color="primary" type="submit">
           Submit
         </Button>
       </Box>
@@ -332,6 +396,9 @@ const PageThree = ({ control }) => (
 const CareerTracking = () => {
 
   const defaultValues = {
+    name: '',
+    grade: '',
+    section: '',
     cle: '',
     english: '',
     filipino: '',
@@ -353,7 +420,7 @@ const CareerTracking = () => {
     specify: '',
     academic_status: '',
     psych_results: '',
-  }
+  };
 
   const { control, handleSubmit, reset } = useForm({defaultValues:defaultValues});
 
@@ -370,11 +437,11 @@ const CareerTracking = () => {
       computer: data.computer,
       fl: data.fl,
 
-      academic_track: data.academic_track,
-      other_track: data.other_track,
-      tech_voc: data.tech_voc,
-      other_techvoc: data.other_techvoc,
-      preferredCourse: data.preferredCourse,
+        academic_track: data.academic_track,
+        other_track: data.other_track,
+        tech_voc: data.tech_voc,
+        other_techvoc: data.other_techvoc,
+        preferredCourse: data.preferredCourse,
 
       medical_records: data.medical_records,
       specify: data.specify,
@@ -392,7 +459,7 @@ const CareerTracking = () => {
   const [page, setPage] = useState(1);
 
   const handleNext = () => {
-    setPage((prevPage) => Math.min(prevPage + 1, 3)); // Maximum page is now 7
+    setPage((prevPage) => Math.min(prevPage + 1, 3)); // Maximum page is now 3
   };
 
   const handleBack = () => {
@@ -400,45 +467,34 @@ const CareerTracking = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submission)}>
-    <Paper
-      elevation={3}
-      sx={{
-        width: "100%",
-        maxWidth: "900px",
-        padding: 4,
-        backgroundColor: "#fafafa",
-        borderRadius: 2,
-        margin: "auto",
-        mt: 4,
-        mb: 4,
-        boxShadow: 3,
-      }}
-    >
-      <Typography
-        variant="h6"
-        sx={{
-          color: "#3f3f3f",
-          marginBottom: 4,
-          fontWeight: "bold",
-          textAlign: "center",
-        }}
-      >
-        CAREER TRACKING
-      </Typography>
-      {page === 1 && <PageOne control={control} />}
-      {page === 2 && <PageTwo control={control} />}
-      {page === 3 && <PageThree control={control} />} {/* New Page 7 */}
-      <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 4 }}>
-        <IconButton onClick={handleBack} disabled={page === 1}>
-          <ArrowBack />
-        </IconButton>
-        <IconButton onClick={handleNext} disabled={page === 3}>
-          <ArrowForward />
-        </IconButton>
-      </Stack>
-    </Paper>
-    </form>
+    <Card elevation={3} sx={{ padding: 2, maxWidth: "900px", margin: "20px auto" }}>
+      <form onSubmit={handleSubmit(submission)}>
+        <Typography variant="h5" gutterBottom align="center">
+          CAREER TRACKING
+        </Typography>
+        <Paper
+          elevation={3}
+          sx={{
+            width: "100%",
+            padding: 4,
+            backgroundColor: "#f7f9fc",
+            borderRadius: 2,
+          }}
+        >
+          {page === 1 && <PageOne control={control} />}
+          {page === 2 && <PageTwo control={control} />}
+          {page === 3 && <PageThree control={control} />}
+          <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 4 }}>
+            <IconButton onClick={handleBack} disabled={page === 1}>
+              <ArrowBack />
+            </IconButton>
+            <IconButton onClick={handleNext} disabled={page === 3}>
+              <ArrowForward />
+            </IconButton>
+          </Stack>
+        </Paper>
+      </form>
+    </Card>
   );
 };
 

@@ -1,5 +1,13 @@
 import React from "react";
-import { Container, Stack, Card, CardContent, Typography } from "@mui/material";
+import {
+  Container,
+  Stack,
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+} from "@mui/material";
+import SingleSelect from "./AllForms/Forms/SingleSelect";
 
 const Dashboard = () => {
   return (
@@ -26,22 +34,18 @@ const Dashboard = () => {
           >
             <Card sx={{ width: "200px", mb: { xs: 2, sm: 0 } }}>
               <CardContent>
-                <Typography variant="h6" fontSize="0.875rem">
-                  Academic Year
+                <Typography variant="h6" fontSize="0.875rem" sx={{fontSize:"15px", fontWeight:"bold"}}>
+                  ACADEMIC YEAR
                 </Typography>
-                <Typography variant="body2" fontSize="0.75rem">
-                  Content for Academic Year card goes here.
-                </Typography>
+                <SingleSelect></SingleSelect>
               </CardContent>
             </Card>
             <Card sx={{ width: "200px", mb: { xs: 2, sm: 0 } }}>
               <CardContent>
-                <Typography variant="h6" fontSize="0.875rem">
-                  Students
+                <Typography variant="h6" fontSize="0.875rem" sx={{fontSize:"15px", fontWeight:"bold"}}>
+                   NO. OF STUDENTS
                 </Typography>
-                <Typography variant="body2" fontSize="0.75rem">
-                  Content for Students card goes here.
-                </Typography>
+                <TextField></TextField>
               </CardContent>
             </Card>
           </Stack>

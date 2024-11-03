@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   Typography,
   Paper,
@@ -8,12 +8,18 @@ import {
   TextField,
   Button,
   Divider,
+  Select,
+  InputLabel,
+  MenuItem,
+  FormControl
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import SingleSelect from './Forms/SingleSelect';
 import AxiosInstance from "./Axios";
+import { useMutation, useQueryClient } from "react-query";
 
-const IndividualRecordForm = () => {
+const IndividualRecordForm = ({initialData, onClose}) => {
+
+  const queryClient = useQueryClient();
 
   const defaultValues = {
     lastname: '',
@@ -34,12 +40,18 @@ const IndividualRecordForm = () => {
     living_with: '',
     relationship: '',
     club: '',
-  }
+  };
 
-  const { control, handleSubmit, reset, setValue } = useForm({defaultValues:defaultValues});
+  const { control, handleSubmit, reset } = useForm({defaultValues: initialData || defaultValues});
 
-  const submission = (data) => {
-    AxiosInstance.post(`/individual_record_form/`, {
+  useEffect(() => {
+    if (initialData) reset(initialData);
+  }, [initialData, reset]);
+
+  const mutation = useMutation(
+    (data) => 
+    initialData
+    ? AxiosInstance.put(`/individual_record_form/${initialData.id}/`, {
       lastname: data.lastname,
       firstname: data.firstname,
       middlename: data.middlename,
@@ -58,17 +70,45 @@ const IndividualRecordForm = () => {
       living_with: data.living_with,
       relationship: data.relationship,
       club: data.club,
-    }).then(response => {
-      console.log("Data submitted successfully:", response.data);
-      reset(); // Reset form after successful submission
-    })
-    .catch(error => {
-      console.error("Error submitting data:", error);
-    });
-  }
+    })  
+    : AxiosInstance.post(`/individual_record_form/`, {
+      lastname: data.lastname,
+      firstname: data.firstname,
+      middlename: data.middlename,
+      year: data.year,
+      section: data.section,
+      completeAddress: data.completeAddress,
+      fatherName: data.fatherName,
+      fatherOccupation: data.fatherOccupation,
+      fatherContactNumber: data.fatherContactNumber,
+      fatherEmailAddress: data.fatherEmailAddress,
+      motherName: data.motherName,
+      motherOccupation: data.motherOccupation,
+      motherContactNumber: data.motherContactNumber,
+      motherEmailAddress: data.motherEmailAddress,
+      parents: data.parents,
+      living_with: data.living_with,
+      relationship: data.relationship,
+      club: data.club,
+    }), {
+        onSuccess: () => {
+          queryClient.invalidateQueries('IRFData');
+          console.log('Data invalidated');
+          queryClient.refetchQueries('IRFData');
+          console.log('Data refetched');
+          reset();
+          onClose();
+          console.log("Data submitted and table refreshed");
+        }, onError: (error) => {
+          console.error("Error submitting data", error);
+        },
+      }
+  );
+
+  const submission = (data) => mutation.mutate(data);
 
   return (
-    <form onSubmit={handleSubmit(submission)} noValidate>
+    <form onSubmit={handleSubmit(submission)} >
     <Card elevation={3} sx={{ maxWidth: "900px", margin: "20px auto" }}>
       <CardContent>
         <Typography variant="h5" gutterBottom align="center">
@@ -92,8 +132,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (
               <TextField
-                label="Last Name"
                 {...field}
+                label="Last Name"
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -104,8 +144,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (  
               <TextField
-                label="First Name"
                 {...field}
+                label="First Name"
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -116,8 +156,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (
               <TextField
-                label="Middle Name"
                 {...field}
+                label="Middle Name"
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -132,8 +172,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (
               <TextField
-                label="Year"
                 {...field}
+                label="Year"
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -144,8 +184,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (  
               <TextField
-                label="Section"
                 {...field}
+                label="Section"
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -156,8 +196,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (  
               <TextField
+                {...field}                
                 label="Complete Address"
-                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -177,8 +217,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (
               <TextField
-                label="Name"
                 {...field}
+                label="Name"
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -189,8 +229,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (  
               <TextField
+              {...field}
                 label="Occupation"
-                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -203,8 +243,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (
               <TextField
+              {...field}
                 label="Contact Number"
-                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -215,8 +255,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (
               <TextField
+              {...field}
                 label="Email Address"
-                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -236,8 +276,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (
               <TextField
+              {...field}
                 label="Name"
-                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -248,8 +288,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (
               <TextField
+              {...field}
                 label="Occupation"
-                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -262,8 +302,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (
               <TextField
+              {...field}
                 label="Contact Number"
-                {...field}
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -274,8 +314,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (  
               <TextField
-                label="Email Address"
                 {...field}
+                label="Email Address"
                 placeholder=""
                 sx={{ flex: 1 }}
               />
@@ -295,23 +335,18 @@ const IndividualRecordForm = () => {
                 spacing={2}
                 alignItems="flex-start"
               >
-                <Controller
-                  name="parents"
-                  control={control}
-                  render={({field}) => (
-                <SingleSelect
-                  label="Parents"
-                  {...field}
-                  options={[
-                    "Living Together",
-                    "Separated"
-                  ]}
-                  sx={{
-                    width: "200px", height: "50px"
-                  }}
-                />
-                  )}
-                  />
+                  <Controller
+                    name = "parents"
+                    control={control}
+                    render={({field}) => (
+                    <FormControl fullWidth>
+                    <InputLabel>Parents</InputLabel>
+                    <Select
+                      label = "Parents"
+                      {...field} >
+                      <MenuItem value={"Living Together"}>Living Together</MenuItem>
+                      <MenuItem value={"Separated"}>Separated</MenuItem>
+                    </Select> </FormControl> )} />
               </Stack>
             </Stack>
             <Divider sx={{ marginY: 2 }} />
@@ -323,23 +358,20 @@ const IndividualRecordForm = () => {
               </Typography>
               <Stack direction="column" spacing={1} alignItems="flex-start">
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Controller
-                    name="living_with"
-                    control={control} 
+                <Controller
+                    name = "living_with"
+                    control={control}
                     render={({field}) => (
-                  <SingleSelect
-                    {...field}
-                    label="Living With"
-                    options= {[
-                      "Both Parents",
-                      "Mother Only",
-                      "Father Only",
-                      "Relatives"
-                    ]}
-                    sx = {{width: "200px", height: "50px"}}
-                  />
-                    )}
-                    />
+                    <FormControl fullWidth>
+                    <InputLabel>Living With</InputLabel>
+                    <Select
+                      label = "Living With"
+                      {...field} >
+                      <MenuItem value={"Both Parents"}>Both Parents</MenuItem>
+                      <MenuItem value={"Mother Only"}>Mother Only</MenuItem>
+                      <MenuItem value={"Father Only"}>Father Only</MenuItem>
+                      <MenuItem value={"Relatives"}>Relatives</MenuItem>
+                    </Select> </FormControl> )} />
                 </Stack>
               </Stack>
               <Stack direction="column" spacing={2} alignItems="center">
@@ -368,8 +400,8 @@ const IndividualRecordForm = () => {
                 control={control}
                 render={({field}) => (
               <TextField
-                label="Club membership/posistion handled"
                 {...field}
+                label="Club membership/posistion handled"
                 placeholder=""
                 sx={{ flex: 1 }}
               />

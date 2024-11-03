@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 GRADE_LEVEL = [
@@ -31,6 +33,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=50, choices=USER_ROLE)
 
+class User(models.Model):
+    username = models.CharField(max_length=150)
+    password = models.CharField(max_length=255)
+
 class RoutineInterview(models.Model):
     name = models.CharField(max_length=255)
     section = models.CharField(max_length=100)
@@ -55,29 +61,29 @@ class RoutineInterview(models.Model):
     other_recommendation = models.CharField(max_length=255, blank=True, null=True)
 
 class IndividualRecordForm(models.Model):
-    lastname = models.CharField(max_length=255)
-    firstname = models.CharField(max_length=255)
-    middlename = models.CharField(max_length=255)
-    year = models.CharField(max_length=255)
-    section = models.CharField(max_length=255)
-    completeAddress = models.CharField(max_length=500)
+    lastname = models.CharField(max_length=255, blank=True, null=True)
+    firstname = models.CharField(max_length=255, blank=True, null=True)
+    middlename = models.CharField(max_length=255, blank=True, null=True)
+    year = models.CharField(max_length=255, blank=True, null=True)
+    section = models.CharField(max_length=255, blank=True, null=True)
+    completeAddress = models.CharField(max_length=500, blank=True, null=True)
 
-    fatherName = models.CharField(max_length=255)
-    fatherOccupation = models.CharField(max_length=255)
-    fatherContactNumber = models.CharField(max_length=255)
-    fatherEmailAddress = models.CharField(max_length=255)
+    fatherName = models.CharField(max_length=255, blank=True, null=True)
+    fatherOccupation = models.CharField(max_length=255, blank=True, null=True)
+    fatherContactNumber = models.CharField(max_length=255, blank=True, null=True)
+    fatherEmailAddress = models.CharField(max_length=255, blank=True, null=True)
 
-    motherName = models.CharField(max_length=255)
-    motherOccupation = models.CharField(max_length=255)
-    motherContactNumber = models.CharField(max_length=255)
-    motherEmailAddress = models.CharField(max_length=255)
+    motherName = models.CharField(max_length=255, blank=True, null=True)
+    motherOccupation = models.CharField(max_length=255, blank=True, null=True)
+    motherContactNumber = models.CharField(max_length=255, blank=True, null=True)
+    motherEmailAddress = models.CharField(max_length=255, blank=True, null=True)
 
     parents = models.JSONField(default=list)
 
     living_with = models.JSONField(default=list)
     relationship = models.CharField(max_length=255, blank=True, null=True)
 
-    club = models.CharField(max_length=500)
+    club = models.CharField(max_length=500, blank=True, null=True)
 
 class CareerTracking(models.Model):
     cle = models.IntegerField()
@@ -102,6 +108,17 @@ class CareerTracking(models.Model):
     academic_status = models.JSONField(default=list)
     psych_results = models.CharField(max_length=255)
 
+class ConferenceForm(models.Model):
+    type = models.JSONField(default=list, blank=True, null=True)
+    name = models.CharField(max_length=255)
+    date = models.DateField()
+    grade = models.CharField(max_length=255)
+    section = models.CharField(max_length=255)
+    teachers = models.CharField(max_length=500)
+    purpose = models.JSONField(default=list)
+    others = models.CharField(max_length=255, blank=True, null=True)
+    note = models.TextField()
+    recommendations = models.TextField()
 
 class Grade_Two(models.Model):
     name = models.CharField(max_length=255)
@@ -249,6 +266,40 @@ class Grade_Ten(models.Model):
     percentile = models.CharField(max_length=255)
     stanine = models.CharField(max_length=255)
     verbal_interpretation = models.JSONField(default=list)
+
+class Resource(models.Model):
+    title = models.CharField(max_length=200)
+    content = RichTextField(blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    author = models.ManyToManyField(get_user_model(), related_name='resource', blank=True, null=True)
+    attachment = models.FileField(upload_to='resource/', blank=True, null=True)
+
+
+    def __str__(self) -> str:
+        return self.title
+
+class Appointment(models.Model):
+    PURPOSE_CHOICES = [
+        ('Routine Interview', 'Routine Interview'),
+        ('Referral', 'Referral'),
+        ('Individual Planning', 'Individual Planning'),
+        ('Counseling', 'Counseling'),
+        ('Others', 'Others'),
+    ]
+
+    name = models.CharField(max_length=255)
+    grade = models.CharField(max_length=50)
+    section = models.CharField(max_length=50)
+    date = models.DateField()
+    purpose = models.CharField(max_length=50, choices=PURPOSE_CHOICES)
+    other_purpose = models.CharField(max_length=255, blank=True, null=True)
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name="student_appointment")
+    counselor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="counselor_appointment")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.date}"
 
 class Project(models.Model):
     name = models.CharField(max_length=200)

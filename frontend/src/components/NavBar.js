@@ -11,14 +11,15 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import NotesIcon from '@mui/icons-material/Notes';
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import NotesIcon from "@mui/icons-material/Notes";
 import MenuIcon from "@mui/icons-material/Menu";
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { IconButton, Menu, MenuItem } from "@mui/material";
+import file from "./images/file.png"; // Use the exact casing for your logo file
 
 export default function NavBar(props) {
   const { drawerWidth, content } = props;
@@ -42,12 +43,12 @@ export default function NavBar(props) {
 
   const handleLogout = () => {
     // Clear the authentication token and role from localStorage
-  localStorage.removeItem("token");
-  localStorage.removeItem("role");
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
 
-  // Redirect to the login page
-  window.location.href = "/";
-  handleProfileMenuClose();  // Close the profile menu
+    // Redirect to the login page
+    window.location.href = "/";
+    handleProfileMenuClose(); // Close the profile menu
   };
 
   const myDrawer = (
@@ -56,11 +57,23 @@ export default function NavBar(props) {
       <Box sx={{ overflow: "auto" }}>
         <List>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/counselor/dashboard" selected={"/counselor/dashboard" === path}>
-              <ListItemIcon>
+            <ListItemButton
+              component={Link}
+              to="/counselor/dashboard"
+              selected={"/counselor/dashboard" === path}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 1)", // Hover effect
+                },
+                "&.Mui-selected": {
+                  backgroundColor: "#1E90FF", // Highlight active link
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: "black" }}>
                 <DashboardIcon />
               </ListItemIcon>
-              <ListItemText primary={"Dashboard"} />
+              <ListItemText primary={"Dashboard"}  primaryTypographyProps={{ sx: {  fontWeight: "bold" } }} />
             </ListItemButton>
           </ListItem>
 
@@ -69,11 +82,19 @@ export default function NavBar(props) {
               component={Link}
               to="/counselor/resourcesharing"
               selected={"/counselor/resourcesharing" === path}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 1)", // Hover effect
+                },
+                "&.Mui-selected": {
+                  backgroundColor: "#1E90FF", // Highlight active link
+                },
+              }}
             >
-              <ListItemIcon>
+              <ListItemIcon sx={{ color: "black" }}>
                 <NotesIcon />
               </ListItemIcon>
-              <ListItemText primary={"Resource Sharing"} />
+              <ListItemText primary={"Resource Sharing"} primaryTypographyProps={{ sx: {  fontWeight: "bold" } }} />
             </ListItemButton>
           </ListItem>
 
@@ -82,42 +103,64 @@ export default function NavBar(props) {
               component={Link}
               to="/counselor/forms"
               selected={"/counselor/forms" === path}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 1)", // Hover effect
+                },
+                "&.Mui-selected": {
+                  backgroundColor: "#1E90FF", // Highlight active link
+                },
+              }}
             >
-              <ListItemIcon>
+              <ListItemIcon sx={{ color: "black" }}>
                 <AssignmentIcon />
               </ListItemIcon>
-              <ListItemText primary={"Forms"} />
+              <ListItemText primary={"Forms"}  primaryTypographyProps={{ sx: {  fontWeight: "bold" } }}/>
             </ListItemButton>
           </ListItem>
         </List>
 
         <ListItem disablePadding>
-            <ListItemButton
-              component={Link}
-              to="/counselor/appointment"
-              selected={"/counselor/appointment" === path}
-            >
-              <ListItemIcon>
-                <CalendarMonthIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Appointment"} />
-            </ListItemButton>
-          </ListItem>
+          <ListItemButton
+            component={Link}
+            to="/counselor/appointment"
+            selected={"/counselor/appointment" === path}
+            sx={{
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 1)", // Hover effect
+              },
+              "&.Mui-selected": {
+                backgroundColor: "#1E90FF", // Highlight active link
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: "black" }}>
+              <CalendarMonthIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Appointment"}  primaryTypographyProps={{ sx: {  fontWeight: "bold" } }}/>
+          </ListItemButton>
+        </ListItem>
 
-          <ListItem disablePadding>
-            <ListItemButton
-              component={Link}
-              to="/counselor/records"
-              selected={"/counselor/records" === path}
-            >
-              <ListItemIcon>
-                <FileCopyIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Records"} />
-            </ListItemButton>
-          </ListItem>
-
-        
+        <ListItem disablePadding>
+          <ListItemButton
+            component={Link}
+            to="/counselor/records"
+            selected={"/counselor/records" === path}
+            sx={{
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 1)", // Hover effect
+              },
+              "&.Mui-selected": {
+                backgroundColor: "#1E90FF", // Highlight active link
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: "black" }}>
+              <FileCopyIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Records"}  primaryTypographyProps={{ sx: {  fontWeight: "bold" } }} />
+          </ListItemButton>
+        </ListItem>
       </Box>
     </div>
   );
@@ -137,13 +180,17 @@ export default function NavBar(props) {
           >
             <MenuIcon />
           </IconButton>
-
-          <Typography variant="h6" noWrap component="div">
+          <img src={file} alt="file" style={{ width: 40, marginRight: 8 }} />{" "}
+          {/* Adjust size as needed */}
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ fontWeight: "bold", color: "#ffffff" }}
+          >
             Student Center for Life and Career Management
           </Typography>
-
           <Box sx={{ flexGrow: 1 }} />
-
           <IconButton
             size="large"
             edge="end"
@@ -172,6 +219,7 @@ export default function NavBar(props) {
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: "border-box",
+            backgroundColor: "rgba(200, 220, 240, .5)",
           },
         }}
       >
@@ -189,6 +237,7 @@ export default function NavBar(props) {
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: "border-box",
+            
           },
         }}
       >

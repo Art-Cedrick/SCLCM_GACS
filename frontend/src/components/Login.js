@@ -17,9 +17,13 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+<<<<<<< HEAD
+import lcct_background from "./pics/lcct_background.jpg";
+=======
+import logo from './images/LOGO.jpg'; // Use the exact casing for your logo file
+>>>>>>> 83863df634130a4d5a83863af41dac261b88a78d
 
 function CustomEmailField({ email, setEmail }) {
   return (
@@ -33,12 +37,9 @@ function CustomEmailField({ email, setEmail }) {
       fullWidth
       value={email}
       onChange={(e) => setEmail(e.target.value)}
-      SlotProps={{
-        startAdornment: <InputAdornment position="start"></InputAdornment>,
-      }}
       variant="outlined"
       InputLabelProps={{
-        required: false, // Remove the asterisk by setting to false
+        required: false,
       }}
     />
   );
@@ -118,7 +119,6 @@ function CustomSignInForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Make the Axios POST request to your backend login API
     try {
       const response = await axios.post("http://localhost:8000/login/", {
         username: email,
@@ -130,12 +130,21 @@ function CustomSignInForm() {
       localStorage.setItem("role", response.data.role);
 
       // Handle redirect based on role
-      if (response.data.role === "counselor") {
+<<<<<<< HEAD
+      if (response.data.role === "counselor" || "Counselor") {
         window.location.href = "/counselor"; // Redirect for Counselor
-      } else if (response.data.role === "psychometrician") {
+      } else if (response.data.role === "psychometrician" || "Psyhometrician") {
         window.location.href = "/psychometrician"; // Redirect for Psychometrician
-      } else if (response.data.role === "student") {
+      } else if (response.data.role === "student" || "Student") {
         window.location.href = "/student"; // Redirect for Student
+=======
+      if (response.data.role === "counselor") {
+        window.location.href = "/counselor";
+      } else if (response.data.role === "psychometrician") {
+        window.location.href = "/psychometrician";
+      } else if (response.data.role === "student") {
+        window.location.href = "/student";
+>>>>>>> 83863df634130a4d5a83863af41dac261b88a78d
       } else {
         console.error("Unknown role:", response.data.role);
       }
@@ -148,7 +157,7 @@ function CustomSignInForm() {
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit} // Use handleSubmit here
+      onSubmit={handleSubmit}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -165,7 +174,7 @@ function CustomSignInForm() {
         sx={{
           width: "100%",
           mb: 5,
-          bgcolor: "skyblue",
+          bgcolor: "#1E90FF",
           height: "2px",
         }}
       />
@@ -212,8 +221,8 @@ export default function SlotsSignIn() {
         minHeight: "80vh",
         px: 2,
         backgroundColor: "background.paper",
-        border: `1px solid`,
-        borderRadius: "8px",
+        border: "3px solid #1E90FF",
+        borderRadius: "20px",
         boxShadow: 3,
         padding: "20px",
         marginTop: "60px",
@@ -221,12 +230,16 @@ export default function SlotsSignIn() {
     >
       <Box
         component="img"
-        src="your-image-url-here"
+<<<<<<< HEAD
+        src={lcct_background}
+=======
+        src={logo} // Use the imported logo here
+>>>>>>> 83863df634130a4d5a83863af41dac261b88a78d
         alt="Auth Header"
         sx={{
-          width: "100%",
+          width: "80px", // Set a smaller width for the logo
           height: "auto",
-          mb: 10,
+          mb: 2, // Adjust margin as needed
         }}
       />
       <Box
@@ -240,7 +253,9 @@ export default function SlotsSignIn() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          border: "2px solid skyblue",
+          border: "2px solid #1E90FF",
+          position: "relative", // Make position relative to avoid shifting
+          overflow: "hidden", // Prevent overflow
         }}
       >
         <CustomSignInForm />
@@ -248,3 +263,4 @@ export default function SlotsSignIn() {
     </Container>
   );
 }
+

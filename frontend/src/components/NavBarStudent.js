@@ -65,13 +65,13 @@ export default function NavBarStudent(props) {
           <ListItem disablePadding>
             <ListItemButton
               component={Link}
-              to="/student/appointment"
-              selected={"/student/appointment" === path}
+              to="/student/studentappointment"
+              selected={"/student/studentappointment" === path}
             >
               <ListItemIcon>
                 <NotesIcon />
               </ListItemIcon>
-              <ListItemText primary={"Appointment"} />
+              <ListItemText primary={"StudentAppointment"} />
             </ListItemButton>
           </ListItem>
 

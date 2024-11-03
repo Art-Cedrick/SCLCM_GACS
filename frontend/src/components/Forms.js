@@ -1,20 +1,3 @@
-
-import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  Paper,
-  Stack,
-  Divider,
-  IconButton,
-  TextField,
-  Button,
-} from "@mui/material";
-import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import SingleSelect from "./AllForms/Forms/SingleSelect";
-import { useForm, Controller } from "react-hook-form";
-import AxiosInstance from "./AllForms/Axios";
-
 import {React, useState} from 'react';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import RoutineInterview from './AllForms/RoutineInterview';
@@ -32,6 +15,7 @@ const Forms = () => {
     {value: 'individual_record_form', label: 'Individual Record Form'},
     {value: 'routine_interview', label: 'Routine Interview'},
     {value: 'careertracking', label: 'Career Tracking'},
+    {value: 'conferenceform', label: 'Conference Form'},
   ]
 
   return (
@@ -57,6 +41,8 @@ const Forms = () => {
       {activeForm === 'individual_record_form' && <IndividualRecordForm />}
       {activeForm === 'routine_interview' && <RoutineInterview />}
       {activeForm === 'careertracking' && <CareerTracking />}
+      {activeForm === 'conferenceform' && <ConferenceForm />}
+
     </div>
   )
 }
