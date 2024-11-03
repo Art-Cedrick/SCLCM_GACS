@@ -4,9 +4,6 @@ import RoutineInterview from './AllForms/RoutineInterview';
 import IndividualRecordForm from './AllForms/IndividualRecordForm';
 import CareerTracking from './AllForms/CareerTracking';
 
-
-
-
 const Forms = () => {
 
   const [activeForm, setActiveForm] = useState('');

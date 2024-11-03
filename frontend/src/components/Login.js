@@ -17,13 +17,10 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
+
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-<<<<<<< HEAD
-import lcct_background from "./pics/lcct_background.jpg";
-=======
 import logo from './images/LOGO.jpg'; // Use the exact casing for your logo file
->>>>>>> 83863df634130a4d5a83863af41dac261b88a78d
 
 function CustomEmailField({ email, setEmail }) {
   return (
@@ -130,21 +127,12 @@ function CustomSignInForm() {
       localStorage.setItem("role", response.data.role);
 
       // Handle redirect based on role
-<<<<<<< HEAD
-      if (response.data.role === "counselor" || "Counselor") {
-        window.location.href = "/counselor"; // Redirect for Counselor
-      } else if (response.data.role === "psychometrician" || "Psyhometrician") {
-        window.location.href = "/psychometrician"; // Redirect for Psychometrician
-      } else if (response.data.role === "student" || "Student") {
-        window.location.href = "/student"; // Redirect for Student
-=======
       if (response.data.role === "counselor") {
         window.location.href = "/counselor";
       } else if (response.data.role === "psychometrician") {
         window.location.href = "/psychometrician";
       } else if (response.data.role === "student") {
         window.location.href = "/student";
->>>>>>> 83863df634130a4d5a83863af41dac261b88a78d
       } else {
         console.error("Unknown role:", response.data.role);
       }
@@ -230,11 +218,7 @@ export default function SlotsSignIn() {
     >
       <Box
         component="img"
-<<<<<<< HEAD
-        src={lcct_background}
-=======
         src={logo} // Use the imported logo here
->>>>>>> 83863df634130a4d5a83863af41dac261b88a78d
         alt="Auth Header"
         sx={{
           width: "80px", // Set a smaller width for the logo
@@ -263,4 +247,3 @@ export default function SlotsSignIn() {
     </Container>
   );
 }
-
