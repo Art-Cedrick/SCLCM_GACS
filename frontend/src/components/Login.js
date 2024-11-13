@@ -311,4 +311,6 @@ export default function SlotsSignIn() {
       </Box>
     </ThemeProvider>
   );
+
 }
+

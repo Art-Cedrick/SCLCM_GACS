@@ -6,11 +6,11 @@ import NavBar from "./components/NavBar";
 import NavBarStudent from "./components/NavBarStudent";
 import NavBarPsych from "./components/NavBarPsych";
 import Forms from "./components/Forms";
-import Appointment from "./components/Appointement";
+import Appointment from "./components/Appointment";
 import Records from "./components/Records";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./components/Login";
-
+import StudentAppointment from "./components/StudentAppointment";
 
 function App() {
   const myWidth = 220;
@@ -24,7 +24,7 @@ function App() {
         <Route
           path="/counselor/*"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute role={"counselor"}>
               <NavBar
                 drawerWidth={myWidth}
                 content={
@@ -43,13 +43,13 @@ function App() {
         <Route
           path="/student/*"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute role={"student"}>
               <NavBarStudent
                 drawerWidth={myWidth}
                 content={
                   <Routes>
                     <Route path="/forms" element={<Forms />} />
-                    <Route path="/appointment" element={<Appointment />} />
+                    <Route path="/studentappointment" element={<StudentAppointment />} />
                     <Route path="/records" element={<Records />} />
                   </Routes>
                 }
@@ -60,7 +60,7 @@ function App() {
         <Route
           path="/psychometrician/*"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute role={"psychometrician"}>
               <NavBarPsych
                 drawerWidth={myWidth}
                 content={

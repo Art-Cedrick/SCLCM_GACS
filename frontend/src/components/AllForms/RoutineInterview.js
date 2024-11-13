@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -13,6 +14,7 @@ import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import SingleSelect from "./Forms/SingleSelect";
 import { useForm, Controller } from "react-hook-form";
 import AxiosInstance from "./Axios";
+import { useMutation, useQueryClient } from "react-query";
 
 const PageOne = ({ control }) => (
   <Box>
@@ -497,32 +499,40 @@ const PageFive = ({ control }) => (
   </Box>
 );
 
-const RoutineInterview = () => {
-  const defaultValues = {
-    name: "",
-    section: "",
-    grade: "",
-    date: "",
-    family_problem: "",
-    family_details: "",
-    friends_problem: "",
-    friends_details: "",
-    health_problem: "",
-    health_details: "",
-    academic_problem: "",
-    academic_details: "",
-    career_problem: "",
-    career_details: "",
-    remarks: "",
-    recommendation: "",
-    other_recommendation: "",
-  };
+const RoutineInterview = ({initialData, onClose}) => {
 
-  const { handleSubmit, reset, setValue, control } = useForm({
-    defaultValues: defaultValues
-  });
-  const submission = (data) => {
-    AxiosInstance.post(`/routine_interview/`, {
+  const queryClient = useQueryClient();
+
+  const defaultValues = {
+    name: '',
+    section: '',
+    grade: '',
+    date: '',
+    family_problem: '',
+    family_details: '',
+    friends_problem: '',
+    friends_details: '',
+    health_problem: '',
+    health_details: '',
+    academic_problem: '',
+    academic_details: '',
+    career_problem: '', 
+    career_details: '',
+    remarks: '',
+    recommendation: '',
+    other_recommendation: '',
+     }
+
+  const { handleSubmit, reset, control } = useForm({defaultValues: initialData || defaultValues});
+
+  useEffect(() => {
+    if (initialData) reset(initialData);
+  },[initialData, reset]);
+
+  const mutation = useMutation(
+    (data) => 
+    initialData  
+    ? AxiosInstance.put(`/routine_interview/${initialData.id}/`,{
       name: data.name,
       section: data.section,
       grade: data.grade,
@@ -541,14 +551,40 @@ const RoutineInterview = () => {
       recommendation: data.recommendation,
       other_recommendation: data.other_recommendation,
     })
-      .then((response) => {
-        console.log("Data submitted successfully:", response.data);
-        reset(); // Reset form after successful submission
-      })
-      .catch((error) => {
-        console.error("Error submitting data:", error);
-      });
-  };
+    : AxiosInstance.post(`/routine_interview/`,{
+      name: data.name,
+      section: data.section,
+      grade: data.grade,
+      date: data.date,
+      family_problem: data.family_problem,
+      family_details: data.family_details,
+      friends_problem: data.friends_problem,
+      friends_details: data.friends_details,
+      health_problem: data.health_problem,
+      health_details: data.health_details,
+      academic_problem: data.academic_problem,
+      academic_details: data.academic_details,
+      career_problem: data.career_problem,
+      career_details: data.career_details,
+      remarks: data.remarks,
+      recommendation: data.recommendation,
+      other_recommendation: data.other_recommendation,
+    }), {
+      onSuccess: () => {
+        queryClient.invalidateQueries('routineData');
+        console.log("Data invalidated");
+        queryClient.refetchQueries('routineData');
+        console.log("Data refetched");
+        reset();
+        onClose();
+        console.log("Data submitted and table refreshed");
+      }, onError: (error) => {
+        console.error("Error submitting data", error);
+      },
+    }
+  );
+
+  const submission = (data) => mutation.mutate(data);
 
   const [page, setPage] = useState(1);
 

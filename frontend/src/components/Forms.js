@@ -3,6 +3,7 @@ import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import RoutineInterview from './AllForms/RoutineInterview';
 import IndividualRecordForm from './AllForms/IndividualRecordForm';
 import CareerTracking from './AllForms/CareerTracking';
+import ConferenceForm from './AllForms/ConferenceForm';
 
 const Forms = () => {
 
@@ -12,6 +13,7 @@ const Forms = () => {
     {value: 'individual_record_form', label: 'Individual Record Form'},
     {value: 'routine_interview', label: 'Routine Interview'},
     {value: 'careertracking', label: 'Career Tracking'},
+    {value: 'conferenceform', label: 'Conference Form'},
   ]
 
   return (
@@ -37,6 +39,8 @@ const Forms = () => {
       {activeForm === 'individual_record_form' && <IndividualRecordForm />}
       {activeForm === 'routine_interview' && <RoutineInterview />}
       {activeForm === 'careertracking' && <CareerTracking />}
+      {activeForm === 'conferenceform' && <ConferenceForm />}
+
     </div>
   )
 }

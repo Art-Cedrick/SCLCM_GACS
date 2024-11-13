@@ -1,27 +1,52 @@
-import {React, useEffect, useMemo, useState} from "react";
+import React, { useEffect, useMemo, useState} from "react";
 import { MaterialReactTable, MRT_ActionMenuItem } from "material-react-table";
-import AxiosInstance from "./AllForms/Axios";
 import Dayjs from "dayjs";
 import { Edit, Delete } from '@mui/icons-material';
-import { IconButton } from "@mui/material";
+import { IconButton, Dialog, DialogContent, DialogTitle, Button } from "@mui/material";
+import AxiosInstance from "../Axios";
+import { useQuery, useQueryClient } from "react-query";
+import RoutineInterview from "../RoutineInterview";
 
+const fetchData = async () => {
+  const response = await AxiosInstance.get(`/routine_interview/`);
+  console.log(response.data);
+  return response.data;
+};
 
 const RoutineInterviewTable = () => {
 
-  const [myData, setMyData] = useState()
-  const [loading, setLoading] = useState(true)
+  const queryClient = useQueryClient();
 
-  const GetData = () => {
-    AxiosInstance.get('/routine_interview/').then((res) => {
-      setMyData(res.data)
-      console.log(res.data)
-      setLoading(false)
-    })
+  const {data: myData = [], isLoading, error, isFetching} = useQuery('routineData', fetchData);
+
+  const [editData, setEdit] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState({open: false, row: null});
+  
+  const handleEdit = (row) => {
+    setEdit(row.original);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setEdit(null);
+    setOpen(false);
   }
 
+  const handleDelete = async (row) => {
+    try {
+      await AxiosInstance.delete(`/routine_interview/${row.original.id}/`);
+      queryClient.invalidateQueries('routineData');
+      setConfirmDelete({open: false, row: null});
+      console.log("Deleted successfully");
+    } catch (error) {
+      console.log("Error deleting", error);
+    }
+  } 
+
   useEffect(() => {
-    GetData();
-  }, [])
+    console.log("Fetching data for Routine Interview...")
+  }, [myData]);
 
   const columns = useMemo(
     () => [
@@ -89,6 +114,10 @@ const RoutineInterviewTable = () => {
     ],
     []
   );
+  
+  if (isLoading) return <p>Loading...</p>;
+  if (isFetching) return <p>Fetching data...</p>;
+  if (error) return <p>Error loading data</p>;
 
   return (
     <div
@@ -100,7 +129,6 @@ const RoutineInterviewTable = () => {
       }}
     >
       <div style={{ width: "1200px", height: "600px" }}>
-        { loading ? <p>Loading data...</p> :
         <MaterialReactTable 
           columns={columns} 
           data={myData} 
@@ -115,7 +143,7 @@ const RoutineInterviewTable = () => {
             }
               key="edit"
               label="Edit"
-              onClick={() => console.info('Edit')}
+              onClick={() => handleEdit(row)}
               table={table}
             />,
             <MRT_ActionMenuItem
@@ -126,12 +154,32 @@ const RoutineInterviewTable = () => {
               }
               key="delete"
               label="Delete"
-              onClick={() => console.info('Delete')}
+              onClick={() => setConfirmDelete({open: true, row})}
               table={table}
             />,
           ]}
           />
-}
+          <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+              <DialogTitle>Edit Routine Interview Form</DialogTitle>
+              <DialogContent>
+                <RoutineInterview initialData={editData} onClose={handleClose}/>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog open={confirmDelete.open} onClose={() => setConfirmDelete({open: false, row: null})}>
+              <DialogTitle>Confirm Delete</DialogTitle>
+              <DialogContent>
+                <p>Are you sure you want to delete this record?</p>
+                <div style={{display: "flex", justifyContent: "flex-end", gap: "10px"}}>
+                  <Button variant="outlined" onClick={() => setConfirmDelete({open: false, row: null})}>
+                    Cancel
+                  </Button>
+                  <Button variant="contained" color="error" onClick={() => handleDelete(confirmDelete.row)}>
+                    Delete
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
       </div>
     </div>
   );

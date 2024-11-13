@@ -39,7 +39,8 @@ const SingleSelect = React.forwardRef(function SingleSelect(
         labelId="single-select-label"
         id="single-select"
         value={value || ""} // Prevent undefined value
-        onChange={(e) => onChange?.(e.target.value)} // Safely handle onChange
+        onChange={(e) => onChange(e.target.value)} 
+        /*onChange={(e) => onChange?.(e.target.value)}*/ // Safely handle onChange
         input={<OutlinedInput label={label} inputRef={ref} />}
         MenuProps={MenuProps}
         renderValue={(selected) => selected || <em>Select an option</em>}

@@ -73,6 +73,7 @@ const NavBarStudent = React.memo((props) => {
           <ListItem key={item.text} disablePadding>
             <ListItemButton
               component={Link}
+
               to={item.link}
               selected={item.link === selectedItem}
               onClick={() => handleMenuItemClick(item.link)}
@@ -88,6 +89,7 @@ const NavBarStudent = React.memo((props) => {
                 },
                 ...(item.text === "Forms" && { marginTop: "20px" }),
               }}
+
             >
               <Box
                 sx={{
@@ -105,7 +107,11 @@ const NavBarStudent = React.memo((props) => {
               <ListItemIcon sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
                 {item.icon}
               </ListItemIcon>
+
               <ListItemText primary={item.text} primaryTypographyProps={{ sx: { fontWeight: "bold", fontFamily: "'Rozha One'", fontSize: "1rem" } }} />
+
+              <ListItemText primary={"StudentAppointment"} />
+
             </ListItemButton>
           </ListItem>
         ))}
