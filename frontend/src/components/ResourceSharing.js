@@ -34,7 +34,7 @@ const ResourceSharing = () => {
   const [editingResource, setEditingResource] = useState(null);
   const [notification, setNotification] = useState("");
   const [expandedResourceId, setExpandedResourceId] = useState(null);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -56,7 +56,7 @@ const ResourceSharing = () => {
         console.error("Error fetching resources:", error);
         setNotification("Failed to fetch resources. Please log in.");
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     };
 
@@ -84,22 +84,19 @@ const ResourceSharing = () => {
       };
 
       if (editingResource) {
-        // Update existing resource
         await AxiosInstance.put(`/resource/${editingResource.id}/`, 
           { title: data.title, content: data.content }, 
           { headers });
         setNotification("Resource updated successfully");
       } else {
-        // Post new resource
         await AxiosInstance.post(`/resource/`, 
           { title: data.title, content: data.content }, 
           { headers });
         setNotification("Resource added successfully");
       }
 
-      // Refetch resources after posting or editing
       const resourcesResponse = await AxiosInstance.get("/resource/", { headers });
-      setResources(resourcesResponse.data); // Re-fetch the updated resources
+      setResources(resourcesResponse.data);
 
       reset();
       setEditingResource(null);
@@ -142,7 +139,7 @@ const ResourceSharing = () => {
   };
 
   const filteredResources = resources.filter((resource) =>
-    resource.title && typeof resource.title === 'string' && // Check for title existence and type
+    resource.title && typeof resource.title === 'string' &&
     resource.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -150,23 +147,37 @@ const ResourceSharing = () => {
     setExpandedResourceId((prev) => (prev === id ? null : id));
   };
 
+  const tableStyles = `
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+  `;
+
   if (loading) {
-    return <Typography variant="body2">Loading resources...</Typography>; // Loading state
+    return <Typography variant="body2">Loading resources...</Typography>;
   }
 
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
+      <style>{tableStyles}</style>
       <Stack spacing={2}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             RESOURCE SHARING
           </Typography>
-
           <Box display="flex" alignItems="center">
             <IconButton onClick={toggleVisibility}>
               <AddIcon />
             </IconButton>
-
             <TextField
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -177,11 +188,9 @@ const ResourceSharing = () => {
                 "& input": { padding: "5px", lineHeight: "1.2" },
               }}
             />
-
             <IconButton size="small">
               <SearchIcon fontSize="small" />
             </IconButton>
-
             <IconButton
               size="small"
               onClick={() => {
@@ -191,7 +200,6 @@ const ResourceSharing = () => {
             >
               <DeleteIcon fontSize="small" />
             </IconButton>
-
             <IconButton size="small">
               <FilterListIcon fontSize="small" />
             </IconButton>
@@ -228,7 +236,6 @@ const ResourceSharing = () => {
                   />
                 )}
               />
-
               <Controller
                 name="content"
                 control={control}
@@ -245,12 +252,10 @@ const ResourceSharing = () => {
                   />
                 )}
               />
-
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <IconButton size="small">
                   <AttachFileIcon fontSize="small" />
                 </IconButton>
-
                 <Button type="submit" variant="contained" color="primary" size="small">
                   {editingResource ? "Update" : "Post"}
                 </Button>
@@ -279,7 +284,6 @@ const ResourceSharing = () => {
                 >
                   {resource.title}
                 </Typography>
-
                 <Box>
                   <IconButton size="small" onClick={() => handleEdit(resource)}>
                     <EditIcon />
@@ -290,10 +294,8 @@ const ResourceSharing = () => {
                 </Box>
               </Stack>
               <Typography variant="body2" sx={{ mt: 1 }}>
-                {new Date(resource.createdAt).toLocaleDateString()} {/* Format the date */}
+                {new Date(resource.createdAt).toLocaleDateString()}
               </Typography>
-
-              {/* Conditionally render the content based on expandedResourceId */}
               {expandedResourceId === resource.id && (
                 <Typography
                   variant="body2"
