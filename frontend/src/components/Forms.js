@@ -3,6 +3,7 @@ import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import RoutineInterview from './AllForms/RoutineInterview';
 import IndividualRecordForm from './AllForms/IndividualRecordForm';
 import CareerTracking from './AllForms/CareerTracking';
+import ConferenceForm from './AllForms/ConferenceForm';
 
 const Forms = () => {
 

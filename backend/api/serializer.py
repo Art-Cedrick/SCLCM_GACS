@@ -91,3 +91,10 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = '__all__'
+        read_only_fields = ['counselor']
+
+    def validate(self, data):
+        # Example: Ensure 'other_purpose' is only required if 'purpose' is 'Others'
+        if data.get('purpose') == 'Others' and not data.get('other_purpose'):
+            raise serializers.ValidationError("Other purpose must be specified.")
+        return data

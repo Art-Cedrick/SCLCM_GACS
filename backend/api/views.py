@@ -15,6 +15,11 @@ from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
 
 # Create your views here.
+class StudentListView(APIView):
+    def get(self, request):
+        students = IndividualRecordForm.objects.all().values("sr_code", "name")  # or any other field
+        return Response(students)
+
 class setPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
@@ -95,9 +100,28 @@ class RoutineInterviewViewset(BaseViewSet):
 class IndividualRecordFormViewset(BaseViewSet):
     queryset = IndividualRecordForm.objects.order_by('-id')
     serializer_class = IndividualRecordFormSerializer
+
+    def perform_create(self, request, *args, **kwargs):
+        self.close_connection()
+
+        # Retrieve the logged-in user's profile
+        try:
+            user_profile = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            return Response({"error": "User profile not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Create the serializer with data and manually set the profile
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            with transaction.atomic():
+                # Save the instance with the logged-in user's profile
+                serializer.save(profile=user_profile)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class CareerTrackingViewset(BaseViewSet):
-    queryset = CareerTracking.objects.all().order_by('-id')
+    queryset = CareerTracking.objects.order_by('-id')
     serializer_class = CareerTrackingSerializer 
 
 class ConferenceFormViewset(BaseViewSet):
@@ -209,14 +233,30 @@ class ResourceViewSet(BaseViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
         
-class AppointmentViewset(BaseViewSet):
-    queryset = Appointment.objects.order_by('-id')
-    serializer_class = AppointmentSerializer
+class AppointmentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        if user.groups.filter(name='counselor').exists():
-            return Appointment.objects.all()
-        else:
-            return Appointment.objects.filter(student=user)
+    def get(self, request):
+        user_profile = Profile.objects.get(user=request.user)
+        if user_profile.role == 'counselor':
+            appointments = Appointment.objects.filter(counselor=user_profile)
+        elif user_profile.role == 'student':
+            # Filter appointments based on the student number associated with the user's profile
+            appointments = Appointment.objects.filter(sr_code__student_number=user_profile.IndividualRecordForm.sr_code)
+        else: 
+            return Response({'error': 'Access denied'}, status=status.HTTP_403_FORBIDDEN)
+        
+        serializer = AppointmentSerializer(appointments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        user_profile = Profile.objects.get(user=request.user)
+        if user_profile.role != 'counselor':
+            return Response({'error': 'Only counselors can create schedules'}, status=status.HTTP_403_FORBIDDEN)
+        
+        # Extract student details from the submitted form and create appointment
+        serializer = AppointmentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(counselor=user_profile)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

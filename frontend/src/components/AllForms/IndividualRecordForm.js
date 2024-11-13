@@ -22,6 +22,7 @@ const IndividualRecordForm = ({initialData, onClose}) => {
   const queryClient = useQueryClient();
 
   const defaultValues = {
+    sr_code: '',
     lastname: '',
     firstname: '',
     middlename: '',
@@ -52,6 +53,7 @@ const IndividualRecordForm = ({initialData, onClose}) => {
     (data) => 
     initialData
     ? AxiosInstance.put(`/individual_record_form/${initialData.id}/`, {
+      sr_code: data.sr_code,
       lastname: data.lastname,
       firstname: data.firstname,
       middlename: data.middlename,
@@ -72,6 +74,7 @@ const IndividualRecordForm = ({initialData, onClose}) => {
       club: data.club,
     })  
     : AxiosInstance.post(`/individual_record_form/`, {
+      sr_code: data.sr_code,
       lastname: data.lastname,
       firstname: data.firstname,
       middlename: data.middlename,
@@ -127,6 +130,18 @@ const IndividualRecordForm = ({initialData, onClose}) => {
           <Stack spacing={2}>
             {/* First Row: Last Name, First Name, and Middle Name */}
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <Controller
+                name="sr_code"
+                control={control}
+                render={({field}) => (
+              <TextField
+                {...field}
+                label="Student Number"
+                placeholder=""
+                sx={{ flex: 1 }}
+              />
+                )}
+                />
               <Controller
                 name="lastname"
                 control={control}

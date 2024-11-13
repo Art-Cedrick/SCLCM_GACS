@@ -49,6 +49,7 @@ const IndividualRecordFormTable = () => {
 
   const columns = useMemo(
     () => [
+      { accessorKey: "sr_code", header: "Student Number", size: 150 },
       { accessorKey: "lastname", header: "Last Name", size: 150 },
       { accessorKey: "firstname", header: "First Name", size: 150 },
       { accessorKey: "middlename", header: "Middle Name", size: 150 },

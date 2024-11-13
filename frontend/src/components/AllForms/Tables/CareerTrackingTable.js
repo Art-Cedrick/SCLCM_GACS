@@ -51,6 +51,10 @@ const CareerTrackingTable = () => {
   const columns = useMemo(
 
     () => [
+
+      { accessorKey: "name", header: "Name", size: 150 },
+      { accessorKey: "grade", header: "Grade", size: 150 },
+      { accessorKey: "section", header: "Section", size: 150 },
       { accessorKey: "cle", header: "CLE", size: 150 },
       { accessorKey: "english", header: "English", size: 150 },
       { accessorKey: "filipino", header: "Filipino", size: 150 },

@@ -9,7 +9,7 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import SingleSelect from "./AllForms/Forms/SingleSelect"; // Ensure this path is correct
 
 const Grade1 = () => {
@@ -39,12 +39,15 @@ const Grade1 = () => {
           <Stack spacing={2}>
             {/* First Row - Single Column */}
             <Stack direction="column" spacing={2}>
-              <TextField
-                label="Student Name"
+              <Controller 
                 name="name"
                 control={control}
+                render={({field}) => (
+              <TextField
+                label="Student Name"
+                {...field}
                 fullWidth
-              />
+              /> )} />
             </Stack>
 
             {/* Subsequent Rows - Three Columns */}

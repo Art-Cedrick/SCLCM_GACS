@@ -13,41 +13,52 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { useForm, Controller, Form } from "react-hook-form";
-import DatePicker from "./AllForms/Forms/DatePicker";
+import { useForm, Controller } from "react-hook-form";
 import AxiosInstance from "./AllForms/Axios";
 
 const Appointment = () => {
-
   const defaultValues = {
-    name: '',
-    grade: '',
-    section: '',
-    date: '',
-    purpose: '',
-    other_purpose: '',
-  }
+    sr_code: "",
+    name: "",
+    grade: "",
+    section: "",
+    date: "",
+    purpose: "",
+    other_purpose: "",
+  };
 
-  const { control, handleSubmit, reset } = useForm({defaultValues:defaultValues});
+  const { control, handleSubmit, reset } = useForm({ defaultValues });
 
   // Submit handler
   const onSubmit = async (data) => {
     console.log(data);
+
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem("token");
+
     try {
-      const response = await AxiosInstance.post("/appointment/", {
-        name: data.name,
-        grade: data.grade,
-        section: data.section,
-        date: data.date,
-        purpose: data.purpose,
-        other_purpose: data.other_purpose,
-      });
+      const response = await AxiosInstance.post(
+        "/appointment/",
+        {
+          sr_code: data.sr_code,
+          name: data.name,
+          grade: data.grade,
+          section: data.section,
+          date: data.date,
+          purpose: data.purpose,
+          other_purpose: data.other_purpose,
+        },
+        {
+          // Include the token in the Authorization header
+          headers: {
+            Authorization: `Token ${token}`, // Replace 'Token' with your actual token type if different
+          },
+        }
+      );
       console.log("Form submitted successfully:", response.data);
-      console.log("Appointment scheduled successfully!");
       reset();
     } catch (error) {
       console.error("Error submitting form:", error);
-      console.log("Failed to schedule appointment.");
     }
   };
 
@@ -57,31 +68,30 @@ const Appointment = () => {
         <Typography variant="h5" gutterBottom align="center">
           STUDENT'S CALL SLIP
         </Typography>
-        <Paper
-          elevation={3}
-          sx={{
-            padding: "40px",
-            borderRadius: "8px",
-            backgroundColor: "#f7f9fc",
-            minHeight: "50vh",
-          }}
-        >
+        <Paper elevation={3} sx={{ padding: "40px", borderRadius: "8px", backgroundColor: "#f7f9fc", minHeight: "50vh" }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={2}>
               {/* First Row: Name, Grade, Section, and Date Picker */}
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 <Controller
+                  name="sr_code"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField {...field} label="Student Number" placeholder="Enter Student Number" fullWidth />
+                  )}
+                />
+                <Controller
                   name="name"
                   control={control}
-                  defaultValue=""
                   render={({ field }) => (
                     <TextField {...field} label="Name" placeholder="Enter Name" fullWidth />
                   )}
                 />
+              </Stack>
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 <Controller
                   name="grade"
                   control={control}
-                  defaultValue=""
                   render={({ field }) => (
                     <TextField {...field} label="Grade" placeholder="Enter Grade" fullWidth />
                   )}
@@ -89,7 +99,6 @@ const Appointment = () => {
                 <Controller
                   name="section"
                   control={control}
-                  defaultValue=""
                   render={({ field }) => (
                     <TextField {...field} label="Section" placeholder="Enter Section" fullWidth />
                   )}
@@ -97,28 +106,17 @@ const Appointment = () => {
                 <Controller
                   name="date"
                   control={control}
-                  defaultValue={null}
-                  render={({ field }) => (
-                    <TextField type="date" {...field} label="" fullWidth />
-                  )}
+                  render={({ field }) => <TextField type="date" {...field} fullWidth />}
                 />
               </Stack>
 
-              {/* Purpose Section - Using Select instead of Checkbox */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 2,
-                  alignItems: "flex-start",
-                }}
-              >
+              {/* Purpose Section */}
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2, alignItems: "flex-start" }}>
                 <FormControl fullWidth>
                   <InputLabel>Purpose</InputLabel>
                   <Controller
                     name="purpose"
                     control={control}
-                    defaultValue=""
                     render={({ field }) => (
                       <Select {...field} label="Purpose">
                         <MenuItem value="Routine Interview">Routine Interview</MenuItem>
@@ -130,11 +128,9 @@ const Appointment = () => {
                     )}
                   />
                 </FormControl>
-                {/** Additional input for "Others" selection */}
                 <Controller
                   name="other_purpose"
                   control={control}
-                  defaultValue=""
                   render={({ field }) => (
                     <TextField
                       {...field}
@@ -147,15 +143,8 @@ const Appointment = () => {
               </Box>
 
               {/* Submit Button */}
-              <Box
-                sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  sx={{ marginTop: "10px" }}
-                >
+              <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}>
+                <Button variant="contained" color="primary" type="submit">
                   Submit
                 </Button>
               </Box>
