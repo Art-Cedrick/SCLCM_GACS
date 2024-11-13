@@ -77,44 +77,40 @@ const ResourceSharing = () => {
       setNotification("You must be logged in to perform this action.");
       return;
     }
-  
-    // Strip HTML tags to get plain text from the CKEditor content
-    const plainTextContent = data.content.replace(/<[^>]*>/g, ''); // This removes HTML tags
-  
+
     try {
       const headers = {
         Authorization: `Token ${token}`,
       };
-  
+
       if (editingResource) {
         // Update existing resource
         await AxiosInstance.put(`/resource/${editingResource.id}/`, 
-          { title: data.title, content: plainTextContent }, 
+          { title: data.title, content: data.content }, 
           { headers });
         setNotification("Resource updated successfully");
       } else {
         // Post new resource
         await AxiosInstance.post(`/resource/`, 
-          { title: data.title, content: plainTextContent }, 
+          { title: data.title, content: data.content }, 
           { headers });
         setNotification("Resource added successfully");
       }
-  
+
       // Refetch resources after posting or editing
       const resourcesResponse = await AxiosInstance.get("/resource/", { headers });
       setResources(resourcesResponse.data); // Re-fetch the updated resources
-  
+
       reset();
       setEditingResource(null);
-  
+
       setTimeout(() => setNotification(""), 3000);
     } catch (error) {
       console.error("Error saving resource:", error);
       setNotification("Error saving resource");
     }
   };
-  
-  
+
   const handleEdit = (resource) => {
     setEditingResource(resource);
     setValue("title", resource.title);
@@ -299,9 +295,11 @@ const ResourceSharing = () => {
 
               {/* Conditionally render the content based on expandedResourceId */}
               {expandedResourceId === resource.id && (
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                  {resource.content}
-                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ mt: 1 }}
+                  dangerouslySetInnerHTML={{ __html: resource.content }}
+                />
               )}
             </Box>
           ))

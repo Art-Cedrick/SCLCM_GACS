@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'api',
     'corsheaders',
     'rest_framework.authtoken',
-    'django_ckeditor_5'  
+    'django_ckeditor_5',
+    'ckeditor'  
 ]
 
 REST_FRAMEWORK = {
@@ -181,6 +182,9 @@ CKEDITOR_CONFIGS = {
 }
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
