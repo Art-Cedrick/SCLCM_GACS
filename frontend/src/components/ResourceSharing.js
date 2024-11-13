@@ -77,39 +77,44 @@ const ResourceSharing = () => {
       setNotification("You must be logged in to perform this action.");
       return;
     }
-
+  
+    // Strip HTML tags to get plain text from the CKEditor content
+    const plainTextContent = data.content.replace(/<[^>]*>/g, ''); // This removes HTML tags
+  
     try {
-      let response;
       const headers = {
         Authorization: `Token ${token}`,
       };
-
+  
       if (editingResource) {
-        response = await AxiosInstance.put(`/resource/${editingResource.id}/`, { title: data.title, content: data.content }, { headers });
+        // Update existing resource
+        await AxiosInstance.put(`/resource/${editingResource.id}/`, 
+          { title: data.title, content: plainTextContent }, 
+          { headers });
         setNotification("Resource updated successfully");
       } else {
-        response = await AxiosInstance.post(`/resource/`, { title: data.title, content: data.content }, { headers });
+        // Post new resource
+        await AxiosInstance.post(`/resource/`, 
+          { title: data.title, content: plainTextContent }, 
+          { headers });
         setNotification("Resource added successfully");
       }
-
-      setResources((prev) => {
-        if (editingResource) {
-          return prev.map((resource) =>
-            resource.id === editingResource.id ? response.data : resource
-          );
-        } else {
-          return [response.data, ...prev];
-        }
-      });
+  
+      // Refetch resources after posting or editing
+      const resourcesResponse = await AxiosInstance.get("/resource/", { headers });
+      setResources(resourcesResponse.data); // Re-fetch the updated resources
+  
       reset();
       setEditingResource(null);
+  
       setTimeout(() => setNotification(""), 3000);
     } catch (error) {
       console.error("Error saving resource:", error);
       setNotification("Error saving resource");
     }
   };
-
+  
+  
   const handleEdit = (resource) => {
     setEditingResource(resource);
     setValue("title", resource.title);

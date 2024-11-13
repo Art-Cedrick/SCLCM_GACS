@@ -30,15 +30,15 @@ const theme = createTheme({
     fontFamily: "'Rozha One'", // Set the font globally
     h6: {
       fontSize: '1.5rem',  // Adjust size for h6 headings
-      fontWeight:'bold',
+     
     },
     body1: {
       fontSize: '1rem', // Default body text size
-      fontWeight:'bold',
+      
     },
     button: {
       fontSize: '0.875rem', // Font size for buttons
-      fontWeight:'bold',
+      
     },
 
   },
