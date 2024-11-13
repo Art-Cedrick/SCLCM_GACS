@@ -16,11 +16,33 @@ import {
   Box,
   Divider,
   Typography,
+  GlobalStyles
 } from "@mui/material";
-
+import { createTheme, ThemeProvider } from '@mui/material/styles'; // Import ThemeProvider and createTheme from MUI
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import logo from './images/LOGO.jpg'; // Use the exact casing for your logo file
+import logo from "./images/LOGO.jpg"; // Use the exact casing for your logo file
+import newimage from "./images/new.jpg"; // Add the background image here
+
+// GlobalStyles to apply 'Rozha One' font globally
+const theme = createTheme({
+  typography: {
+    fontFamily: "'Rozha One'", // Set the font globally
+    h6: {
+      fontSize: '1.5rem',  // Adjust size for h6 headings
+      fontWeight:'bold',
+    },
+    body1: {
+      fontSize: '1rem', // Default body text size
+      fontWeight:'bold',
+    },
+    button: {
+      fontSize: '0.875rem', // Font size for buttons
+      fontWeight:'bold',
+    },
+
+  },
+});
 
 function CustomEmailField({ email, setEmail }) {
   return (
@@ -198,53 +220,95 @@ function CustomSignInForm() {
 
 export default function SlotsSignIn() {
   return (
-    <Container
-      component="main"
-      maxWidth="xs"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "80vh",
-        px: 2,
-        backgroundColor: "background.paper",
-        border: "3px solid #1E90FF",
-        borderRadius: "20px",
-        boxShadow: 3,
-        padding: "20px",
-        marginTop: "60px",
-      }}
-    >
-      <Box
-        component="img"
-        src={logo} // Use the imported logo here
-        alt="Auth Header"
-        sx={{
-          width: "80px", // Set a smaller width for the logo
-          height: "auto",
-          mb: 2, // Adjust margin as needed
+    <ThemeProvider theme={theme}> {/* Wrap the component with ThemeProvider */}
+      <GlobalStyles
+        styles={{
+          body: {
+            fontFamily: "'Rozha One', sans-serif", // Apply font globally
+          },
         }}
       />
       <Box
         sx={{
-          width: "100%",
-          maxWidth: "400px",
-          padding: "10px",
-          backgroundColor: "background.default",
-          borderRadius: "20px",
-          minHeight: "300px",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          border: "2px solid #1E90FF",
-          position: "relative", // Make position relative to avoid shifting
-          overflow: "hidden", // Prevent overflow
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          position: "relative", // To allow absolute positioning of background
         }}
       >
-        <CustomSignInForm />
+        {/* Pseudo-element for the background image */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            "::before": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundImage: `url(${newimage})`,
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "100% 100%",
+              opacity: 0.7, // Apply opacity only to the background
+              zIndex: -1,
+            },
+          }}
+        />
+        <Container
+          component="main"
+          maxWidth="xs"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "60vh",
+            px: 1,
+            backgroundColor: "background.paper",
+            borderRadius: "16px",
+            boxShadow: 3,
+            padding: "16px",
+            marginTop: "60px",
+            opacity: "0.8",
+          }}
+        >
+          <Box
+            component="img"
+            src={logo} // Use the imported logo here
+            alt="Auth Header"
+            sx={{
+              width: "60px", // Set a smaller width for the logo
+              height: "auto",
+              mb: 1, // Adjust margin as needed
+            }}
+          />
+          <Box
+            sx={{
+              width: "90%",
+              maxWidth: "350px",
+              padding: "20px",
+              backgroundColor: "background.default",
+              borderRadius: "16px",
+              minHeight: "250px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              border: "2px solid #1E90FF",
+              position: "relative", // Make position relative to avoid shifting
+              overflow: "hidden", // Prevent overflow
+            }}
+          >
+            <CustomSignInForm />
+          </Box>
+        </Container>
       </Box>
-    </Container>
+    </ThemeProvider>
   );
 }
-

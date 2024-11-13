@@ -11,24 +11,22 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import NotesIcon from '@mui/icons-material/Notes';
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import NotesIcon from "@mui/icons-material/Notes";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { IconButton, Menu, MenuItem, useMediaQuery } from "@mui/material";
+import file from "./images/file.png";  // Assuming file.png is the logo image
 
-export default function NavBarStudent(props) {
-  const { drawerWidth, content } = props;
+const NavBarStudent = React.memo((props) => {
+  const { drawerWidth = 260, content } = props;
   const location = useLocation();
   const path = location.pathname;
 
-  const [open, setOpen] = React.useState(false);
   const [profileMenuAnchor, setProfileMenuAnchor] = React.useState(null);
-
-  const changeOpenStatus = () => {
-    setOpen(!open);
-  };
+  const [mobileOpen, setMobileOpen] = React.useState(false); // For toggling mobile sidebar
+  const [selectedItem, setSelectedItem] = React.useState(path); // Track selected menu item
 
   const handleProfileMenuOpen = (event) => {
     setProfileMenuAnchor(event.currentTarget);
@@ -39,58 +37,80 @@ export default function NavBarStudent(props) {
   };
 
   const handleLogout = () => {
-    // Clear the authentication token and role from localStorage
-  localStorage.removeItem("token");
-  localStorage.removeItem("role");
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    window.location.href = "/";
+    handleProfileMenuClose();
+  };
 
-  // Redirect to the login page
-  window.location.href = "/";
-  handleProfileMenuClose();  // Close the profile menu
+  const menuItems = [
+    { text: "Forms", icon: <DashboardIcon />, link: "/student/forms" },
+    { text: "Appointment", icon: <NotesIcon />, link: "/student/appointment" },
+    { text: "Records", icon: <AssignmentIcon />, link: "/student/records" },
+  ];
+
+  const isMobile = useMediaQuery("(max-width: 768px)"); // Check if screen width is less than 768px
+
+  // Handle menu item click to update the selected item
+  const handleMenuItemClick = (link) => {
+    setSelectedItem(link);
+    if (isMobile && mobileOpen) {
+      setMobileOpen(false); // Close the sidebar on mobile when an item is clicked
+    }
+  };
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen); // Toggle sidebar visibility on mobile
   };
 
   const myDrawer = (
-    <div>
-      <Toolbar />
-      <Box sx={{ overflow: "auto" }}>
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/student/forms" selected={"/student/forms" === path}>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Forms"} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
+    <Box sx={{ backgroundColor: "rgba(5, 21, 54, 255)", height: "100vh", color: "#ffffff", position: "relative" }}>
+      <Toolbar>
+        <img src={file} alt="logo" style={{ width: 60, height: 60, margin: "10px auto 0" }} />
+      </Toolbar>
+      <List>
+        {menuItems.map((item) => (
+          <ListItem key={item.text} disablePadding>
             <ListItemButton
               component={Link}
-              to="/student/appointment"
-              selected={"/student/appointment" === path}
+              to={item.link}
+              selected={item.link === selectedItem}
+              onClick={() => handleMenuItemClick(item.link)}
+              sx={{
+                "&.Mui-selected": {
+                  backgroundColor: "#ffffff", // White background for selected item
+                  borderTopLeftRadius: "20px", // Round only the left side
+                  borderBottomLeftRadius: "20px", // Round only the left side
+                  color: "#000", // Change text color to black when selected
+                  "& .MuiListItemIcon-root": {
+                    color: "#000", // Change icon color to black for selected item
+                  },
+                },
+                ...(item.text === "Forms" && { marginTop: "20px" }),
+              }}
             >
-              <ListItemIcon>
-                <NotesIcon />
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: -25,
+                  width: 8,
+                  height: "100%",
+                  backgroundColor: "#1E90FF",
+                  visibility: item.link === selectedItem ? "visible" : "hidden",
+                  borderTopRightRadius: "5px",
+                  borderBottomRightRadius: "5px",
+                }}
+              />
+              <ListItemIcon sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                {item.icon}
               </ListItemIcon>
-              <ListItemText primary={"Appointment"} />
+              <ListItemText primary={item.text} primaryTypographyProps={{ sx: { fontWeight: "bold", fontFamily: "'Rozha One'", fontSize: "1rem" } }} />
             </ListItemButton>
           </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton
-              component={Link}
-              to="/student/records"
-              selected={"/student/records" === path}
-            >
-              <ListItemIcon>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Records"} />
-            </ListItemButton>
-          </ListItem>
-        </List>
-        
-      </Box>
-    </div>
+        ))}
+      </List>
+    </Box>
   );
 
   return (
@@ -98,78 +118,83 @@ export default function NavBarStudent(props) {
       <CssBaseline />
       <AppBar
         position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{
+          width: isMobile ? "100%" : `calc(100% - ${drawerWidth}px)`,
+          ml: isMobile ? 0 : `${drawerWidth}px`,
+          backgroundColor: "#ffffff",
+          boxShadow: "none",
+          borderBottom: "1px solid #E0E0E0",
+          color: "rgba(5, 21, 54, 255)",
+          zIndex: 1200,
+        }}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            onClick={changeOpenStatus}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-
-          <Typography variant="h6" noWrap component="div">
-            Student Center for Life and Career Management
-          </Typography>
-
-          <Box sx={{ flexGrow: 1 }} />
-
-          <IconButton
-            size="large"
-            edge="end"
-            color="inherit"
-            onClick={handleProfileMenuOpen}
-          >
-            <AccountCircle />
-          </IconButton>
-          <Menu
-            anchorEl={profileMenuAnchor}
-            open={Boolean(profileMenuAnchor)}
-            onClose={handleProfileMenuClose}
-          >
-            <MenuItem onClick={handleProfileMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleProfileMenuClose}>Settings</MenuItem>
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-          </Menu>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {isMobile && (
+              <IconButton color="inherit" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
+                <MenuIcon sx={{ color: "rgba(5, 21, 54, 255)" }} />
+              </IconButton>
+            )}
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{
+                fontWeight: "bold",
+                color: "rgba(5, 21, 54, 255)",
+                textTransform: "uppercase",
+                letterSpacing: 1.5,
+                fontFamily: "'Rozha One'",
+                fontSize: "1.25rem",
+                "&:hover": {
+                  color: "#1E90FF",
+                  cursor: "pointer",
+                },
+              }}
+            >
+              Student Center for Life and Career Management
+            </Typography>
+          </Box>
+          <Box>
+            <IconButton color="inherit" onClick={handleProfileMenuOpen} sx={{ color: "rgba(5, 21, 54, 255)" }}>
+              <AccountCircle fontSize="large" />
+            </IconButton>
+            <Menu
+              anchorEl={profileMenuAnchor}
+              open={Boolean(profileMenuAnchor)}
+              onClose={handleProfileMenuClose}
+            >
+              <MenuItem onClick={handleProfileMenuClose}>Profile</MenuItem>
+              <MenuItem onClick={handleProfileMenuClose}>Settings</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </Box>
         </Toolbar>
       </AppBar>
+
       <Drawer
-        variant="permanent"
+        variant={isMobile ? "temporary" : "permanent"}
+        open={isMobile ? mobileOpen : true}
+        onClose={handleDrawerToggle}
         sx={{
-          display: { xs: "none", sm: "block" },
           width: drawerWidth,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
+            backgroundColor: "rgba(5, 21, 54, 255)",
+            borderRight: "2px solid #ffffff",
           },
         }}
       >
         {myDrawer}
       </Drawer>
 
-      <Drawer
-        variant="temporary"
-        open={open}
-        onClose={changeOpenStatus}
-        sx={{
-          display: { xs: "block", sm: "none" },
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-      >
-        {myDrawer}
-      </Drawer>
-
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, bgcolor: "#ffffff", p: 3, minHeight: "100vh", height: "100%", overflow: "auto" }}>
         <Toolbar />
         {content}
       </Box>
     </Box>
   );
-}
+});
+
+export default NavBarStudent;

@@ -18,20 +18,17 @@ import MenuIcon from "@mui/icons-material/Menu";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import file from "./images/file.png"; // Use the exact casing for your logo file
+import { IconButton, Menu, MenuItem, useMediaQuery } from "@mui/material";
+import file from "./images/file.png";
 
-export default function NavBar(props) {
-  const { drawerWidth, content } = props;
+const NavBar = React.memo((props) => {
+  const { drawerWidth = 260, content } = props;
   const location = useLocation();
   const path = location.pathname;
 
-  const [open, setOpen] = React.useState(false);
   const [profileMenuAnchor, setProfileMenuAnchor] = React.useState(null);
-
-  const changeOpenStatus = () => {
-    setOpen(!open);
-  };
+  const [mobileOpen, setMobileOpen] = React.useState(false); // For toggling mobile sidebar
+  const [selectedItem, setSelectedItem] = React.useState(path); // Track selected menu item
 
   const handleProfileMenuOpen = (event) => {
     setProfileMenuAnchor(event.currentTarget);
@@ -42,127 +39,84 @@ export default function NavBar(props) {
   };
 
   const handleLogout = () => {
-    // Clear the authentication token and role from localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-
-    // Redirect to the login page
     window.location.href = "/";
-    handleProfileMenuClose(); // Close the profile menu
+    handleProfileMenuClose();
+  };
+
+  const menuItems = [
+    { text: "Dashboard", icon: <DashboardIcon />, link: "/counselor/dashboard" },
+    { text: "Resource Sharing", icon: <NotesIcon />, link: "/counselor/resourcesharing" },
+    { text: "Forms", icon: <AssignmentIcon />, link: "/counselor/forms" },
+    { text: "Appointment", icon: <CalendarMonthIcon />, link: "/counselor/appointment" },
+    { text: "Records", icon: <FileCopyIcon />, link: "/counselor/records" },
+  ];
+
+  const isMobile = useMediaQuery("(max-width: 768px)"); // Check if screen width is less than 768px
+
+  // Handle menu item click to update the selected item
+  const handleMenuItemClick = (link) => {
+    setSelectedItem(link);
+    if (isMobile && mobileOpen) {
+      setMobileOpen(false); // Close the sidebar on mobile when an item is clicked
+    }
+  };
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen); // Toggle sidebar visibility on mobile
   };
 
   const myDrawer = (
-    <div>
-      <Toolbar />
-      <Box sx={{ overflow: "auto" }}>
-        <List>
-          <ListItem disablePadding>
+    <Box sx={{ backgroundColor: "rgba(5, 21, 54, 255)", height: "100vh", color: "#ffffff", position: "relative" }}>
+      <Toolbar>
+        <img src={file} alt="logo" style={{ width: 60, height: 60, margin: "10px auto 0"  }} />
+      </Toolbar>
+      <List>
+        {menuItems.map((item) => (
+          <ListItem key={item.text} disablePadding>
             <ListItemButton
               component={Link}
-              to="/counselor/dashboard"
-              selected={"/counselor/dashboard" === path}
+              to={item.link}
+              selected={item.link === selectedItem}
+              onClick={() => handleMenuItemClick(item.link)}
               sx={{
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 1)", // Hover effect
-                },
                 "&.Mui-selected": {
-                  backgroundColor: "#1E90FF", // Highlight active link
+                  backgroundColor: "#ffffff", // White background for selected item
+                  borderTopLeftRadius: "20px", // Round only the left side
+                  borderBottomLeftRadius: "20px", // Round only the left side
+                  color: "#000", // Change text color to black when selected
+                  "& .MuiListItemIcon-root": {
+                    color: "#000", // Change icon color to black for selected item
+                  },
                 },
+                // Add a margin-top only for the Dashboard item
+                ...(item.text === "Dashboard" && { marginTop: "20px" }),
               }}
             >
-              <ListItemIcon sx={{ color: "black" }}>
-                <DashboardIcon />
+              {/* Highlight section when selected */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: -25,
+                  width: 8, // Adjust the width of the highlighted line
+                  height: "100%",
+                  backgroundColor: "#1E90FF",
+                  visibility: item.link === selectedItem ? "visible" : "hidden",
+                  borderTopRightRadius: "5px",
+                  borderBottomRightRadius: "5px",
+                }}
+              />
+              <ListItemIcon sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                {item.icon}
               </ListItemIcon>
-              <ListItemText primary={"Dashboard"}  primaryTypographyProps={{ sx: {  fontWeight: "bold" } }} />
+              <ListItemText primary={item.text} primaryTypographyProps={{ sx: { fontWeight: "bold" , fontFamily: "'Rozha One'", fontSize: "1rem"} }} />
             </ListItemButton>
           </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton
-              component={Link}
-              to="/counselor/resourcesharing"
-              selected={"/counselor/resourcesharing" === path}
-              sx={{
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 1)", // Hover effect
-                },
-                "&.Mui-selected": {
-                  backgroundColor: "#1E90FF", // Highlight active link
-                },
-              }}
-            >
-              <ListItemIcon sx={{ color: "black" }}>
-                <NotesIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Resource Sharing"} primaryTypographyProps={{ sx: {  fontWeight: "bold" } }} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton
-              component={Link}
-              to="/counselor/forms"
-              selected={"/counselor/forms" === path}
-              sx={{
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 1)", // Hover effect
-                },
-                "&.Mui-selected": {
-                  backgroundColor: "#1E90FF", // Highlight active link
-                },
-              }}
-            >
-              <ListItemIcon sx={{ color: "black" }}>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Forms"}  primaryTypographyProps={{ sx: {  fontWeight: "bold" } }}/>
-            </ListItemButton>
-          </ListItem>
-        </List>
-
-        <ListItem disablePadding>
-          <ListItemButton
-            component={Link}
-            to="/counselor/appointment"
-            selected={"/counselor/appointment" === path}
-            sx={{
-              "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 1)", // Hover effect
-              },
-              "&.Mui-selected": {
-                backgroundColor: "#1E90FF", // Highlight active link
-              },
-            }}
-          >
-            <ListItemIcon sx={{ color: "black" }}>
-              <CalendarMonthIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Appointment"}  primaryTypographyProps={{ sx: {  fontWeight: "bold" } }}/>
-          </ListItemButton>
-        </ListItem>
-
-        <ListItem disablePadding>
-          <ListItemButton
-            component={Link}
-            to="/counselor/records"
-            selected={"/counselor/records" === path}
-            sx={{
-              "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 1)", // Hover effect
-              },
-              "&.Mui-selected": {
-                backgroundColor: "#1E90FF", // Highlight active link
-              },
-            }}
-          >
-            <ListItemIcon sx={{ color: "black" }}>
-              <FileCopyIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Records"}  primaryTypographyProps={{ sx: {  fontWeight: "bold" } }} />
-          </ListItemButton>
-        </ListItem>
-      </Box>
-    </div>
+        ))}
+      </List>
+    </Box>
   );
 
   return (
@@ -170,84 +124,85 @@ export default function NavBar(props) {
       <CssBaseline />
       <AppBar
         position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{
+          width: isMobile ? "100%" : `calc(100% - ${drawerWidth}px)`,
+          ml: isMobile ? 0 : `${drawerWidth}px`,
+          backgroundColor: "#ffffff", // Set background color to white
+          boxShadow: "none",
+          borderBottom: "1px solid #E0E0E0", // Add light grey bottom border to AppBar
+          color: "rgba(5, 21, 54, 255)", // Text color for AppBar
+          zIndex: 1200, // Ensure the AppBar is on top with correct stacking
+        }}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            onClick={changeOpenStatus}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <img src={file} alt="file" style={{ width: 40, marginRight: 8 }} />{" "}
-          {/* Adjust size as needed */}
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ fontWeight: "bold", color: "#ffffff" }}
-          >
-            Student Center for Life and Career Management
-          </Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          <IconButton
-            size="large"
-            edge="end"
-            color="inherit"
-            onClick={handleProfileMenuOpen}
-          >
-            <AccountCircle />
-          </IconButton>
-          <Menu
-            anchorEl={profileMenuAnchor}
-            open={Boolean(profileMenuAnchor)}
-            onClose={handleProfileMenuClose}
-          >
-            <MenuItem onClick={handleProfileMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleProfileMenuClose}>Settings</MenuItem>
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-          </Menu>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {isMobile && (
+              <IconButton color="inherit" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
+                <MenuIcon sx={{ color: "rgba(5, 21, 54, 255)" }} /> {/* Set Menu Icon color */}
+              </IconButton>
+            )}
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{
+                fontWeight: "bold", // Make the font bold
+                color: "rgba(5, 21, 54, 255)", // Set text color
+                textTransform: "uppercase", // Uppercase text for a professional look
+                letterSpacing: 1.5, // Add spacing between letters for better readability
+                fontFamily:"'Rozha One'",
+                fontSize: "1.25rem", // Increase the font size
+                "&:hover": {
+                  color: "#1E90FF", // Change color on hover for interaction
+                  cursor: "pointer", // Add pointer cursor on hover
+                },
+              }}
+            >
+              Student Center for Life and Career Management
+            </Typography>
+          </Box>
+          <Box>
+            <IconButton color="inherit" onClick={handleProfileMenuOpen} sx={{ color: "rgba(5, 21, 54, 255)" }}>
+              <AccountCircle fontSize="large" />
+            </IconButton>
+            <Menu
+              anchorEl={profileMenuAnchor}
+              open={Boolean(profileMenuAnchor)}
+              onClose={handleProfileMenuClose}
+            >
+              <MenuItem onClick={handleProfileMenuClose}>Profile</MenuItem>
+              <MenuItem onClick={handleProfileMenuClose}>Settings</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </Box>
         </Toolbar>
       </AppBar>
+
+      {/* Sidebar Drawer */}
       <Drawer
-        variant="permanent"
+        variant={isMobile ? "temporary" : "permanent"}
+        open={isMobile ? mobileOpen : true}
+        onClose={handleDrawerToggle}
         sx={{
-          display: { xs: "none", sm: "block" },
           width: drawerWidth,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
-            backgroundColor: "rgba(200, 220, 240, .5)",
+            backgroundColor: "rgba(5, 21, 54, 255)", // Sidebar background color
+            borderRight: "2px solid #ffffff", // Add white border to the right side
           },
         }}
       >
         {myDrawer}
       </Drawer>
 
-      <Drawer
-        variant="temporary"
-        open={open}
-        onClose={changeOpenStatus}
-        sx={{
-          display: { xs: "block", sm: "none" },
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
-            width: drawerWidth,
-            boxSizing: "border-box",
-            
-          },
-        }}
-      >
-        {myDrawer}
-      </Drawer>
-
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      {/* Main Content with white background */}
+      <Box component="main" sx={{ flexGrow: 1, bgcolor: "#ffffff", p: 3,  minHeight: "100vh", height: "100%", overflow: "auto" }}>
         <Toolbar />
         {content}
       </Box>
     </Box>
   );
-}
+});
+
+export default NavBar;
