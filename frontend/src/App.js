@@ -11,6 +11,7 @@ import Records from "./components/Records";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./components/Login";
 import StudentAppointment from "./components/StudentAppointment";
+import SignUp from "./components/SignUp";
 
 function App() {
   const myWidth = 220;
@@ -19,6 +20,15 @@ function App() {
       <Routes>
         {/* Login route (unprotected) */}
         <Route path="/" element={<Login />} />
+
+        <Route
+          path="/counselor/signup"
+          element={
+            <ProtectedRoute role="counselor">
+              <SignUp /> {/* Render SignUp component only for counselors */}
+            </ProtectedRoute>
+          }
+        />
 
         {/* Wrap NavBar with ProtectedRoute */}
         <Route

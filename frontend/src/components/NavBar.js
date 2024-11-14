@@ -20,6 +20,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { IconButton, Menu, MenuItem, useMediaQuery } from "@mui/material";
 import file from "./images/file.png";
+import SignUp from './SignUp'; // Importing SignUp component
 
 const NavBar = React.memo((props) => {
   const { drawerWidth = 260, content } = props;
@@ -29,6 +30,7 @@ const NavBar = React.memo((props) => {
   const [profileMenuAnchor, setProfileMenuAnchor] = React.useState(null);
   const [mobileOpen, setMobileOpen] = React.useState(false); // For toggling mobile sidebar
   const [selectedItem, setSelectedItem] = React.useState(path); // Track selected menu item
+  const [showSignUp, setShowSignUp] = React.useState(false); // State for showing SignUp form
 
   const handleProfileMenuOpen = (event) => {
     setProfileMenuAnchor(event.currentTarget);
@@ -55,7 +57,6 @@ const NavBar = React.memo((props) => {
 
   const isMobile = useMediaQuery("(max-width: 768px)"); // Check if screen width is less than 768px
 
-  // Handle menu item click to update the selected item
   const handleMenuItemClick = (link) => {
     setSelectedItem(link);
     if (isMobile && mobileOpen) {
@@ -70,7 +71,7 @@ const NavBar = React.memo((props) => {
   const myDrawer = (
     <Box sx={{ backgroundColor: "rgba(5, 21, 54, 255)", height: "100vh", color: "#ffffff", position: "relative" }}>
       <Toolbar>
-        <img src={file} alt="logo" style={{ width: 60, height: 60, margin: "10px auto 0"  }} />
+        <img src={file} alt="logo" style={{ width: 60, height: 60, margin: "10px auto 0" }} />
       </Toolbar>
       <List>
         {menuItems.map((item) => (
@@ -90,17 +91,14 @@ const NavBar = React.memo((props) => {
                     color: "#000", // Change icon color to black for selected item
                   },
                 },
-                // Add a margin-top only for the Dashboard item
-                ...(item.text === "Dashboard" && { marginTop: "20px" }),
               }}
             >
-              {/* Highlight section when selected */}
               <Box
                 sx={{
                   position: "absolute",
                   top: 0,
                   left: -25,
-                  width: 8, // Adjust the width of the highlighted line
+                  width: 8,
                   height: "100%",
                   backgroundColor: "#1E90FF",
                   visibility: item.link === selectedItem ? "visible" : "hidden",
@@ -111,13 +109,27 @@ const NavBar = React.memo((props) => {
               <ListItemIcon sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
                 {item.icon}
               </ListItemIcon>
-              <ListItemText primary={item.text} primaryTypographyProps={{ sx: { fontWeight: "bold" , fontFamily: "'Rozha One'", fontSize: "1rem"} }} />
+              <ListItemText primary={item.text} primaryTypographyProps={{ sx: { fontWeight: "bold", fontFamily: "'Rozha One'", fontSize: "1rem" } }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
     </Box>
   );
+
+  // Toggle visibility of the SignUp form
+  const handleSignUpClick = () => {
+    setShowSignUp(prevState => !prevState); // Toggle the SignUp form visibility
+    handleProfileMenuClose(); // Close the profile menu
+  };
+
+  const renderContent = () => {
+    if (showSignUp) {
+      return <SignUp />; // Show SignUp component when `showSignUp` is true
+    }
+
+    return content; // Render default content when `showSignUp` is false
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -127,33 +139,33 @@ const NavBar = React.memo((props) => {
         sx={{
           width: isMobile ? "100%" : `calc(100% - ${drawerWidth}px)`,
           ml: isMobile ? 0 : `${drawerWidth}px`,
-          backgroundColor: "#ffffff", // Set background color to white
+          backgroundColor: "#ffffff",
           boxShadow: "none",
-          borderBottom: "1px solid #E0E0E0", // Add light grey bottom border to AppBar
-          color: "rgba(5, 21, 54, 255)", // Text color for AppBar
-          zIndex: 1200, // Ensure the AppBar is on top with correct stacking
+          borderBottom: "1px solid #E0E0E0",
+          color: "rgba(5, 21, 54, 255)",
+          zIndex: 1200,
         }}
       >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {isMobile && (
               <IconButton color="inherit" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
-                <MenuIcon sx={{ color: "rgba(5, 21, 54, 255)" }} /> {/* Set Menu Icon color */}
+                <MenuIcon sx={{ color: "rgba(5, 21, 54, 255)" }} />
               </IconButton>
             )}
             <Typography
               variant="h6"
               component="div"
               sx={{
-                fontWeight: "bold", // Make the font bold
-                color: "rgba(5, 21, 54, 255)", // Set text color
-                textTransform: "uppercase", // Uppercase text for a professional look
-                letterSpacing: 1.5, // Add spacing between letters for better readability
-                fontFamily:"'Rozha One'",
-                fontSize: "1.25rem", // Increase the font size
+                fontWeight: "bold",
+                color: "rgba(5, 21, 54, 255)",
+                textTransform: "uppercase",
+                letterSpacing: 1.5,
+                fontFamily: "'Rozha One'",
+                fontSize: "1.25rem",
                 "&:hover": {
-                  color: "#1E90FF", // Change color on hover for interaction
-                  cursor: "pointer", // Add pointer cursor on hover
+                  color: "#1E90FF",
+                  cursor: "pointer",
                 },
               }}
             >
@@ -170,6 +182,7 @@ const NavBar = React.memo((props) => {
               onClose={handleProfileMenuClose}
             >
               <MenuItem onClick={handleProfileMenuClose}>Profile</MenuItem>
+              <MenuItem onClick={handleSignUpClick}>{showSignUp ? "Close Sign Up" : "Sign Up"}</MenuItem> {/* Toggle between Sign Up and Close */}
               <MenuItem onClick={handleProfileMenuClose}>Settings</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
@@ -188,18 +201,18 @@ const NavBar = React.memo((props) => {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
-            backgroundColor: "rgba(5, 21, 54, 255)", // Sidebar background color
-            borderRight: "2px solid #ffffff", // Add white border to the right side
+            backgroundColor: "rgba(5, 21, 54, 255)",
+            borderRight: "2px solid #ffffff",
           },
         }}
       >
         {myDrawer}
       </Drawer>
 
-      {/* Main Content with white background */}
-      <Box component="main" sx={{ flexGrow: 1, bgcolor: "#ffffff", p: 3,  minHeight: "100vh", height: "100%", overflow: "auto" }}>
+      {/* Main Content */}
+      <Box component="main" sx={{ flexGrow: 1, bgcolor: "#ffffff", p: 3, minHeight: "100vh", height: "100%", overflow: "auto" }}>
         <Toolbar />
-        {content}
+        {renderContent()} {/* Render content or SignUp form */}
       </Box>
     </Box>
   );
