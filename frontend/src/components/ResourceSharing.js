@@ -10,9 +10,7 @@ import {
 } from "@mui/material";
 import {
   Add as AddIcon,
-  Search as SearchIcon,
   Delete as DeleteIcon,
-  FilterList as FilterListIcon,
   AttachFile as AttachFileIcon,
   Edit as EditIcon,
 } from "@mui/icons-material";
@@ -23,8 +21,8 @@ import AxiosInstance from "./AllForms/Axios";
 
 const ResourceSharing = () => {
   const defaultValues = {
-    title: '',
-    content: '',
+    title: "",
+    content: "",
   };
 
   const { control, handleSubmit, reset, setValue } = useForm({ defaultValues });
@@ -84,18 +82,24 @@ const ResourceSharing = () => {
       };
 
       if (editingResource) {
-        await AxiosInstance.put(`/resource/${editingResource.id}/`, 
-          { title: data.title, content: data.content }, 
-          { headers });
+        await AxiosInstance.put(
+          `/resource/${editingResource.id}/`,
+          { title: data.title, content: data.content },
+          { headers }
+        );
         setNotification("Resource updated successfully");
       } else {
-        await AxiosInstance.post(`/resource/`, 
-          { title: data.title, content: data.content }, 
-          { headers });
+        await AxiosInstance.post(
+          `/resource/`,
+          { title: data.title, content: data.content },
+          { headers }
+        );
         setNotification("Resource added successfully");
       }
 
-      const resourcesResponse = await AxiosInstance.get("/resource/", { headers });
+      const resourcesResponse = await AxiosInstance.get("/resource/", {
+        headers,
+      });
       setResources(resourcesResponse.data);
 
       reset();
@@ -138,9 +142,11 @@ const ResourceSharing = () => {
     }
   };
 
-  const filteredResources = resources.filter((resource) =>
-    resource.title && typeof resource.title === 'string' &&
-    resource.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredResources = resources.filter(
+    (resource) =>
+      resource.title &&
+      typeof resource.title === "string" &&
+      resource.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const toggleContentVisibility = (id) => {
@@ -161,6 +167,7 @@ const ResourceSharing = () => {
       font-weight: bold;
     }
   `;
+  
 
   if (loading) {
     return <Typography variant="body2">Loading resources...</Typography>;
@@ -170,7 +177,11 @@ const ResourceSharing = () => {
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <style>{tableStyles}</style>
       <Stack spacing={2}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+        >
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             RESOURCE SHARING
           </Typography>
@@ -188,26 +199,15 @@ const ResourceSharing = () => {
                 "& input": { padding: "5px", lineHeight: "1.2" },
               }}
             />
-            <IconButton size="small">
-              <SearchIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              size="small"
-              onClick={() => {
-                setSearchQuery("");
-                reset();
-              }}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-            <IconButton size="small">
-              <FilterListIcon fontSize="small" />
-            </IconButton>
+            
           </Box>
         </Stack>
 
         {notification && (
-          <Typography variant="body2" sx={{ color: "green", textAlign: "center" }}>
+          <Typography
+            variant="body2"
+            sx={{ color: "green", textAlign: "center" }}
+          >
             {notification}
           </Typography>
         )}
@@ -252,11 +252,20 @@ const ResourceSharing = () => {
                   />
                 )}
               />
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
                 <IconButton size="small">
                   <AttachFileIcon fontSize="small" />
                 </IconButton>
-                <Button type="submit" variant="contained" color="primary" size="small">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                >
                   {editingResource ? "Update" : "Post"}
                 </Button>
               </Stack>
@@ -276,10 +285,14 @@ const ResourceSharing = () => {
                 mb: 2,
               }}
             >
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
                 <Typography
                   variant="body1"
-                  sx={{ fontWeight: "bold", cursor: 'pointer' }}
+                  sx={{ fontWeight: "bold", cursor: "pointer" }}
                   onClick={() => toggleContentVisibility(resource.id)}
                 >
                   {resource.title}
@@ -288,7 +301,10 @@ const ResourceSharing = () => {
                   <IconButton size="small" onClick={() => handleEdit(resource)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton size="small" onClick={() => handleDelete(resource.id)}>
+                  <IconButton
+                    size="small"
+                    onClick={() => handleDelete(resource.id)}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </Box>
@@ -306,7 +322,10 @@ const ResourceSharing = () => {
             </Box>
           ))
         ) : (
-          <Typography variant="body2" sx={{ textAlign: "center", color: "gray" }}>
+          <Typography
+            variant="body2"
+            sx={{ textAlign: "center", color: "gray" }}
+          >
             No resources found.
           </Typography>
         )}
