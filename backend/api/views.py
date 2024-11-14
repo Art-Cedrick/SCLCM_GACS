@@ -19,6 +19,32 @@ class StudentListView(APIView):
     def get(self, request):
         students = IndividualRecordForm.objects.all().values("sr_code", "name")  # or any other field
         return Response(students)
+    
+class RegisterView(APIView):
+    def post(self, request):
+        # Extract data from request
+        username = request.data.get('username')
+        password = request.data.get('password')
+        role = request.data.get('role')  # Role ('Counselor', 'Psychometrician', 'Student')
+
+        if role not in ['Counselor', 'Psychometrician', 'Student']:
+            return Response({'message': 'Invalid role specified'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create the user
+        user_data = {'username': username, 'password': password}
+        serializer = RegistrationSerializer(data=user_data)
+
+        if serializer.is_valid():
+            user = serializer.save()
+            Profile.objects.create(user=user, role=role)  # Assign role in Profile model
+
+            return Response({
+                'message': 'User created successfully',
+                'username': user.username,
+                'role': role,
+            }, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class setPagination(PageNumberPagination):
     page_size = 10
