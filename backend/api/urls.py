@@ -23,5 +23,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('login/', LoginView.as_view(), name='login'),
     path('api/appointment/', AppointmentView.as_view(), name='appointment'),
+    path('register/', RegisterView.as_view(), name='register'),
     path('students/', StudentListView.as_view(), name='student-list'),
 ]

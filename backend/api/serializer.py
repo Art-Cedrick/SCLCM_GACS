@@ -2,6 +2,17 @@ from rest_framework import serializers
 from .models import *
 from django.contrib.auth.models import User
 
+class RegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        # Hash the password automatically with create_user
+        user = User.objects.create_user(**validated_data)
+        return user
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
