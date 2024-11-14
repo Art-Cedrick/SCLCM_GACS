@@ -30,32 +30,28 @@ const theme = createTheme({
     fontFamily: "'Rozha One'", // Set the font globally
     h6: {
       fontSize: '1.5rem',  // Adjust size for h6 headings
-     
     },
     body1: {
       fontSize: '1rem', // Default body text size
-      
     },
     button: {
       fontSize: '0.875rem', // Font size for buttons
-      
     },
-
   },
 });
 
-function CustomEmailField({ email, setEmail }) {
+function CustomUsernameField({ username, setUsername }) {
   return (
     <TextField
       id="input-with-icon-textfield"
-      label="Username"
-      name="email"
-      type="email"
+      label="Student/Employee Number"
+      name="username"
+      type="text"  // Change type to "text" to accept characters and numbers
       size="small"
       required
       fullWidth
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
+      value={username}
+      onChange={(e) => setUsername(e.target.value)}
       variant="outlined"
       InputLabelProps={{
         required: false,
@@ -127,7 +123,7 @@ function ForgotPasswordLink() {
 }
 
 function CustomSignInForm() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(""); // Renamed email to username
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
 
@@ -140,7 +136,7 @@ function CustomSignInForm() {
 
     try {
       const response = await axios.post("http://localhost:8000/login/", {
-        username: email,
+        username: username,  // Use the updated variable
         password: password,
       });
 
@@ -188,7 +184,7 @@ function CustomSignInForm() {
           height: "2px",
         }}
       />
-      <CustomEmailField email={email} setEmail={setEmail} />
+      <CustomUsernameField username={username} setUsername={setUsername} />
       <CustomPasswordField password={password} setPassword={setPassword} />
       <FormGroup
         sx={{
@@ -311,6 +307,4 @@ export default function SlotsSignIn() {
       </Box>
     </ThemeProvider>
   );
-
 }
-

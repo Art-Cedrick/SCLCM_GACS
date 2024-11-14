@@ -35,9 +35,10 @@ const ResourceSharing = () => {
   const [notification, setNotification] = useState("");
   const [expandedResourceId, setExpandedResourceId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null); // New state for storing user information
 
   useEffect(() => {
-    const fetchResources = async () => {
+    const fetchUserAndResources = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
         setNotification("You must be logged in to perform this action.");
@@ -46,21 +47,30 @@ const ResourceSharing = () => {
       }
 
       try {
-        const response = await AxiosInstance.get("/resource/", {
+        // Fetch the logged-in user's info
+        const userResponse = await AxiosInstance.get("/auth/user/", {
           headers: {
             Authorization: `Token ${token}`,
           },
         });
-        setResources(response.data);
+        setUser(userResponse.data);
+
+        // Fetch resources
+        const resourcesResponse = await AxiosInstance.get("/resource/", {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        setResources(resourcesResponse.data);
       } catch (error) {
-        console.error("Error fetching resources:", error);
-        setNotification("Failed to fetch resources. Please log in.");
+        console.error("Error fetching data:", error);
+        setNotification("Failed to fetch data. Please log in.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchResources();
+    fetchUserAndResources();
   }, []);
 
   const toggleVisibility = () => {
@@ -83,24 +93,26 @@ const ResourceSharing = () => {
         Authorization: `Token ${token}`,
       };
 
+      const requestData = {
+        title: data.title,
+        content: data.content,
+        author: user.username, // Set the current user as the author
+      };
+
       if (editingResource) {
-        await AxiosInstance.put(`/resource/${editingResource.id}/`, 
-          { title: data.title, content: data.content }, 
-          { headers });
+        await AxiosInstance.put(`/resource/${editingResource.id}/`, requestData, { headers });
         setNotification("Resource updated successfully");
       } else {
-        await AxiosInstance.post(`/resource/`, 
-          { title: data.title, content: data.content }, 
-          { headers });
+        await AxiosInstance.post(`/resource/`, requestData, { headers });
         setNotification("Resource added successfully");
       }
 
+      // Refresh resources
       const resourcesResponse = await AxiosInstance.get("/resource/", { headers });
       setResources(resourcesResponse.data);
 
       reset();
       setEditingResource(null);
-
       setTimeout(() => setNotification(""), 3000);
     } catch (error) {
       console.error("Error saving resource:", error);
@@ -284,31 +296,32 @@ const ResourceSharing = () => {
                 >
                   {resource.title}
                 </Typography>
-                <Box>
-                  <IconButton size="small" onClick={() => handleEdit(resource)}>
-                    <EditIcon />
+                <Stack direction="row" spacing={1}>
+                  <IconButton
+                    size="small"
+                    onClick={() => handleEdit(resource)}
+                    sx={{ marginRight: "8px" }}
+                  >
+                    <EditIcon fontSize="small" />
                   </IconButton>
-                  <IconButton size="small" onClick={() => handleDelete(resource.id)}>
-                    <DeleteIcon />
+                  <IconButton
+                    size="small"
+                    onClick={() => handleDelete(resource.id)}
+                  >
+                    <DeleteIcon fontSize="small" />
                   </IconButton>
-                </Box>
+                </Stack>
               </Stack>
-              <Typography variant="body2" sx={{ mt: 1 }}>
-                {new Date(resource.createdAt).toLocaleDateString()}
+              <Typography variant="caption" color="textSecondary">
+                Author: {resource.author}
               </Typography>
               {expandedResourceId === resource.id && (
-                <Typography
-                  variant="body2"
-                  sx={{ mt: 1 }}
-                  dangerouslySetInnerHTML={{ __html: resource.content }}
-                />
+                <div dangerouslySetInnerHTML={{ __html: resource.content }} />
               )}
             </Box>
           ))
         ) : (
-          <Typography variant="body2" sx={{ textAlign: "center", color: "gray" }}>
-            No resources found.
-          </Typography>
+          <Typography variant="body2">No resources found.</Typography>
         )}
       </Stack>
     </Container>
