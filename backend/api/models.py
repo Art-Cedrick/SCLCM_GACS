@@ -42,9 +42,6 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user} - {self.role}'
 
-class User(models.Model):
-    username = models.CharField(max_length=150)
-    password = models.CharField(max_length=255)
 
 class RoutineInterview(models.Model):
     name = models.CharField(max_length=255)
@@ -292,7 +289,7 @@ class Resource(models.Model):
     content = RichTextField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    author = models.ManyToManyField(get_user_model(), related_name='resource')
+    author = models.ForeignKey(get_user_model(), related_name='resource', on_delete=models.CASCADE, default=1)
     attachment = models.FileField(upload_to='resource/', blank=True, null=True)
 
 

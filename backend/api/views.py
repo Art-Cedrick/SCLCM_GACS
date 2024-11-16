@@ -1,3 +1,4 @@
+from venv import logger
 from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import viewsets, permissions
@@ -13,6 +14,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.db import connection, transaction
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
+from django.db import close_old_connections
 
 # Create your views here.
 class StudentListView(APIView):
@@ -22,29 +24,48 @@ class StudentListView(APIView):
     
 class RegisterView(APIView):
     def post(self, request):
-        # Extract data from request
-        username = request.data.get('username')
-        password = request.data.get('password')
-        role = request.data.get('role')  # Role ('Counselor', 'Psychometrician', 'Student')
+        try:
+            # Extract data from request
+            username = request.data.get('username')
+            password = request.data.get('password')
+            role = request.data.get('role')  # Role ('Counselor', 'Psychometrician', 'Student')
 
-        if role not in ['Counselor', 'Psychometrician', 'Student']:
-            return Response({'message': 'Invalid role specified'}, status=status.HTTP_400_BAD_REQUEST)
+            # Log the role received from frontend for debugging
+            print(f"Backend received role: {role}")  # Ensure this prints the correct role
 
-        # Create the user
-        user_data = {'username': username, 'password': password}
-        serializer = RegistrationSerializer(data=user_data)
+            # Validate role (case insensitive check)
+            valid_roles = ['counselor', 'psychometrician', 'student']
+            if role.lower() not in valid_roles:
+                return Response({'message': 'Invalid role specified'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if serializer.is_valid():
-            user = serializer.save()
-            Profile.objects.create(user=user, role=role)  # Assign role in Profile model
+            # Check if the user already exists
+            if User.objects.filter(username=username).exists():
+                return Response({'message': 'User already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({
-                'message': 'User created successfully',
-                'username': user.username,
-                'role': role,
-            }, status=status.HTTP_201_CREATED)
+            # Create the user
+            user_data = {'username': username, 'password': password}
+            serializer = RegistrationSerializer(data=user_data)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            if serializer.is_valid():
+                # Save user after validation
+                user = serializer.save()
+
+                # Create profile and assign the role directly here
+                print(f"Creating profile with role: {role.lower()}")
+                Profile.objects.create(user=user, role=role.lower())  # Role should be saved in lowercase
+
+                return Response({
+                    'message': 'User created successfully',
+                    'username': user.username,
+                    'role': role,
+                }, status=status.HTTP_201_CREATED)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            print("Error occurred:", str(e))  # This will print any error to the console
+            return Response({'message': 'Internal Server Error', 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class setPagination(PageNumberPagination):
     page_size = 10
@@ -52,8 +73,6 @@ class setPagination(PageNumberPagination):
     max_page_size = 100
 
 class BaseViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.AllowAny]
-    pagination_class = setPagination    
 
     def close_connection(self):
         """Close any existing database connections to avoid stale data."""
@@ -121,11 +140,13 @@ class LoginView(APIView):
         
 class RoutineInterviewViewset(BaseViewSet):
     queryset = RoutineInterview.objects.all()
+    permission_classes = [permissions.AllowAny]
     serializer_class = RoutineInterviewSerializer
     
 class IndividualRecordFormViewset(BaseViewSet):
     queryset = IndividualRecordForm.objects.order_by('-id')
     serializer_class = IndividualRecordFormSerializer
+    permission_classes = [permissions.AllowAny]
 
     def perform_create(self, request, *args, **kwargs):
         self.close_connection()
@@ -148,47 +169,58 @@ class IndividualRecordFormViewset(BaseViewSet):
     
 class CareerTrackingViewset(BaseViewSet):
     queryset = CareerTracking.objects.order_by('-id')
-    serializer_class = CareerTrackingSerializer 
+    serializer_class = CareerTrackingSerializer
+    permission_classes = [permissions.AllowAny]
 
 class ConferenceFormViewset(BaseViewSet):
     queryset = ConferenceForm.objects.order_by('-id')
     serializer_class = ConferenceFormSerializer
+    permission_classes = [permissions.AllowAny]
 
 class Grade_TwoViewset(BaseViewSet):
     queryset = Grade_Two.objects.order_by('-id')
     serializer_class = Grade_TwoSerializer  
+    permission_classes = [permissions.AllowAny]
     
 class Grade_ThreeViewset(BaseViewSet):
     queryset = Grade_Three.objects.order_by('-id')
     serializer_class = Grade_ThreeSerializer
+    permission_classes = [permissions.AllowAny]
 
 class Grade_FourViewset(BaseViewSet):
     queryset = Grade_Four.objects.order_by('-id')
     serializer_class = Grade_FourSerializer
+    permission_classes = [permissions.AllowAny]
 
 class Grade_FiveViewset(BaseViewSet):
     queryset = Grade_Five.objects.order_by('-id')
     serializer_class = Grade_FiveSerializer
+    permission_classes = [permissions.AllowAny]
 
 class Grade_SixViewset(BaseViewSet):
     queryset = Grade_Six.objects.order_by('-id')
     serializer_class = Grade_SixSerializer
+    permission_classes = [permissions.AllowAny]
 
 class Grade_SevenViewset(BaseViewSet):
     queryset = Grade_Seven.objects.order_by('-id')
     serializer_class = Grade_SevenSerializer
+    permission_classes = [permissions.AllowAny]
 
 class Grade_EightViewset(BaseViewSet):
     queryset = Grade_Eight.objects.order_by('-id')
     serializer_class = Grade_EightSerializer
+    permission_classes = [permissions.AllowAny]
 
 class Grade_NineViewset(BaseViewSet):
     queryset = Grade_Nine.objects.order_by('-id')
     serializer_class = Grade_NineSerializer
+    permission_classes = [permissions.AllowAny]
 
 class Grade_TenViewset(BaseViewSet):
     queryset = Grade_Ten.objects.order_by('-id')
     serializer_class = Grade_TenSerializer
+    permission_classes = [permissions.AllowAny]
 
 class ProjectViewset(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
@@ -228,36 +260,26 @@ class ProjectViewset(viewsets.ModelViewSet):
         return Response(status=204)
     
 class ResourceViewSet(BaseViewSet):
-
     queryset = Resource.objects.order_by('-created', '-modified')
     serializer_class = ResourceSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        print(type(request.user))  # Debug: Should print <class 'django.contrib.auth.models.User'>
-        print(request.user)  # Debug: Confirm the user object
-
-        try:
-            with transaction.atomic():  # Ensure atomic transaction
-                # Create the resource instance
-                resource = Resource.objects.create(
-                    title=request.data.get('title'),
-                    content=request.data.get('content'),
-                )
-
-                # Add the logged-in user to the author field
-                resource.author.add(request.user)  
-
+        if not request.user.is_authenticated:
             return Response(
-                {"detail": "Resource created successfully."},
-                status=status.HTTP_201_CREATED,
+                {"detail": "Authentication required"}, 
+                status=status.HTTP_401_UNAUTHORIZED
             )
-        except Exception as e:
-            print(f"Error: {e}")  # Log error for debugging
-            return Response(
-                {"detail": "Something went wrong."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            try:
+                with transaction.atomic():
+                    resource = serializer.save(author=request.user)  # Automatically set the author to the logged-in user
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                return Response({"error": f"An error occurred: {str(e)}"},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class AppointmentView(APIView):
     permission_classes = [permissions.IsAuthenticated]

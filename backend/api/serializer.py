@@ -6,11 +6,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        # Hash the password automatically with create_user
-        user = User.objects.create_user(**validated_data)
+        password = validated_data.pop('password')
+        user = User.objects.create_user(**validated_data)  # create_user hashes the password automatically
+        user.set_password(password)
+        user.save()
         return user
 
 class UserSerializer(serializers.ModelSerializer):
@@ -89,14 +90,12 @@ class Grade_TenSerializer(serializers.ModelSerializer):
         fields = '__all__'  
 
 class ResourceSerializer(serializers.ModelSerializer):
-    author = UserSerializer(many=True, read_only=True)  # Nested serializer for author
+    author = serializers.StringRelatedField()  # This will return the user's string representation (e.g., username)
 
     class Meta:
         model = Resource
-        fields = '__all__'  # Include all fields, author will be populated automatically
-        extra_kwargs = {
-            'author': {'required': False},  # This ensures the author field is optional
-        }
+        fields = '__all__'
+
 
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:

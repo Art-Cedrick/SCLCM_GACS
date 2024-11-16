@@ -3,24 +3,31 @@ import { useForm, Controller } from 'react-hook-form';  // Importing useForm and
 import axios from 'axios';
 
 const SignUp = () => {
-    const { control, handleSubmit, formState: { errors } } = useForm();  // Using useForm for form management
+    const { control, handleSubmit, formState: { errors }, reset } = useForm();  // Using useForm for form management
 
     const onSubmit = async (data) => {
-        // Destructuring data from the form
         const { username, password, role } = data;
-
+        console.log('Data being sent:', { username, password, role });  // Check data being sent
+    
         try {
-            // Sending data to the backend
             const response = await axios.post('http://localhost:8000/register/', {
-                username, 
-                password, 
-                role
+                username,
+                password,
+                role: role.toLowerCase()  // Ensure the role is always lowercase
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
             });
+    
             alert('User created successfully');
+            reset();
         } catch (error) {
+            console.error('Error:', error.response ? error.response : error.message);  // Log full error response
             alert('Error creating user');
         }
     };
+    
 
     return (
         <div>
@@ -31,6 +38,7 @@ const SignUp = () => {
                     <Controller
                         name="username"
                         control={control}
+                        defaultValue=""  // Explicitly setting defaultValue to avoid uncontrolled to controlled transition
                         rules={{ required: "Username is required" }}
                         render={({ field }) => <input {...field} type="text" />}
                     />
@@ -42,6 +50,7 @@ const SignUp = () => {
                     <Controller
                         name="password"
                         control={control}
+                        defaultValue=""  // Explicitly setting defaultValue to avoid uncontrolled to controlled transition
                         rules={{ required: "Password is required" }}
                         render={({ field }) => <input {...field} type="password" />}
                     />
@@ -53,12 +62,12 @@ const SignUp = () => {
                     <Controller
                         name="role"
                         control={control}
-                        defaultValue="Student"
+                        defaultValue="Student"  // default value for role
                         render={({ field }) => (
                             <select {...field}>
-                                <option value="Student">Student</option>
-                                <option value="Counselor">Counselor</option>
-                                <option value="Psychometrician">Psychometrician</option>
+                                <option value="student">student</option>
+                                <option value="counselor">counselor</option>
+                                <option value="psychometrician">psychometrician</option>
                             </select>
                         )}
                     />

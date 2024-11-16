@@ -7,6 +7,10 @@ import {
   Stack,
   IconButton,
   TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -18,6 +22,7 @@ import { useForm, Controller } from "react-hook-form";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import AxiosInstance from "./AllForms/Axios";
+import { parseISO, format } from 'date-fns';
 
 const ResourceSharing = () => {
   const defaultValues = {
@@ -27,7 +32,7 @@ const ResourceSharing = () => {
 
   const { control, handleSubmit, reset, setValue } = useForm({ defaultValues });
   const [resources, setResources] = useState([]);
-  const [isVisible, setIsVisible] = useState(false);
+  const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [editingResource, setEditingResource] = useState(null);
   const [notification, setNotification] = useState("");
@@ -61,12 +66,14 @@ const ResourceSharing = () => {
     fetchResources();
   }, []);
 
-  const toggleVisibility = () => {
-    setIsVisible((prev) => !prev);
-    if (isVisible) {
-      setEditingResource(null);
-      reset();
-    }
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setEditingResource(null);
+    reset();
   };
 
   const onSubmit = async (data) => {
@@ -82,11 +89,12 @@ const ResourceSharing = () => {
       };
 
       if (editingResource) {
-        await AxiosInstance.put(
+        const updatedResource = await AxiosInstance.put(
           `/resource/${editingResource.id}/`,
           { title: data.title, content: data.content },
           { headers }
         );
+        updatedResource.data.updated = new Date(); // Set the updated date to now
         setNotification("Resource updated successfully");
       } else {
         await AxiosInstance.post(
@@ -102,8 +110,7 @@ const ResourceSharing = () => {
       });
       setResources(resourcesResponse.data);
 
-      reset();
-      setEditingResource(null);
+      handleClose();
 
       setTimeout(() => setNotification(""), 3000);
     } catch (error) {
@@ -116,7 +123,7 @@ const ResourceSharing = () => {
     setEditingResource(resource);
     setValue("title", resource.title);
     setValue("content", resource.content);
-    setIsVisible(true);
+    handleClickOpen();
   };
 
   const handleDelete = async (id) => {
@@ -167,7 +174,6 @@ const ResourceSharing = () => {
       font-weight: bold;
     }
   `;
-  
 
   if (loading) {
     return <Typography variant="body2">Loading resources...</Typography>;
@@ -186,7 +192,7 @@ const ResourceSharing = () => {
             RESOURCE SHARING
           </Typography>
           <Box display="flex" alignItems="center">
-            <IconButton onClick={toggleVisibility}>
+            <IconButton onClick={handleClickOpen}>
               <AddIcon />
             </IconButton>
             <TextField
@@ -199,7 +205,6 @@ const ResourceSharing = () => {
                 "& input": { padding: "5px", lineHeight: "1.2" },
               }}
             />
-            
           </Box>
         </Stack>
 
@@ -212,16 +217,9 @@ const ResourceSharing = () => {
           </Typography>
         )}
 
-        {isVisible && (
-          <Box
-            sx={{
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-              p: 2,
-              backgroundColor: "#f7f9fc",
-              mb: 2,
-            }}
-          >
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+          <DialogTitle>{editingResource ? "Edit Resource" : "Add Resource"}</DialogTitle>
+          <DialogContent>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Controller
                 control={control}
@@ -232,14 +230,12 @@ const ResourceSharing = () => {
                     label="Title"
                     fullWidth
                     margin="normal"
-                    sx={{ mb: 1 }}
                   />
                 )}
               />
               <Controller
                 name="content"
                 control={control}
-                defaultValue=""
                 render={({ field }) => (
                   <CKEditor
                     {...field}
@@ -249,29 +245,31 @@ const ResourceSharing = () => {
                       const data = editor.getData();
                       field.onChange(data);
                     }}
+                    config={{
+                      height: 400, // Set a larger height here
+                    }}
+                    style={{ height: "400px" }}
                   />
                 )}
               />
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <IconButton size="small">
-                  <AttachFileIcon fontSize="small" />
-                </IconButton>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                >
-                  {editingResource ? "Update" : "Post"}
-                </Button>
-              </Stack>
             </form>
-          </Box>
-        )}
+          </DialogContent>
+          <DialogActions>
+            <IconButton size="small">
+              <AttachFileIcon fontSize="small" />
+            </IconButton>
+            <Button onClick={handleClose} color="secondary">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmit(onSubmit)}
+              variant="contained"
+              color="primary"
+            >
+              {editingResource ? "Update" : "Post"}
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         {filteredResources.length > 0 ? (
           filteredResources.map((resource) => (
@@ -283,51 +281,52 @@ const ResourceSharing = () => {
                 p: 2,
                 backgroundColor: "#fff",
                 mb: 2,
+                cursor: "pointer",
               }}
+              onClick={() => toggleContentVisibility(resource.id)}
             >
               <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
+                direction="column"
+                justifyContent="flex-start"
+                alignItems="flex-start"
               >
-                <Typography
-                  variant="body1"
-                  sx={{ fontWeight: "bold", cursor: "pointer" }}
-                  onClick={() => toggleContentVisibility(resource.id)}
-                >
+                <Typography variant="body1" sx={{ fontWeight: "bold" }}>
                   {resource.title}
                 </Typography>
-                <Box>
-                  <IconButton size="small" onClick={() => handleEdit(resource)}>
+
+                <Typography variant="body2" sx={{ fontSize: "0.700rem", fontStyle: "italic" }}>
+                  {resource.author}
+                </Typography>
+
+                {/* Display the creation date under the title */}
+                
+                <Typography variant="body2" sx={{ fontSize: "0.600rem" }}>
+                  {resource.modified ? `${format(parseISO(resource.modified), 'Pp')}` : "Not yet updated"}
+                </Typography>
+
+                <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
+                  <IconButton size="small" onClick={(e) => { e.stopPropagation(); handleEdit(resource); }}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleDelete(resource.id)}
-                  >
+                  <IconButton size="small" onClick={(e) => { e.stopPropagation(); handleDelete(resource.id); }}>
                     <DeleteIcon />
                   </IconButton>
                 </Box>
               </Stack>
-              <Typography variant="body2" sx={{ mt: 1 }}>
-                {new Date(resource.createdAt).toLocaleDateString()}
-              </Typography>
+
               {expandedResourceId === resource.id && (
                 <Typography
                   variant="body2"
-                  sx={{ mt: 1 }}
-                  dangerouslySetInnerHTML={{ __html: resource.content }}
+                  sx={{ mt: 1, textAlign: "justify" }}
+                  dangerouslySetInnerHTML={{
+                    __html: resource.content,
+                  }}
                 />
               )}
             </Box>
           ))
         ) : (
-          <Typography
-            variant="body2"
-            sx={{ textAlign: "center", color: "gray" }}
-          >
-            No resources found.
-          </Typography>
+          <Typography variant="body2">No resources found.</Typography>
         )}
       </Stack>
     </Container>
