@@ -463,7 +463,7 @@ function CustomSignInForm() {
       } else if (response.data.role === "psychometrician") {
         navigate("/psychometrician/dashboard"); // Redirect to psychometrician dashboard
       } else if (response.data.role === "student") {
-        navigate("/student/forms"); // Redirect to student forms page
+        navigate("/student/studentappointment"); // Redirect to student forms page
       } else {
         console.error("Unknown role:", response.data.role);
         alert("Role not recognized");
