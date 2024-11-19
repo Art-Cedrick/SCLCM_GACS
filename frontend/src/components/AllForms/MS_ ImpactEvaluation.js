@@ -932,9 +932,9 @@ import {
   Card,
 } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import SingleSelect from "./AllForms/Forms/SingleSelect";
+import SingleSelect from "./Forms/SingleSelect";
 import { useForm, Controller } from "react-hook-form";
-import AxiosInstance from "./AllForms/Axios";
+import AxiosInstance from "./Axios";
 import { useMutation, useQueryClient } from "react-query";
 
 const PageOne = ({ control }) => (

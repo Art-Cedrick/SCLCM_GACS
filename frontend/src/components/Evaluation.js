@@ -6,7 +6,7 @@ import MSCounselingServiceEvaluation from './AllForms/MSCounselingServiceEvaluat
 
 const Evaluation = () => {
 
-  const [activeForm, setActiveForm] = useState('');
+  const [activeForm, setActiveForm] = useState('guidanceclassevaluation');
 
   const formOptions = [
     {value: 'guidanceclassevaluation', label: 'Guidance Class Evaluation'},

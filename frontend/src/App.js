@@ -13,6 +13,7 @@ import Login from "./components/Login";
 import StudentAppointment from "./components/StudentAppointment";
 import SignUp from "./components/SignUp";
 import IndividualRecordForm from "./components/AllForms/IndividualRecordForm";
+import Evaluation from "./components/Evaluation";
 
 function App() {
   const myWidth = 220;
@@ -60,7 +61,7 @@ function App() {
                 content={
                   <Routes>
                     <Route path="/studentappointment" element={<StudentAppointment />} />
-                    <Route path="/forms" element={<Forms />} />
+                    <Route path="/evaluation" element={<Evaluation />} />
                     <Route path="/individualrecordform" element={<IndividualRecordForm />} />
                   </Routes>
                 }

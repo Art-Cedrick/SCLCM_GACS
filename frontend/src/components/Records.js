@@ -7,7 +7,7 @@ import IndividualRecordFormTable from './AllForms/Tables/IndividualRecordFormTab
 
 const Records = () => {
 
-  const [activeForm, setActiveForm] = useState('');
+  const [activeForm, setActiveForm] = useState('individual_record_form');
 
   const formOptions = [
     {value: 'individual_record_form', label: 'Individual Record Form'},
