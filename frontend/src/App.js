@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./components/Login";
 import StudentAppointment from "./components/StudentAppointment";
 import SignUp from "./components/SignUp";
+import IndividualRecordForm from "./components/AllForms/IndividualRecordForm";
 
 function App() {
   const myWidth = 220;
@@ -60,7 +61,7 @@ function App() {
                   <Routes>
                     <Route path="/forms" element={<Forms />} />
                     <Route path="/studentappointment" element={<StudentAppointment />} />
-                    <Route path="/records" element={<Records />} />
+                    <Route path="/individualrecordform" element={<IndividualRecordForm />} />
                   </Routes>
                 }
               />

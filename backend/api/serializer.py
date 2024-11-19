@@ -6,11 +6,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        # Hash the password automatically with create_user
-        user = User.objects.create_user(**validated_data)
+        password = validated_data.pop('password')
+        user = User.objects.create_user(**validated_data)  # create_user hashes the password automatically
+        user.set_password(password)
+        user.save()
         return user
 
 class UserSerializer(serializers.ModelSerializer):
@@ -29,6 +30,8 @@ class RoutineInterviewSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class IndividualRecordFormSerializer(serializers.ModelSerializer):
+    profile = serializers.StringRelatedField()
+
     class Meta:
         model = IndividualRecordForm
         fields = '__all__'
@@ -129,23 +132,28 @@ class Fourth_YearSerializer(serializers.ModelSerializer):
         fields = '__all__'  
 
 class ResourceSerializer(serializers.ModelSerializer):
-    author = UserSerializer(many=True, read_only=True)  # Nested serializer for author
+    author = serializers.StringRelatedField()  # This will return the user's string representation (e.g., username)
 
     class Meta:
         model = Resource
-        fields = '__all__'  # Include all fields, author will be populated automatically
-        extra_kwargs = {
-            'author': {'required': False},  # This ensures the author field is optional
-        }
+        fields = '__all__'
+
 
 class AppointmentSerializer(serializers.ModelSerializer):
+    counselor_user = serializers.CharField(source='counselor.user', read_only=True)
+    sr_code = serializers.SlugRelatedField(
+        queryset=IndividualRecordForm.objects.all(),
+        slug_field='sr_code'
+    )
+
     class Meta:
         model = Appointment
         fields = '__all__'
-        read_only_fields = ['counselor']
 
     def validate(self, data):
-        # Example: Ensure 'other_purpose' is only required if 'purpose' is 'Others'
-        if data.get('purpose') == 'Others' and not data.get('other_purpose'):
-            raise serializers.ValidationError("Other purpose must be specified.")
+        # Check if the Profile (Counselor) exists
+        if not Profile.objects.filter(id=data['counselor'].id).exists():
+            raise serializers.ValidationError("Invalid counselor reference.")
+        
         return data
+        

@@ -1,8 +1,10 @@
-from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from ckeditor.fields import RichTextField
+from datetime import time
+
+
 
 # Create your models here.
 GRADE_LEVEL = [
@@ -42,9 +44,6 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user} - {self.role}'
 
-class User(models.Model):
-    username = models.CharField(max_length=150)
-    password = models.CharField(max_length=255)
 
 class RoutineInterview(models.Model):
     name = models.CharField(max_length=255)
@@ -70,8 +69,8 @@ class RoutineInterview(models.Model):
     other_recommendation = models.CharField(max_length=255, blank=True, null=True)
 
 class IndividualRecordForm(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
-    sr_code = models.CharField(max_length=100, blank=True, null=True, unique=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, default=1)
+    sr_code = models.CharField(max_length=100, unique=True, primary_key=True, default=1)
     lastname = models.CharField(max_length=255, blank=True, null=True)
     firstname = models.CharField(max_length=255, blank=True, null=True)
     middlename = models.CharField(max_length=255, blank=True, null=True)
@@ -95,11 +94,6 @@ class IndividualRecordForm(models.Model):
     relationship = models.CharField(max_length=255, blank=True, null=True)
 
     club = models.CharField(max_length=500, blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        if not self.profile and hasattr(self, 'user') and self.user.is_authenticated:
-            self.profile = Profile.objects.get(user=self.user)
-        super().save(*args, **kwargs)
 
 class CareerTracking(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -488,7 +482,7 @@ class Resource(models.Model):
     content = RichTextField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    author = models.ManyToManyField(get_user_model(), related_name='resource')
+    author = models.ForeignKey(get_user_model(), related_name='resource', on_delete=models.CASCADE, default=1)
     attachment = models.FileField(upload_to='resource/', blank=True, null=True)
 
 
@@ -504,12 +498,13 @@ class Appointment(models.Model):
         ('Others', 'Others'),
     ]
 
-    sr_code = models.ForeignKey(IndividualRecordForm, on_delete=models.CASCADE, related_name='appointments', default=1)
-    counselor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='counselor_appointments', default=1)
+    sr_code = models.ForeignKey(IndividualRecordForm, on_delete=models.SET_NULL, related_name='appointments', null=True)
+    counselor = models.ForeignKey(Profile, on_delete=models.SET_NULL, related_name='counselor_appointments', null=True)
     name = models.CharField(max_length=255)
     grade = models.CharField(max_length=50)
     section = models.CharField(max_length=50)
     date = models.DateField()
+    time = models.TimeField(default=time(9, 0))
     purpose = models.CharField(max_length=50, choices=PURPOSE_CHOICES)
     other_purpose = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

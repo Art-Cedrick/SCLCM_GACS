@@ -96,17 +96,16 @@ const IndividualRecordForm = ({initialData, onClose}) => {
     }), {
         onSuccess: () => {
           queryClient.invalidateQueries('IRFData');
-          console.log('Data invalidated');
           queryClient.refetchQueries('IRFData');
-          console.log('Data refetched');
           reset();
           onClose();
-          console.log("Data submitted and table refreshed");
-        }, onError: (error) => {
+        }, 
+        onError: (error) => {
           console.error("Error submitting data", error);
         },
-      }
+    }
   );
+  
 
   const submission = (data) => mutation.mutate(data);
 
