@@ -154,6 +154,15 @@ class ConferenceFormViewset(BaseViewSet):
     queryset = ConferenceForm.objects.order_by('-id')
     serializer_class = ConferenceFormSerializer
 
+class KinderViewset(BaseViewSet):
+    queryset = Kinder.objects.order_by('-id')
+    serializer_class = KinderSerializer  
+
+
+class Grade_OneViewset(BaseViewSet):
+    queryset = Grade_One.objects.order_by('-id')
+    serializer_class = Grade_OneSerializer  
+
 class Grade_TwoViewset(BaseViewSet):
     queryset = Grade_Two.objects.order_by('-id')
     serializer_class = Grade_TwoSerializer  
@@ -189,6 +198,30 @@ class Grade_NineViewset(BaseViewSet):
 class Grade_TenViewset(BaseViewSet):
     queryset = Grade_Ten.objects.order_by('-id')
     serializer_class = Grade_TenSerializer
+
+class Grade_ElevenViewset(BaseViewSet):
+    queryset = Grade_Eleven.objects.order_by('-id')
+    serializer_class = Grade_ElevenSerializer
+
+class Grade_TwelveViewset(BaseViewSet):
+    queryset = Grade_Twelve.objects.order_by('-id')
+    serializer_class = Grade_TwelveSerializer
+
+class First_YearViewset(BaseViewSet):
+    queryset = First_Year.objects.order_by('-id')
+    serializer_class = First_YearSerializer
+
+class Second_YearViewset(BaseViewSet):
+    queryset = Second_Year.objects.order_by('-id')
+    serializer_class = Second_YearSerializer
+
+class Third_YearViewset(BaseViewSet):
+    queryset = Third_Year.objects.order_by('-id')
+    serializer_class = Third_YearSerializer
+
+class Fourth_YearViewset(BaseViewSet):
+    queryset = Fourth_Year.objects.order_by('-id')
+    serializer_class = Fourth_YearSerializer
 
 class ProjectViewset(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]

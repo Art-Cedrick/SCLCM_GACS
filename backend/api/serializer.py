@@ -43,6 +43,16 @@ class ConferenceFormSerializer(serializers.ModelSerializer):
         model = ConferenceForm
         fields = '__all__'  
 
+class KinderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Kinder
+        fields = '__all__'
+
+class Grade_OneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Grade_One
+        fields = '__all__'
+
 class Grade_TwoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grade_Two
@@ -86,6 +96,36 @@ class Grade_NineSerializer(serializers.ModelSerializer):
 class Grade_TenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grade_Ten
+        fields = '__all__'  
+
+class Grade_ElevenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Grade_Eleven
+        fields = '__all__'  
+
+class Grade_TwelveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Grade_Twelve
+        fields = '__all__'  
+
+class First_YearSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = First_Year
+        fields = '__all__'  
+
+class Second_YearSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Second_Year
+        fields = '__all__'  
+
+class Third_YearSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Third_Year
+        fields = '__all__'  
+
+class Fourth_YearSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fourth_Year
         fields = '__all__'  
 
 class ResourceSerializer(serializers.ModelSerializer):

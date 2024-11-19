@@ -110,7 +110,6 @@ const NavBarStudent = React.memo((props) => {
 
               <ListItemText primary={item.text} primaryTypographyProps={{ sx: { fontWeight: "bold", fontFamily: "'Rozha One'", fontSize: "1rem" } }} />
 
-              <ListItemText primary={"StudentAppointment"} />
 
             </ListItemButton>
           </ListItem>
