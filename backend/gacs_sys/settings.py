@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework.authtoken',
     'django_ckeditor_5',
-    'ckeditor'  
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 REST_FRAMEWORK = {
@@ -174,19 +175,30 @@ LOGGING = {
 
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': 'full',
+        'toolbar': 'Full',
         'height': 300,
-        'width': '100%',
-        'extraPlugins': 'table',
+        'width': 'auto',
+        'extraPlugins': 'uploadimage,uploadfile',
+        'skin': 'moono-lisa',
+    },
+    'secure': {
+        'toolbar': 'Basic',
+        'skin': 'moono',
+        'height': 200,
+        'width': 'auto',
     },
 }
 
+
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / "static",
 ]
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 customColorPalette = [
         {

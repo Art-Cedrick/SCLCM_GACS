@@ -30,6 +30,8 @@ class RoutineInterviewSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class IndividualRecordFormSerializer(serializers.ModelSerializer):
+    profile = serializers.StringRelatedField()
+
     class Meta:
         model = IndividualRecordForm
         fields = '__all__'
@@ -98,13 +100,20 @@ class ResourceSerializer(serializers.ModelSerializer):
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
+    counselor_user = serializers.CharField(source='counselor.user', read_only=True)
+    sr_code = serializers.SlugRelatedField(
+        queryset=IndividualRecordForm.objects.all(),
+        slug_field='sr_code'
+    )
+
     class Meta:
         model = Appointment
         fields = '__all__'
-        read_only_fields = ['counselor']
 
     def validate(self, data):
-        # Example: Ensure 'other_purpose' is only required if 'purpose' is 'Others'
-        if data.get('purpose') == 'Others' and not data.get('other_purpose'):
-            raise serializers.ValidationError("Other purpose must be specified.")
+        # Check if the Profile (Counselor) exists
+        if not Profile.objects.filter(id=data['counselor'].id).exists():
+            raise serializers.ValidationError("Invalid counselor reference.")
+        
         return data
+        

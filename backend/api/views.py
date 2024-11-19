@@ -144,28 +144,24 @@ class RoutineInterviewViewset(BaseViewSet):
     serializer_class = RoutineInterviewSerializer
     
 class IndividualRecordFormViewset(BaseViewSet):
-    queryset = IndividualRecordForm.objects.order_by('-id')
+    queryset = IndividualRecordForm.objects.order_by('-sr_code')
     serializer_class = IndividualRecordFormSerializer
     permission_classes = [permissions.AllowAny]
 
-    def perform_create(self, request, *args, **kwargs):
-        self.close_connection()
-
-        # Retrieve the logged-in user's profile
+    def create(self, request, *args, **kwargs):
         try:
-            user_profile = Profile.objects.get(user=request.user)
+            profile = Profile.objects.get(user=request.user)
+            serializer = self.serializer_class(data=request.data)
+            if serializer.is_valid():
+                serializer.save(profile=profile)  # Associate the profile
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Profile.DoesNotExist:
-            return Response({"error": "User profile not found."}, status=status.HTTP_404_NOT_FOUND)
-
-        # Create the serializer with data and manually set the profile
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            with transaction.atomic():
-                # Save the instance with the logged-in user's profile
-                serializer.save(profile=user_profile)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Profile not found for the logged-in user."},
+                status=status.HTTP_404_NOT_FOUND
+            )
     
 class CareerTrackingViewset(BaseViewSet):
     queryset = CareerTracking.objects.order_by('-id')
@@ -286,25 +282,50 @@ class AppointmentView(APIView):
 
     def get(self, request):
         user_profile = Profile.objects.get(user=request.user)
-        if user_profile.role == 'counselor':
-            appointments = Appointment.objects.filter(counselor=user_profile)
-        elif user_profile.role == 'student':
-            # Filter appointments based on the student number associated with the user's profile
-            appointments = Appointment.objects.filter(sr_code__student_number=user_profile.IndividualRecordForm.sr_code)
-        else: 
-            return Response({'error': 'Access denied'}, status=status.HTTP_403_FORBIDDEN)
+        
+        if user_profile.role == 'student':
+            appointments = Appointment.objects.filter(sr_code__profile=user_profile)
+        else:
+            appointments = Appointment.objects.all()
         
         serializer = AppointmentSerializer(appointments, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data)
     
     def post(self, request):
+        try:
+            # Ensure sr_code is a valid instance of IndividualRecordForm
+            try:
+                student = IndividualRecordForm.objects.get(sr_code=request.data.get('sr_code'))
+            except IndividualRecordForm.DoesNotExist:
+                return Response({'non_field_errors': ['Invalid Individual Record Form reference.']}, status=status.HTTP_400_BAD_REQUEST)
+        except IndividualRecordForm.DoesNotExist:
+            return Response({'error': 'Invalid sr_code. No student found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Automatically assign the counselor field from the logged-in user (who is creating the appointment)
         user_profile = Profile.objects.get(user=request.user)
-        if user_profile.role != 'counselor':
-            return Response({'error': 'Only counselors can create schedules'}, status=status.HTTP_403_FORBIDDEN)
         
-        # Extract student details from the submitted form and create appointment
+        # Add counselor to the request data
+        request.data['counselor'] = user_profile.id  # Add the logged-in counselor's ID
+
+        # Serialize the data
         serializer = AppointmentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(counselor=user_profile)
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk):
+        try:
+            # Fetch the appointment by primary key (ID)
+            appointment = Appointment.objects.get(pk=pk)
+            
+            # Authorization: Allow deletion only by the counselor who created it or an admin
+            if request.user.profile.role != 'admin' and appointment.counselor.user != request.user:
+                return Response({'error': 'Permission denied.'}, status=status.HTTP_403_FORBIDDEN)
+            
+            # Delete the appointment
+            appointment.delete()
+            return Response({'message': 'Appointment deleted successfully.'}, status=status.HTTP_200_OK)
+        except Appointment.DoesNotExist:
+            return Response({'error': 'Appointment not found.'}, status=status.HTTP_404_NOT_FOUND)

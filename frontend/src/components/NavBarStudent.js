@@ -45,8 +45,8 @@ const NavBarStudent = React.memo((props) => {
 
   const menuItems = [
     { text: "Forms", icon: <DashboardIcon />, link: "/student/forms" },
-    { text: "Appointment", icon: <NotesIcon />, link: "/student/appointment" },
-    { text: "Records", icon: <AssignmentIcon />, link: "/student/records" },
+    { text: "Appointment", icon: <NotesIcon />, link: "/student/studentappointment" },
+    { text: "Profile", icon: <AssignmentIcon />, link: "/student/individualrecordform" },
   ];
 
   const isMobile = useMediaQuery("(max-width: 768px)"); // Check if screen width is less than 768px
@@ -110,7 +110,7 @@ const NavBarStudent = React.memo((props) => {
 
               <ListItemText primary={item.text} primaryTypographyProps={{ sx: { fontWeight: "bold", fontFamily: "'Rozha One'", fontSize: "1rem" } }} />
 
-              <ListItemText primary={"StudentAppointment"} />
+              <ListItemText  />
 
             </ListItemButton>
           </ListItem>
