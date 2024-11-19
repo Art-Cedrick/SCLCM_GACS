@@ -17,7 +17,7 @@ import NotesIcon from "@mui/icons-material/Notes";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { IconButton, Menu, MenuItem, useMediaQuery } from "@mui/material";
-import file from "./images/file.png"; // Assuming file.png is the logo image
+import file from "./images/file.png";  // Assuming file.png is the logo image
 
 const NavBarStudent = React.memo((props) => {
   const { drawerWidth = 260, content } = props;
@@ -44,17 +44,9 @@ const NavBarStudent = React.memo((props) => {
   };
 
   const menuItems = [
-    { text: "Forms", icon: <DashboardIcon />, link: "/student/forms" },
-    {
-      text: "Appointment",
-      icon: <NotesIcon />,
-      link: "/student/studentappointment",
-    },
-    {
-      text: "Profile",
-      icon: <AssignmentIcon />,
-      link: "/student/individualrecordform",
-    },
+    { text: "Appointment", icon: <NotesIcon />, link: "/student/studentappointment", sx: { marginTop: "20px" } }, // Added margin-top to Appointment
+    { text: "Forms", icon: <DashboardIcon />, link: "/student/forms" }, // No extra margin needed here
+    { text: "Profile", icon: <AssignmentIcon />, link: "/student/individualrecordform" },
   ];
 
   const isMobile = useMediaQuery("(max-width: 768px)"); // Check if screen width is less than 768px
@@ -72,20 +64,9 @@ const NavBarStudent = React.memo((props) => {
   };
 
   const myDrawer = (
-    <Box
-      sx={{
-        backgroundColor: "rgba(5, 21, 54, 255)",
-        height: "100vh",
-        color: "#ffffff",
-        position: "relative",
-      }}
-    >
+    <Box sx={{ backgroundColor: "rgba(5, 21, 54, 255)", height: "100vh", color: "#ffffff", position: "relative" }}>
       <Toolbar>
-        <img
-          src={file}
-          alt="logo"
-          style={{ width: 60, height: 60, margin: "10px auto 0" }}
-        />
+        <img src={file} alt="logo" style={{ width: 60, height: 60, margin: "10px auto 0" }} />
       </Toolbar>
       <List>
         {menuItems.map((item) => (
@@ -105,7 +86,7 @@ const NavBarStudent = React.memo((props) => {
                     color: "#000", // Change icon color to black for selected item
                   },
                 },
-                ...(item.text === "Forms" && { marginTop: "20px" }),
+                ...(item.text === "Appointment" && { marginTop: "20px" }), // Apply marginTop only to Appointment
               }}
             >
               <Box
@@ -124,19 +105,7 @@ const NavBarStudent = React.memo((props) => {
               <ListItemIcon sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
                 {item.icon}
               </ListItemIcon>
-
-              <ListItemText
-                primary={item.text}
-                primaryTypographyProps={{
-                  sx: {
-                    fontWeight: "bold",
-                    fontFamily: "'Rozha One'",
-                    fontSize: "1rem",
-                  },
-                }}
-              />
-
-              <ListItemText />
+              <ListItemText primary={item.text} primaryTypographyProps={{ sx: { fontWeight: "bold", fontFamily: "'Rozha One'", fontSize: "1rem" } }} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -162,11 +131,7 @@ const NavBarStudent = React.memo((props) => {
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {isMobile && (
-              <IconButton
-                color="inherit"
-                onClick={handleDrawerToggle}
-                sx={{ mr: 2 }}
-              >
+              <IconButton color="inherit" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
                 <MenuIcon sx={{ color: "rgba(5, 21, 54, 255)" }} />
               </IconButton>
             )}
@@ -190,11 +155,7 @@ const NavBarStudent = React.memo((props) => {
             </Typography>
           </Box>
           <Box>
-            <IconButton
-              color="inherit"
-              onClick={handleProfileMenuOpen}
-              sx={{ color: "rgba(5, 21, 54, 255)" }}
-            >
+            <IconButton color="inherit" onClick={handleProfileMenuOpen} sx={{ color: "rgba(5, 21, 54, 255)" }}>
               <AccountCircle fontSize="large" />
             </IconButton>
             <Menu
@@ -228,17 +189,7 @@ const NavBarStudent = React.memo((props) => {
         {myDrawer}
       </Drawer>
 
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          bgcolor: "#ffffff",
-          p: 3,
-          minHeight: "100vh",
-          height: "100%",
-          overflow: "auto",
-        }}
-      >
+      <Box component="main" sx={{ flexGrow: 1, bgcolor: "#ffffff", p: 3, minHeight: "100vh", height: "100%", overflow: "auto" }}>
         <Toolbar />
         {content}
       </Box>

@@ -59,8 +59,8 @@ function App() {
                 drawerWidth={myWidth}
                 content={
                   <Routes>
-                    <Route path="/forms" element={<Forms />} />
                     <Route path="/studentappointment" element={<StudentAppointment />} />
+                    <Route path="/forms" element={<Forms />} />
                     <Route path="/individualrecordform" element={<IndividualRecordForm />} />
                   </Routes>
                 }
