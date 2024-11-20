@@ -29,8 +29,6 @@ pickleshare==0.7.5
 pillow==10.4.0
 prompt-toolkit==3.0.31
 psutil==5.9.2
-psycopg2==2.9.10
-psycopg2-binary==2.9.9
 pure-eval==0.2.2
 pygame==2.1.2
 Pygments==2.13.0
