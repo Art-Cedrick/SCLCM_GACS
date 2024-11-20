@@ -173,6 +173,21 @@ class ConferenceFormViewset(BaseViewSet):
     serializer_class = ConferenceFormSerializer
     permission_classes = [permissions.AllowAny]
 
+class MS_ImpactEvaluationViewset(BaseViewSet):
+    queryset = MS_ImpactEvaluation.objects.order_by('-id')
+    serializer_class = MS_ImpactEvaluationSerializer
+    permission_classes = [permissions.AllowAny]
+
+class MS_CounselingServiceEvaluationViewset(BaseViewSet):
+    queryset = MS_CounselingServiceEvaluation.objects.order_by('-id')
+    serializer_class = MS_CounselingServiceEvaluationSerializer
+    permission_classes = [permissions.AllowAny]
+
+class Guidance_Class_EvaluationViewset(BaseViewSet):
+    queryset = Guidance_Class_Evaluation.objects.order_by('-id')
+    serializer_class = Guidance_Class_EvaluationSerializer
+    permission_classes = [permissions.AllowAny]
+
 class KinderViewset(BaseViewSet):
     queryset = Kinder.objects.order_by('-id')
     serializer_class = KinderSerializer  

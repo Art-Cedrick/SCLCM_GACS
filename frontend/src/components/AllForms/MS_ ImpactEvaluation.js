@@ -1220,14 +1220,14 @@ const PageTwo = ({ control }) => (
 
       {/* Question 12 */}
       <Typography variant="h7" gutterBottom align="left">
-        12. I have been influenced by the counselor’s advice on career planning.
+        12. I prioritize my studies over other activities.
       </Typography>
       <Controller
-        name="influenced"
+        name="prioritize"
         control={control}
         render={({ field }) => (
           <SingleSelect
-            label="How influenced were you by the counselor's advice?"
+            label="How you prioritize your studies over other activities?"
             {...field}
             options={["Great", "Considerable", "Slight", "Not at All"]}
             sx={{ width: "50%" }}
@@ -1238,14 +1238,14 @@ const PageTwo = ({ control }) => (
 
       {/* Question 13 */}
       <Typography variant="h7" gutterBottom align="left">
-        13. I have learned how to balance school work and personal life.
+        13. I can now maintain a good positive relation with others.
       </Typography>
       <Controller
-        name="schoolandlife"
+        name="positive"
         control={control}
         render={({ field }) => (
           <SingleSelect
-            label="How well do you balance school work and personal life?"
+            label="How you maintain a good positive relation with others?"
             {...field}
             options={["Great", "Considerable", "Slight", "Not at All"]}
             sx={{ width: "50%" }}
@@ -1256,14 +1256,14 @@ const PageTwo = ({ control }) => (
 
       {/* Question 14 */}
       <Typography variant="h7" gutterBottom align="left">
-        14. I have developed self-confidence.
+        14. I am now adjusted and able to cope with school life.
       </Typography>
       <Controller
-        name="selfconfidence"
+        name="cope"
         control={control}
         render={({ field }) => (
           <SingleSelect
-            label="How much have you developed self-confidence?"
+            label="How you adjusted and able to cope with school life?"
             {...field}
             options={["Great", "Considerable", "Slight", "Not at All"]}
             sx={{ width: "50%" }}
@@ -1274,14 +1274,14 @@ const PageTwo = ({ control }) => (
 
       {/* Question 15 */}
       <Typography variant="h7" gutterBottom align="left">
-        15. I am better at managing my time effectively.
+        15. I became more attentive to my teachers.
       </Typography>
       <Controller
-        name="timemanagement"
+        name="attentive"
         control={control}
         render={({ field }) => (
           <SingleSelect
-            label="How well do you manage your time?"
+            label="How you became more attentive to your teacher ?"
             {...field}
             options={["Great", "Considerable", "Slight", "Not at All"]}
             sx={{ width: "50%" }}
@@ -1292,14 +1292,14 @@ const PageTwo = ({ control }) => (
 
       {/* Question 16 */}
       <Typography variant="h7" gutterBottom align="left">
-        16. I am more motivated to pursue my academic and career goals.
+        16. I understand the need for self-control and how to practice it.
       </Typography>
       <Controller
-        name="motivated"
+        name="selfcontrol"
         control={control}
         render={({ field }) => (
           <SingleSelect
-            label="How motivated are you to pursue your goals?"
+            label="How you understand the need of self-control?"
             {...field}
             options={["Great", "Considerable", "Slight", "Not at All"]}
             sx={{ width: "50%" }}
@@ -1310,14 +1310,14 @@ const PageTwo = ({ control }) => (
 
       {/* Question 17 */}
       <Typography variant="h7" gutterBottom align="left">
-        17. I feel more confident about my future.
+        17. I become aware of my skills and abilities that match with my career choice.
       </Typography>
       <Controller
-        name="futureconfidence"
+        name="aware"
         control={control}
         render={({ field }) => (
           <SingleSelect
-            label="How confident are you about your future?"
+            label="How you become aware in your skills and abilities?"
             {...field}
             options={["Great", "Considerable", "Slight", "Not at All"]}
             sx={{ width: "50%" }}
@@ -1599,12 +1599,12 @@ const MS_ImpactEvaluation = ({ initialData, onClose }) => {
     cooperate: "",
     decided: "",
     careergoals: "",
-    influence: "",
-    schoolandlife: "",
-    selfconfidence: "",
-    timemanagement: "",
-    betterdecisions: "",
-    matchcareer: "",
+    prioritize: "",
+    positive: "",
+    cope: "",
+    attentive: "",
+    selfcontrol: "",
+    aware: "",
     helpful: "",
     meetingneeds: "",
     satisfaction: "",
@@ -1643,12 +1643,12 @@ const MS_ImpactEvaluation = ({ initialData, onClose }) => {
             cooperate: data.cooperate,
             decided: data.decided,
             careergoals: data.careergoals,
-            influence: data.influence,
-            schoolandlife: data.schoolandlife,
-            selfconfidence: data.selfconfidence,
-            timemanagement: data.timemanagement,
-            betterdecisions: data.betterdecisions,
-            matchcareer: data.matchcareer,
+            priorotize: data.prioritize,
+            positive: data.positive,
+            cope: data.cope,
+            attentive: data.attentive,
+            selfcontrol: data.selfcontrol,
+            aware: data.aware,
             helpful: data.helpful,
             meetingneeds: data.meetingneeds,
             satisfaction: data.satisfaction,
@@ -1675,12 +1675,12 @@ const MS_ImpactEvaluation = ({ initialData, onClose }) => {
             cooperate: data.cooperate,
             decided: data.decided,
             careergoals: data.careergoals,
-            influence: data.influence,
-            schoolandlife: data.schoolandlife,
-            selfconfidence: data.selfconfidence,
-            timemanagement: data.timemanagement,
-            betterdecisions: data.betterdecisions,
-            matchcareer: data.matchcareer,
+            priorotize: data.prioritize,
+            positive: data.positive,
+            cope: data.cope,
+            attentive: data.attentive,
+            selfcontrol: data.selfcontrol,
+            aware: data.aware,
             helpful: data.helpful,
             meetingneeds: data.meetingneeds,
             satisfaction: data.satisfaction,

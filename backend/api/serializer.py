@@ -46,6 +46,21 @@ class ConferenceFormSerializer(serializers.ModelSerializer):
         model = ConferenceForm
         fields = '__all__'  
 
+class MS_ImpactEvaluationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MS_ImpactEvaluation
+        fields = '__all__'  
+
+class MS_CounselingServiceEvaluationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MS_CounselingServiceEvaluation
+        fields = '__all__'  
+
+class Guidance_Class_EvaluationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Guidance_Class_Evaluation
+        fields = '__all__'  
+
 class KinderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kinder

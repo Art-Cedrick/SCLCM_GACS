@@ -1,10 +1,13 @@
-import React, { useMemo } from "react";
-import { MaterialReactTable } from "material-react-table";
-import { useQueryClient } from "react-query";
+import React, { useMemo,useEffect, useState } from "react";
+import { MaterialReactTable, MRT_ActionMenuItem } from "material-react-table";
+import AxiosInstance from "../Axios";
+import { Edit, Delete } from '@mui/icons-material';
+import { IconButton, Dialog, DialogContent, DialogTitle, Button } from "@mui/material";
+import { useQuery, useQueryClient } from "react-query";
 import Grade2 from '../Grade2';
 
 const fetchData = async () => {
-  const response = await AxiosInstance.get(`/careertracking/`);
+  const response = await AxiosInstance.get(`/grade_two/`);
   console.log(response.data)
   return response.data;
 };
@@ -41,7 +44,7 @@ const Grade2Table = () => {
   }
 
   useEffect(() => {
-    console.log('Fetching data for Career Tracking...');
+    console.log('Fetching data for Grade Two...');
   }, [myData]);
 
   const columns = useMemo(
