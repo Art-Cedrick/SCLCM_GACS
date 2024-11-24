@@ -46,8 +46,8 @@ const NavBarPsych = (props) => {
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, link: "/psychometrician/dashboard" },
     { text: "Resource Sharing", icon: <NotesIcon />, link: "/psychometrician/resourcesharing" },
-    { text: "Forms", icon: <AssignmentIcon />, link: "/psychometrician/forms" },
-    { text: "Records", icon: <AssignmentIcon />, link: "/psychometrician/records" },
+    { text: "Forms", icon: <AssignmentIcon />, link: "/psychometrician/psychometrician_forms" },
+    { text: "Records", icon: <AssignmentIcon />, link: "/psychometrician/psychometrician_records" },
   ];
 
   const isMobile = useMediaQuery("(max-width: 768px)");

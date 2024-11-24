@@ -49,9 +49,9 @@ const NavBar = React.memo((props) => {
 
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, link: "/counselor/dashboard" },
+    { text: "Schedule", icon: <CalendarMonthIcon />, link: "/counselor/appointment" },
     { text: "Resource Sharing", icon: <NotesIcon />, link: "/counselor/resourcesharing" },
     { text: "Forms", icon: <AssignmentIcon />, link: "/counselor/forms" },
-    { text: "Appointment", icon: <CalendarMonthIcon />, link: "/counselor/appointment" },
     { text: "Records", icon: <FileCopyIcon />, link: "/counselor/records" },
   ];
 

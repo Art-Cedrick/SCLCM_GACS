@@ -22,14 +22,14 @@ function StudentAppointment() {
   return (
     <Box sx={{ padding: "20px" }}>
       <Typography variant="h5" align="center" gutterBottom>
-        Your Appointments
+        Your Schedules
       </Typography>
       <Grid container spacing={2}>
         {schedules.length === 0 ? (
           <Grid item xs={12}>
             <Card sx={{ padding: 2, textAlign: "center" }}>
               <Typography variant="h6" color="textSecondary">
-                No appointments scheduled yet.
+                No schedules yet.
               </Typography>
             </Card>
           </Grid>

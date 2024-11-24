@@ -44,7 +44,7 @@ const NavBarStudent = React.memo((props) => {
   };
 
   const menuItems = [
-    { text: "Appointment", icon: <NotesIcon />, link: "/student/studentappointment", sx: { marginTop: "20px" } }, // Added margin-top to Appointment
+    { text: "Schedule", icon: <NotesIcon />, link: "/student/studentappointment", sx: { marginTop: "20px" } }, // Added margin-top to Appointment
     { text: "Evaluation", icon: <DashboardIcon />, link: "/student/evaluation" }, // No extra margin needed here
     { text: "Profile", icon: <AssignmentIcon />, link: "/student/individualrecordform" },
   ];

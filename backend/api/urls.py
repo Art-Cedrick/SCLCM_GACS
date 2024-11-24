@@ -36,5 +36,5 @@ urlpatterns = [
     path('api/appointment/', AppointmentView.as_view(), name='appointment'),
     path('api/appointment/<int:pk>/', AppointmentView.as_view(), name='appointment-detail'),
     path('register/', RegisterView.as_view(), name='register'),
-    path('students/', StudentListView.as_view(), name='student-list'),
+    path('api/routineinterview_analytics', RoutineInterviewAnalyticsViews.as_view(), name='routineinterview_analytics')
 ]
