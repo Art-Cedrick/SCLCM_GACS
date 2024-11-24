@@ -25,9 +25,9 @@ router.register('grade_ten', Grade_TenViewset, basename='grade_ten')
 router.register('grade_eleven', Grade_ElevenViewset, basename='grade_eleven')
 router.register('grade_twelve', Grade_TwelveViewset, basename='grade_twelve')
 router.register('first_year', First_YearViewset, basename='first_year')
-router.register('second_year', First_YearViewset, basename='second_year')
-router.register('third_year', First_YearViewset, basename='third_year')
-router.register('fourth_year', First_YearViewset, basename='fourth_year')
+router.register('second_year', Second_YearViewset, basename='second_year')
+router.register('third_year', Third_YearViewset, basename='third_year')
+router.register('fourth_year', Fourth_YearViewset, basename='fourth_year')
 router.register('resource', ResourceViewSet, basename='resource')
 
 urlpatterns = [
@@ -37,4 +37,5 @@ urlpatterns = [
     path('api/appointment/<int:pk>/', AppointmentView.as_view(), name='appointment-detail'),
     path('register/', RegisterView.as_view(), name='register'),
     path('students/', StudentListView.as_view(), name='student-list'),
+    
 ]

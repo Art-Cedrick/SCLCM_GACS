@@ -353,7 +353,7 @@ const IndividualRecordForm = ({initialData, onClose}) => {
                     name = "parents"
                     control={control}
                     render={({field}) => (
-                    <FormControl fullWidth>
+                    <FormControl fullWidth sx={{width:"150px"}}>
                     <InputLabel>Parents</InputLabel>
                     <Select
                       label = "Parents"
@@ -376,7 +376,7 @@ const IndividualRecordForm = ({initialData, onClose}) => {
                     name = "living_with"
                     control={control}
                     render={({field}) => (
-                    <FormControl fullWidth>
+                    <FormControl fullWidth sx={{width:"150px"}}>
                     <InputLabel>Living With</InputLabel>
                     <Select
                       label = "Living With"
