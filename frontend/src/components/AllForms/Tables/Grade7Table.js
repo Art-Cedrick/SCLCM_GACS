@@ -1,26 +1,39 @@
-import React, { useMemo,useEffect, useState } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { MaterialReactTable, MRT_ActionMenuItem } from "material-react-table";
 import AxiosInstance from "../Axios";
-import { Edit, Delete } from '@mui/icons-material';
-import { IconButton, Dialog, DialogContent, DialogTitle, Button } from "@mui/material";
+import { Edit, Delete } from "@mui/icons-material";
+import {
+  IconButton,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from "@mui/material";
 import { useQuery, useQueryClient } from "react-query";
-import Grade7 from '../Grade7';
+import Grade7 from "../Grade7";
 
 const fetchData = async () => {
   const response = await AxiosInstance.get(`/grade_seven/`);
-  console.log(response.data)
+  console.log(response.data);
   return response.data;
 };
 
 const Example = () => {
-
   const queryClient = useQueryClient();
 
-  const { data: myData = [], isLoading, error, isFetching } = useQuery('grade_sevenData', fetchData);
+  const {
+    data: myData = [],
+    isLoading,
+    error,
+    isFetching,
+  } = useQuery("grade_sevenData", fetchData);
 
   const [editData, setEdit] = useState(null);
   const [open, setOpen] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState({open: false, row: null})
+  const [confirmDelete, setConfirmDelete] = useState({
+    open: false,
+    row: null,
+  });
 
   const handleEdit = (row) => {
     setEdit(row.original);
@@ -30,23 +43,22 @@ const Example = () => {
   const handleClose = () => {
     setEdit(null);
     setOpen(false);
-  }
+  };
 
   const handleDelete = async (row) => {
     try {
       await AxiosInstance.delete(`/grade_seven/${row.original.id}/`);
-      queryClient.invalidateQueries('grade_sevenData');
-      setConfirmDelete({open: false, row: null});
+      queryClient.invalidateQueries("grade_sevenData");
+      setConfirmDelete({ open: false, row: null });
       console.log("Deleted Successfully");
     } catch (error) {
       console.log("Error deleting", error);
     }
-  }
+  };
 
   useEffect(() => {
-    console.log('Fetching data for Grade Seven...');
+    console.log("Fetching data for Grade Seven...");
   }, [myData]);
-
 
   const columns = useMemo(
     () => [
@@ -97,19 +109,18 @@ const Example = () => {
         marginBottom: "16px",
       }}
     >
-      <div style={{ maxWidth: "1000px", width: "100%", height: "100%" }}>
-      <MaterialReactTable 
-          columns={columns} 
-          data={myData} 
-          
+      <div style={{ width: "1200px", height: "600px" }}>
+        <MaterialReactTable
+          columns={columns}
+          data={myData}
           enableRowActions
           renderRowActionMenuItems={({ row, table }) => [
             <MRT_ActionMenuItem //or just use a normal MUI MenuItem component
               icon={
-              <IconButton>
-              <Edit />
-              </IconButton>
-            }
+                <IconButton>
+                  <Edit />
+                </IconButton>
+              }
               key="edit"
               label="Edit"
               onClick={() => handleEdit(row)}
@@ -118,37 +129,53 @@ const Example = () => {
             <MRT_ActionMenuItem
               icon={
                 <IconButton>
-                <Delete />
+                  <Delete />
                 </IconButton>
               }
               key="delete"
               label="Delete"
-              onClick={() => setConfirmDelete({open: true, row})}
+              onClick={() => setConfirmDelete({ open: true, row })}
               table={table}
             />,
           ]}
-            />
-          <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
-              <DialogTitle>Edit Grade Seven Form</DialogTitle>
-              <DialogContent>
-                <Grade7 initialData={editData} onClose={handleClose}/>
-              </DialogContent>
-            </Dialog>
+        />
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+          <DialogTitle>Edit Grade Seven Form</DialogTitle>
+          <DialogContent>
+            <Grade7 initialData={editData} onClose={handleClose} />
+          </DialogContent>
+        </Dialog>
 
-            <Dialog open={confirmDelete.open} onClose={() => setConfirmDelete({open: false, row: null})}>
-              <DialogTitle>Confirm Delete</DialogTitle>
-              <DialogContent>
-                <p>Are you sure you want to delete this record?</p>
-                <div style={{display: "flex", justifyContent: "flex-end", gap: "10px"}}>
-                  <Button variant="outlined" onClick={() => setConfirmDelete({open: false, row: null})}>
-                    Cancel
-                  </Button>
-                  <Button variant="contained" color="error" onClick={() => handleDelete(confirmDelete.row)}>
-                    Delete
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+        <Dialog
+          open={confirmDelete.open}
+          onClose={() => setConfirmDelete({ open: false, row: null })}
+        >
+          <DialogTitle>Confirm Delete</DialogTitle>
+          <DialogContent>
+            <p>Are you sure you want to delete this record?</p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "10px",
+              }}
+            >
+              <Button
+                variant="outlined"
+                onClick={() => setConfirmDelete({ open: false, row: null })}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleDelete(confirmDelete.row)}
+              >
+                Delete
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

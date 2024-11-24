@@ -15,6 +15,7 @@ from django.db import connection, transaction
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
 from django.db import close_old_connections
+from django.db.models import Count, Q
 
 # Create your views here.
 class StudentListView(APIView):
@@ -377,3 +378,36 @@ class AppointmentView(APIView):
             return Response({'message': 'Appointment deleted successfully.'}, status=status.HTTP_200_OK)
         except Appointment.DoesNotExist:
             return Response({'error': 'Appointment not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+class RoutineInterviewAnalyticsViews(APIView):
+    def get(self, request):
+        # Problem analytics
+        total_family_problems = RoutineInterview.objects.filter(~Q(family_problem=[])).count()
+        total_friends_problems = RoutineInterview.objects.filter(~Q(friends_problem=[])).count()
+        total_health_problems = RoutineInterview.objects.filter(~Q(health_problem=[])).count()
+        total_academic_problems = RoutineInterview.objects.filter(~Q(academic_problem=[])).count()
+        total_career_problems = RoutineInterview.objects.filter(~Q(career_problem=[])).count()
+
+        # Students count by grade level
+        students_by_grade = (
+         IndividualRecordForm.objects.values('year')  # Ensure 'year' exists
+        .annotate(student_count=Count(IndividualRecordForm))  # Use 'routine_interview'
+    )
+
+
+            # Construct the response
+        total_students = IndividualRecordForm.objects.count()
+        analytics = {
+            "problem_counts": {
+                "Family": total_family_problems,
+                "Friends": total_friends_problems,
+                "Health": total_health_problems,
+                "Academic": total_academic_problems,
+                "Career": total_career_problems,
+            },
+            "students_by_grade": list(students_by_grade),
+            "total_students": total_students,
+        }
+
+
+        return Response(analytics)

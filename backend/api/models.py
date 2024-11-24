@@ -4,8 +4,6 @@ from django.contrib.auth import get_user_model
 from ckeditor.fields import RichTextField
 from datetime import time
 
-
-
 # Create your models here.
 GRADE_LEVEL = [
     ('Grade 1', 'grade 1'),
@@ -44,30 +42,6 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user} - {self.role}'
 
-
-class RoutineInterview(models.Model):
-    name = models.CharField(max_length=255)
-    section = models.CharField(max_length=100)
-    grade = models.CharField(max_length=100, choices=GRADE_LEVEL)
-    date = models.DateField()
-
-    family_problem = models.JSONField(default=list, blank=True, null=True)
-    family_details = models.TextField(blank=True, null=True)
-    friends_problem = models.JSONField(default=list, blank=True, null=True)
-    friends_details = models.TextField(blank=True, null=True)
-    health_problem = models.JSONField(default=list, blank=True, null=True)
-    health_details = models.TextField(blank=True, null=True)
-    
-    academic_problem = models.JSONField(default=list, blank=True, null=True)
-    academic_details = models.TextField(blank=True, null=True)
-
-    career_problem = models.JSONField(default=list, blank=True, null=True)
-    career_details = models.TextField(blank=True, null=True)
-
-    remarks = models.TextField(blank=True, null=True)
-    recommendation = models.JSONField(default=list, blank=True, null=True)
-    other_recommendation = models.CharField(max_length=255, blank=True, null=True)
-
 class IndividualRecordForm(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, default=1)
     sr_code = models.CharField(max_length=100, unique=True, primary_key=True, default=1)
@@ -95,7 +69,31 @@ class IndividualRecordForm(models.Model):
 
     club = models.CharField(max_length=500, blank=True, null=True)
 
-class CareerTracking(models.Model):
+class RoutineInterview(models.Model):
+    sr_code = models.ForeignKey(IndividualRecordForm, on_delete=models.SET_NULL, related_name='routine_interview', null=True)
+    name = models.CharField(max_length=255)
+    section = models.CharField(max_length=100)
+    grade = models.CharField(max_length=100, choices=GRADE_LEVEL)
+    date = models.DateField()
+
+    family_problem = models.JSONField(default=list, blank=True, null=True)
+    family_details = models.TextField(blank=True, null=True)
+    friends_problem = models.JSONField(default=list, blank=True, null=True)
+    friends_details = models.TextField(blank=True, null=True)
+    health_problem = models.JSONField(default=list, blank=True, null=True)
+    health_details = models.TextField(blank=True, null=True)
+    
+    academic_problem = models.JSONField(default=list, blank=True, null=True)
+    academic_details = models.TextField(blank=True, null=True)
+
+    career_problem = models.JSONField(default=list, blank=True, null=True)
+    career_details = models.TextField(blank=True, null=True)
+
+    remarks = models.TextField(blank=True, null=True)
+    recommendation = models.JSONField(default=list, blank=True, null=True)
+    other_recommendation = models.CharField(max_length=255, blank=True, null=True)
+
+class CareerTracking(models.Model): 
     name = models.CharField(max_length=255, blank=True, null=True)
     grade = models.CharField(max_length=255, blank=True, null=True)
     section = models.CharField(max_length=255, blank=True, null=True)
@@ -194,10 +192,6 @@ class Guidance_Class_Evaluation(models.Model):
     question_7 = models.TextField()
     question_8 = models.TextField()
     question_9 = models.TextField()
-    
-
-
-
 
 class Kinder(models.Model):
     name = models.CharField(max_length=255)
@@ -539,8 +533,6 @@ class Fourth_Year(models.Model):
     leadership = models.CharField(max_length=255)
     planning_organizing = models.CharField(max_length=255)
     numeracy = models.CharField(max_length=255)
-
-
 
 class Resource(models.Model):
     title = models.CharField(max_length=200)

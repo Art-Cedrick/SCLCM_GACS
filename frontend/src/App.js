@@ -14,6 +14,8 @@ import StudentAppointment from "./components/StudentAppointment";
 import SignUp from "./components/SignUp";
 import IndividualRecordForm from "./components/AllForms/IndividualRecordForm";
 import Evaluation from "./components/Evaluation";
+import Psychometrician_Forms from "./components/Psychometrician_Forms";
+import Psychometrician_Table from "./components/Psychometrician_Table";
 
 function App() {
   const myWidth = 220;
@@ -79,8 +81,8 @@ function App() {
                   <Routes>
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/resourcesharing" element={<ResourceSharing />} />
-                    <Route path="/forms" element={<Forms />} />
-                    <Route path="/records" element={<Records />} />
+                    <Route path="/psychometrician_forms" element={<Psychometrician_Forms />} />
+                    <Route path="/psychometrician_records" element={<Psychometrician_Table />} />
                   </Routes>
                 }
               />
