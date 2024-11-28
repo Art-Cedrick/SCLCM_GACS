@@ -1,26 +1,27 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import MenuIcon from "@mui/icons-material/Menu";
+import NotesIcon from "@mui/icons-material/Notes";
+import { IconButton, Menu, MenuItem, useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import Toolbar from "@mui/material/Toolbar";
+import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import { Link, useLocation } from "react-router-dom";
-import Typography from "@mui/material/Typography";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import NotesIcon from "@mui/icons-material/Notes";
-import MenuIcon from "@mui/icons-material/Menu";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import { IconButton, Menu, MenuItem, useMediaQuery } from "@mui/material";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import { Link, useLocation } from "react-router-dom";
 import file from "./images/file.png";
-import SignUp from './SignUp'; // Importing SignUp component
+import SignUp from "./SignUp"; // Importing SignUp component
+import CouncilorActiveFDropdown from "./CouncilorActiveFDropdown";
+import CouncilorActiveRDropdown from "./CouncilorActiveRDropdown";
 
 const NavBar = React.memo((props) => {
   const { drawerWidth = 260, content } = props;
@@ -29,7 +30,6 @@ const NavBar = React.memo((props) => {
 
   const [profileMenuAnchor, setProfileMenuAnchor] = React.useState(null);
   const [mobileOpen, setMobileOpen] = React.useState(false); // For toggling mobile sidebar
-  const [selectedItem, setSelectedItem] = React.useState(path); // Track selected menu item
   const [showSignUp, setShowSignUp] = React.useState(false); // State for showing SignUp form
 
   const handleProfileMenuOpen = (event) => {
@@ -48,17 +48,28 @@ const NavBar = React.memo((props) => {
   };
 
   const menuItems = [
-    { text: "Dashboard", icon: <DashboardIcon />, link: "/counselor/dashboard" },
-    { text: "Schedule", icon: <CalendarMonthIcon />, link: "/counselor/appointment" },
-    { text: "Resource Sharing", icon: <NotesIcon />, link: "/counselor/resourcesharing" },
-    { text: "Forms", icon: <AssignmentIcon />, link: "/counselor/forms" },
-    { text: "Records", icon: <FileCopyIcon />, link: "/counselor/records" },
+    {
+      text: "Dashboard",
+      icon: <DashboardIcon />,
+      link: "/counselor/dashboard",
+    },
+    {
+      text: "Schedule",
+      icon: <CalendarMonthIcon />,
+      link: "/counselor/appointment",
+    },
+    {
+      text: "Resource Sharing",
+      icon: <NotesIcon />,
+      link: "/counselor/resourcesharing",
+    },
+    // { text: "Forms", icon: <AssignmentIcon />, link: "/counselor/forms" },
+    // { text: "Records", icon: <FileCopyIcon />, link: "/counselor/records" },
   ];
 
   const isMobile = useMediaQuery("(max-width: 768px)"); // Check if screen width is less than 768px
 
   const handleMenuItemClick = (link) => {
-    setSelectedItem(link);
     if (isMobile && mobileOpen) {
       setMobileOpen(false); // Close the sidebar on mobile when an item is clicked
     }
@@ -69,9 +80,20 @@ const NavBar = React.memo((props) => {
   };
 
   const myDrawer = (
-    <Box sx={{ backgroundColor: "rgba(5, 21, 54, 255)", height: "100vh", color: "#ffffff", position: "relative" }}>
+    <Box
+      sx={{
+        backgroundColor: "rgba(5, 21, 54, 255)",
+        height: "100vh",
+        color: "#ffffff",
+        position: "relative",
+      }}
+    >
       <Toolbar>
-        <img src={file} alt="logo" style={{ width: 60, height: 60, margin: "10px auto 0" }} />
+        <img
+          src={file}
+          alt="logo"
+          style={{ width: 60, height: 60, margin: "10px auto 0" }}
+        />
       </Toolbar>
       <List>
         {menuItems.map((item) => (
@@ -79,7 +101,7 @@ const NavBar = React.memo((props) => {
             <ListItemButton
               component={Link}
               to={item.link}
-              selected={item.link === selectedItem}
+              selected={item.link === path}
               onClick={() => handleMenuItemClick(item.link)}
               sx={{
                 "&.Mui-selected": {
@@ -101,7 +123,7 @@ const NavBar = React.memo((props) => {
                   width: 8,
                   height: "100%",
                   backgroundColor: "#1E90FF",
-                  visibility: item.link === selectedItem ? "visible" : "hidden",
+                  visibility: item.link === path ? "visible" : "hidden",
                   borderTopRightRadius: "5px",
                   borderBottomRightRadius: "5px",
                 }}
@@ -109,17 +131,32 @@ const NavBar = React.memo((props) => {
               <ListItemIcon sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
                 {item.icon}
               </ListItemIcon>
-              <ListItemText primary={item.text} primaryTypographyProps={{ sx: { fontWeight: "bold", fontFamily: "'Rozha One'", fontSize: "1rem" } }} />
+              <ListItemText
+                primary={item.text}
+                primaryTypographyProps={{
+                  sx: {
+                    fontWeight: "bold",
+                    fontFamily: "'Rozha One'",
+                    fontSize: "1rem",
+                  },
+                }}
+              />
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem disablePadding>
+          <CouncilorActiveFDropdown pathname={path} />
+        </ListItem>
+        <ListItem disablePadding>
+          <CouncilorActiveRDropdown pathname={path} />
+        </ListItem>
       </List>
     </Box>
   );
 
   // Toggle visibility of the SignUp form
   const handleSignUpClick = () => {
-    setShowSignUp(prevState => !prevState); // Toggle the SignUp form visibility
+    setShowSignUp((prevState) => !prevState); // Toggle the SignUp form visibility
     handleProfileMenuClose(); // Close the profile menu
   };
 
@@ -149,7 +186,11 @@ const NavBar = React.memo((props) => {
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {isMobile && (
-              <IconButton color="inherit" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
+              <IconButton
+                color="inherit"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2 }}
+              >
                 <MenuIcon sx={{ color: "rgba(5, 21, 54, 255)" }} />
               </IconButton>
             )}
@@ -173,7 +214,11 @@ const NavBar = React.memo((props) => {
             </Typography>
           </Box>
           <Box>
-            <IconButton color="inherit" onClick={handleProfileMenuOpen} sx={{ color: "rgba(5, 21, 54, 255)" }}>
+            <IconButton
+              color="inherit"
+              onClick={handleProfileMenuOpen}
+              sx={{ color: "rgba(5, 21, 54, 255)" }}
+            >
               <AccountCircle fontSize="large" />
             </IconButton>
             <Menu
@@ -182,7 +227,10 @@ const NavBar = React.memo((props) => {
               onClose={handleProfileMenuClose}
             >
               <MenuItem onClick={handleProfileMenuClose}>Profile</MenuItem>
-              <MenuItem onClick={handleSignUpClick}>{showSignUp ? "Close Sign Up" : "Sign Up"}</MenuItem> {/* Toggle between Sign Up and Close */}
+              <MenuItem onClick={handleSignUpClick}>
+                {showSignUp ? "Close Sign Up" : "Sign Up"}
+              </MenuItem>{" "}
+              {/* Toggle between Sign Up and Close */}
               <MenuItem onClick={handleProfileMenuClose}>Settings</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
@@ -210,7 +258,17 @@ const NavBar = React.memo((props) => {
       </Drawer>
 
       {/* Main Content */}
-      <Box component="main" sx={{ flexGrow: 1, bgcolor: "#ffffff", p: 3, minHeight: "100vh", height: "100%", overflow: "auto" }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          bgcolor: "#ffffff",
+          p: 3,
+          minHeight: "100vh",
+          height: "100%",
+          overflow: "auto",
+        }}
+      >
         <Toolbar />
         {renderContent()} {/* Render content or SignUp form */}
       </Box>

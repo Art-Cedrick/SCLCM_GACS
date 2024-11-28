@@ -49,16 +49,16 @@ const Grade9Table = () => {
 
   const columns = useMemo(
     () => [
-      { accessorKey: "studentname", header: "Student Name", size: 150 },
+      { accessorKey: "name", header: "Student Name", size: 150 },
       { accessorKey: "age", header: "Age", size: 150 },
       { accessorKey: "sex", header: "Sex", size: 200 },
-      { accessorKey: "gradelevel", header: "Grade Level", size: 150 },
+      { accessorKey: "gradeLevel", header: "Grade Level", size: 150 },
       { accessorKey: "section", header: "Section", size: 150 },
-      { accessorKey: "top 1", header: "Top 1", size: 150 },
-      { accessorKey: "top 2", header: "Top 2", size: 200 },
-      { accessorKey: "top 3", header: "Top 3", size: 200 },
-      { accessorKey: "selfcontrol", header: "Self Control", size: 200 },
-      { accessorKey: "mas-fem", header: "Masculinity-FEminity", size: 200 },
+      { accessorKey: "top_one", header: "Top 1", size: 150 },
+      { accessorKey: "top_two", header: "Top 2", size: 200 },
+      { accessorKey: "top_three", header: "Top 3", size: 200 },
+      { accessorKey: "self_control", header: "Self Control", size: 200 },
+      { accessorKey: "mas_fem", header: "Masculinity-FEminity", size: 200 },
       { accessorKey: "status", header: "Status", size: 200 },
       { accessorKey: "infrequency", header: "Infrequency", size: 200 },
       { accessorKey: "acquiescence", header: "Acquiescence", size: 200 },

@@ -10,8 +10,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import AxiosInstance from "./AllForms/Axios";
-import SingleSelect from "./AllForms/Forms/SingleSelect"; // Import the custom SingleSelect
+import AxiosInstance from "./Axios";
+import SingleSelect from "./Forms/SingleSelect"; // Import the custom SingleSelect
 
 const Grade12 = () => {
   const defaultValues = {

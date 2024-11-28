@@ -18,6 +18,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { IconButton, Menu, MenuItem, useMediaQuery } from "@mui/material";
 import file from "./images/file.png";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import DropdownMenu from "./FormDropdown";
+import ActiveRecordDropdown from "./ActiveRecordDropdown";
 
 const NavBarPsych = (props) => {
   const { drawerWidth = 260, content } = props;
@@ -44,10 +47,10 @@ const NavBarPsych = (props) => {
   };
 
   const menuItems = [
-    { text: "Dashboard", icon: <DashboardIcon />, link: "/psychometrician/dashboard" },
-    { text: "Resource Sharing", icon: <NotesIcon />, link: "/psychometrician/resourcesharing" },
-    { text: "Forms", icon: <AssignmentIcon />, link: "/psychometrician/psychometrician_forms" },
-    { text: "Records", icon: <AssignmentIcon />, link: "/psychometrician/psychometrician_records" },
+    { text: "Dashboard", icon: <DashboardIcon />, link: "/psychometrician/dashboard", menu: false, mc: null },
+    { text: "Resource Sharing", icon: <NotesIcon />, link: "/psychometrician/resourcesharing", menu: false, mc: null },
+    // { text: "Forms", icon: <AssignmentIcon />, link: "/psychometrician/psychometrician_forms", menu: false, mc: <DropdownMenu selectedItem={selectedItem}  /> },
+    // { text: "Records", icon: <FileCopyIcon />, link: "/psychometrician/psychometrician_records", menu: false, mc: null },
   ];
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -74,7 +77,7 @@ const NavBarPsych = (props) => {
             <ListItemButton
               component={Link}
               to={item.link}
-              selected={item.link === selectedItem}
+              selected={item.link === path}
               onClick={() => handleMenuItemClick(item.link)}
               sx={{
                 "&.Mui-selected": {
@@ -97,7 +100,7 @@ const NavBarPsych = (props) => {
                   width: 8,
                   height: "100%",
                   backgroundColor: "#1E90FF",
-                  visibility: item.link === selectedItem ? "visible" : "hidden",
+                  visibility: item.link === path ? "visible" : "hidden",
                   borderTopRightRadius: "5px",
                   borderBottomRightRadius: "5px",
                 }}
@@ -109,6 +112,12 @@ const NavBarPsych = (props) => {
             </ListItemButton>
           </ListItem>
         ))}
+         <ListItem disablePadding>
+          <DropdownMenu pathname={path} />
+        </ListItem>
+         <ListItem disablePadding>
+          <ActiveRecordDropdown pathname={path} />
+        </ListItem>
       </List>
     </Box>
   );

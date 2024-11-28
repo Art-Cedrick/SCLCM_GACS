@@ -62,14 +62,14 @@ const Grade12Table = () => {
 
   const columns = useMemo(
     () => [
-      { accessorKey: "studentname", header: "Student Name", size: 150 },
+      { accessorKey: "name", header: "Student Name", size: 150 },
       { accessorKey: "age", header: "Age", size: 150 },
       { accessorKey: "sex", header: "Sex", size: 200 },
-      { accessorKey: "gradelevel", header: "Grade Level", size: 150 },
+      { accessorKey: "gradeLevel", header: "Grade Level", size: 150 },
       { accessorKey: "section", header: "Section", size: 150 },
-      { accessorKey: "top 1", header: "Top 1", size: 150 },
-      { accessorKey: "top 2", header: "Top 2", size: 200 },
-      { accessorKey: "top 3", header: "Top 3", size: 200 },
+      { accessorKey: "top1", header: "Top 1", size: 150 },
+      { accessorKey: "top2", header: "Top 2", size: 200 },
+      { accessorKey: "top3", header: "Top 3", size: 200 },
       { accessorKey: "ad", header: "AD", size: 200 },
       { accessorKey: "sc", header: "SC", size: 200 },
       { accessorKey: "ass", header: "ASS", size: 200 },

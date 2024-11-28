@@ -10,8 +10,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form"; // Import Controller
-import SingleSelect from "./AllForms/Forms/SingleSelect"; // Ensure this path is correct
-import AxiosInstance from "./AllForms/Axios";
+import SingleSelect from "./Forms/SingleSelect"; // Ensure this path is correct
+import AxiosInstance from "./Axios";
 
 const ThirdYear = () => {
   const defaultValues = {
@@ -195,7 +195,7 @@ const ThirdYear = () => {
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      label="Persecutory_Ideas:"
+                      label="Persecutory Ideas:"
                       {...field}
                       fullWidth
                       variant="outlined"
@@ -247,7 +247,7 @@ const ThirdYear = () => {
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      label="Social_Isolation:"
+                      label="Social Isolation:"
                       {...field}
                       fullWidth
                       variant="outlined"

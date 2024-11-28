@@ -10,8 +10,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form"; // Import Controller
-import SingleSelect from "./AllForms/Forms/SingleSelect"; // Ensure this path is correct
-import AxiosInstance from "./AllForms/Axios"; // Axios instance
+import SingleSelect from "./Forms/SingleSelect"; // Ensure this path is correct
+import AxiosInstance from "./Axios"; // Axios instance
 
 const Kinder = () => {
   const defaultValues = {

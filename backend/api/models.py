@@ -417,6 +417,7 @@ class Grade_Eleven(models.Model):
     section = models.CharField(max_length=255)
     warmth = models.CharField(max_length=255)
     reasoning= models.CharField(max_length=255)
+    emotional= models.CharField(max_length=255)
     dominance = models.CharField(max_length=255)
     liveliness = models.CharField(max_length=255)
     rule_consciousness = models.CharField(max_length=255)
