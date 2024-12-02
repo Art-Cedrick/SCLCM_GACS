@@ -2,6 +2,7 @@ import {React, useState} from 'react';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import Grade7 from './AllForms/Grade7';
 import Grade2 from './AllForms/Grade2';
+import Grade11 from './AllForms/Grade11';
 import CareerTrackingTable from './AllForms/Tables/CareerTrackingTable';
 import RoutineInterviewTable from './AllForms/Tables/RoutineInterviewTable';
 import ConferenceFormTable from './AllForms/Tables/ConferenceFormTable';
@@ -13,6 +14,7 @@ const Psychometrician_Forms = () => {
   const formOptions = [
     {value: 'grade_seven', label: 'Grade Seven'},
     {value: 'grade_two', label: 'Grade Two'},
+    {value: 'grade_eleven', label: 'Grade Eleven'},
     {value: 'routine_interview', label: 'Routine Interview'},
     {value: 'careertracking', label: 'Career Tracking'},
     {value: 'conferenceform', label: 'Conference Form'},
@@ -40,6 +42,7 @@ const Psychometrician_Forms = () => {
       {/* Render forms based on the selected option from the dropdown */}
       {activeForm === 'grade_seven' && <Grade7 />}
       {activeForm === 'grade_two' && <Grade2 />}
+      {activeForm === 'grade_eleven' && <Grade11 />}
       {activeForm === 'routine_interview' && <RoutineInterviewTable />}
       {activeForm === 'careertracking' && <CareerTrackingTable />}
       {activeForm === 'conferenceform' && <ConferenceFormTable />}

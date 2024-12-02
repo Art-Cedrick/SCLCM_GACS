@@ -171,7 +171,7 @@ const PageTwo = ({ control }) => (
       </Typography>
       <Stack spacing={2}>
         <Controller
-          name="friends_problems"
+          name="friends_problem"
           control={control}
           render={({ field }) => (
             <SingleSelect

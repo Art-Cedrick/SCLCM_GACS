@@ -379,35 +379,40 @@ class AppointmentView(APIView):
         except Appointment.DoesNotExist:
             return Response({'error': 'Appointment not found.'}, status=status.HTTP_404_NOT_FOUND)
         
-class RoutineInterviewAnalyticsViews(APIView):
+class Family_Problem_Analytics(APIView):
     def get(self, request):
-        # Problem analytics
-        total_family_problems = RoutineInterview.objects.filter(~Q(family_problem=[])).count()
-        total_friends_problems = RoutineInterview.objects.filter(~Q(friends_problem=[])).count()
-        total_health_problems = RoutineInterview.objects.filter(~Q(health_problem=[])).count()
-        total_academic_problems = RoutineInterview.objects.filter(~Q(academic_problem=[])).count()
-        total_career_problems = RoutineInterview.objects.filter(~Q(career_problem=[])).count()
+        grade = request.query_params.get('grade', None)
+        if grade:
+            stats = RoutineInterview.objects.filter(grade=grade).values('family_problem').annotate(count=Count('family_problem'))
+        else:
+            stats = RoutineInterview.objects.values('family_problem').annotate(count=Count('family_problem'))
+        return Response(stats)
+    
+class Friends_Problem_Analytics(APIView):
+    def get(self, request):
+        stats = RoutineInterview.objects.values('friends_problem').annotate(count=Count('friends_problem'))
+        return Response(stats)
 
-        # Students count by grade level
-        students_by_grade = (
-         IndividualRecordForm.objects.values('year')  # Ensure 'year' exists
-        .annotate(student_count=Count(IndividualRecordForm))  # Use 'routine_interview'
-    )
-
-
-            # Construct the response
-        total_students = IndividualRecordForm.objects.count()
-        analytics = {
-            "problem_counts": {
-                "Family": total_family_problems,
-                "Friends": total_friends_problems,
-                "Health": total_health_problems,
-                "Academic": total_academic_problems,
-                "Career": total_career_problems,
-            },
-            "students_by_grade": list(students_by_grade),
-            "total_students": total_students,
-        }
-
-
-        return Response(analytics)
+class Health_Problem_Analytics(APIView):
+    def get(self, request):
+        stats = RoutineInterview.objects.values('health_problem').annotate(count=Count('health_problem'))
+        return Response(stats)
+    
+class Academic_Problem_Analytics(APIView):
+    def get(self, request):
+        stats = RoutineInterview.objects.values('academic_problem').annotate(count=Count('academic_problem'))
+        return Response(stats)
+    
+class Career_Problem_Analytics(APIView):
+    def get(self, request):
+        stats = RoutineInterview.objects.values('career_problem').annotate(count=Count('career_problem'))
+        return Response(stats)
+    
+class CareerTrackingView(APIView):
+    def get(self, request, student_id):
+        try:
+            career_tracking = CareerTracking.objects.get(student_id=student_id)
+            serializer = CareerTrackingSerializer(career_tracking)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except CareerTracking.DoesNotExist:
+            return Response({"error": "Career tracking not found"}, status=status.HTTP_404_NOT_FOUND)   

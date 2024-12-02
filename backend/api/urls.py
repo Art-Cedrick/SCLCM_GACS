@@ -3,7 +3,6 @@ from . views import *
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('project', ProjectViewset, basename='project')
 router.register('routine_interview', RoutineInterviewViewset, basename='routine_interview')
 router.register('individual_record_form', IndividualRecordFormViewset, basename='individual_record_form')
 router.register('careertracking', CareerTrackingViewset, basename='careertracking')
@@ -37,6 +36,9 @@ urlpatterns = [
     path('api/appointment/<int:pk>/', AppointmentView.as_view(), name='appointment-detail'),
     path('register/', RegisterView.as_view(), name='register'),
     path('students/', StudentListView.as_view(), name='student-list'),
-    path('api/routineinterview_analytics', RoutineInterviewAnalyticsViews.as_view(), name='routineinterview_analytics')
-
+    path('api/familyproblem_analytics/', Family_Problem_Analytics.as_view(), name='familyproblem_analytics'),
+    path('api/friendsproblem_analytics/', Friends_Problem_Analytics.as_view(), name='friendsproblem_analytics'),
+    path('api/healthproblem_analytics/', Health_Problem_Analytics.as_view(), name='healthproblem_analytics'),
+    path('api/academicproblem_analytics/', Academic_Problem_Analytics.as_view(), name='academicproblem_analytics'),
+    path('api/careerproblem_analytics/', Career_Problem_Analytics.as_view(), name='careerproblem_analytics'),
 ]

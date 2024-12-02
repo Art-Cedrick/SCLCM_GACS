@@ -109,7 +109,7 @@ const RoutineInterviewTable = () => {
         size: 150,
       },
       { accessorKey: "remarks", header: "Counselor's Remark", size: 150 },
-      { accessorKey: "recommendations", header: "Recommendations", size: 150 },
+      { accessorKey: "recommendation", header: "Recommendations", size: 150 },
       { accessorKey: "other_recommendations", header: "Other Recommendations", size: 150 },
     ],
     []
