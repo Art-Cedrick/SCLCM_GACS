@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from "react";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import {
   Box,
-  Typography,
+  Button,
   Card,
-  Paper,
-  Stack,
   Divider,
   IconButton,
+  Paper,
+  Stack,
   TextField,
-  Button,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl
+  Typography
 } from "@mui/material";
-import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import { useForm, Controller } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "react-query";
+import recommend from "../../utils/recommend.mjs";
 import AxiosInstance from "./Axios";
 import SingleSelect from "./Forms/SingleSelect";
-import { useMutation, useQueryClient } from "react-query";
 
 const PageOne = ({ control }) => {
   const subjects = [
@@ -40,7 +37,7 @@ const PageOne = ({ control }) => {
         <Typography variant="h6" sx={{ mb: 3 }}>
           Final Grade Summary
         </Typography>
-        
+
         <Box
           sx={{
             display: "grid",
@@ -53,11 +50,7 @@ const PageOne = ({ control }) => {
             name="name"
             control={control}
             render={({ field }) => (
-              <TextField
-                label="Name"
-                {...field}
-                sx={{ width: "100%" }}
-              />
+              <TextField label="Name" {...field} sx={{ width: "100%" }} />
             )}
           />
 
@@ -66,11 +59,7 @@ const PageOne = ({ control }) => {
             name="grade"
             control={control}
             render={({ field }) => (
-              <TextField
-                label="Grade"
-                {...field}
-                sx={{ width: "100%" }}
-              />
+              <TextField label="Grade" {...field} sx={{ width: "100%" }} />
             )}
           />
 
@@ -79,11 +68,7 @@ const PageOne = ({ control }) => {
             name="section"
             control={control}
             render={({ field }) => (
-              <TextField
-                label="Section"
-                {...field}
-                sx={{ width: "100%" }}
-              />
+              <TextField label="Section" {...field} sx={{ width: "100%" }} />
             )}
           />
         </Box>
@@ -343,7 +328,11 @@ const PageThree = ({ control }) => (
             <SingleSelect
               label="Academic Status"
               {...field}
-              options={["Above Average", "Average Student", "Low Average Student"]}
+              options={[
+                "Above Average",
+                "Average Student",
+                "Low Average Student",
+              ]}
             />
           )}
         />
@@ -388,110 +377,143 @@ const PageThree = ({ control }) => (
   </Box>
 );
 
-const CareerTracking = ({initialData, onClose}) => {
-
+const CareerTracking = ({ initialData, onClose }) => {
   const queryClient = useQueryClient();
 
   const defaultValues = {
-    name: '',
-    grade: '',
-    section: '',
+    name: "",
+    grade: "",
+    section: "",
 
-    cle: '',
-    english: '',
-    filipino: '',
-    ap: '',
-    science: '',
-    math: '',
-    mapeh: '',
-    tle: '',
-    computer: '',
-    fl: '',
+    cle: "",
+    english: "",
+    filipino: "",
+    ap: "",
+    science: "",
+    math: "",
+    mapeh: "",
+    tle: "",
+    computer: "",
+    fl: "",
 
-    academic_track: '',
-    other_track: '',
-    tech_voc: '',
-    other_techvoc: '',
-    preferredCourse: '',
+    academic_track: "",
+    other_track: "",
+    tech_voc: "",
+    other_techvoc: "",
+    preferredCourse: "",
 
-    medical_records: '',
-    specify: '',
-    academic_status: '',
-    psych_results: '',
+    medical_records: "",
+    specify: "",
+    academic_status: "",
+    psych_results: "",
   };
 
-  const { control, handleSubmit, reset } = useForm({ defaultValues: defaultValues });
+  const { control, handleSubmit, reset, watch } = useForm({
+    defaultValues: defaultValues,
+  });
+
+  const stdnt = watch();
+
+  const studentData = {
+    grades: {
+      ENGLISH: stdnt.english,
+      FILIPINO: stdnt.filipino,
+      ARALING_PANLIPUNAN: stdnt.ap,
+      MATH: stdnt.math,
+      SCIENCE: stdnt.science,
+      COMPUTER: stdnt.computer,
+      TLE: stdnt.tle,
+      FOREIGN_LANGUAGE: stdnt.fl,
+      MAPEH: stdnt.mapeh,
+    },
+    academicTrack: stdnt.academic_track, // ABM, STEM, HUMMS
+    vocationalTrack: stdnt.tech_voc, // Home Economic, ICT
+    academicStatus: stdnt.academic_status, // "Above Average", "Average", "Low Average"
+    medicalRecord: stdnt.medical_records, // "No History of Illness" or "Has History of Illness"
+  };
 
   useEffect(() => {
     if (initialData) reset(initialData);
   }, [initialData, reset]);
 
   const mutation = useMutation(
-    (data) =>
-    initialData
-    ? AxiosInstance.put(`/careertracking/${initialData.id}/`, {
-      name: data.name,
-      grade: data.grade,
-      section: data.section,
+    async (data) => {
+      const res = await recommend(studentData);
 
-      cle: data.cle,
-      english: data.english,
-      filipino: data.filipino,
-      ap: data.ap,
-      science: data.science,
-      math: data.math,
-      mapeh: data.mapeh,
-      tle: data.tle,
-      computer: data.computer,
-      fl: data.fl,
+      initialData
+        ? AxiosInstance.put(`/careertracking/${initialData.id}/`, {
+            name: data.name,
+            grade: data.grade,
+            section: data.section,
 
-      academic_track: data.academic_track,
-      other_track: data.other_track,
-      tech_voc: data.tech_voc,
-      other_techvoc: data.other_techvoc,
-      preferredCourse: data.preferredCourse,
+            cle: data.cle,
+            english: data.english,
+            filipino: data.filipino,
+            ap: data.ap,
+            science: data.science,
+            math: data.math,
+            mapeh: data.mapeh,
+            tle: data.tle,
+            computer: data.computer,
+            fl: data.fl,
 
-      medical_records: data.medical_records,
-      specify: data.specify,
-      academic_status: data.academic_status,
-      psych_results: data.psych_results,
-    })
-    : AxiosInstance.post(`/careertracking/`, {
-      name: data.name,
-      grade: data.grade,
-      section: data.section,
+            academic_track: data.academic_track,
+            other_track: data.other_track,
+            tech_voc: data.tech_voc,
+            other_techvoc: data.other_techvoc,
+            preferredCourse: data.preferredCourse,
 
-      cle: data.cle,
-      english: data.english,
-      filipino: data.filipino,
-      ap: data.ap,
-      science: data.science,
-      math: data.math,
-      mapeh: data.mapeh,
-      tle: data.tle,
-      computer: data.computer,
-      fl: data.fl,
+            medical_records: data.medical_records,
+            specify: data.specify,
+            academic_status: data.academic_status,
+            psych_results: data.psych_results,
+            top_one: res[0].industry,
+            top_two: res[1].industry,
+            top_three: res[2].industry,
+          })
+        : AxiosInstance.post(`/careertracking/`, {
+            name: data.name,
+            grade: data.grade,
+            section: data.section,
 
-      academic_track: data.academic_track,
-      other_track: data.other_track,
-      tech_voc: data.tech_voc,
-      other_techvoc: data.other_techvoc,
-      preferredCourse: data.preferredCourse,
+            cle: data.cle,
+            english: data.english,
+            filipino: data.filipino,
+            ap: data.ap,
+            science: data.science,
+            math: data.math,
+            mapeh: data.mapeh,
+            tle: data.tle,
+            computer: data.computer,
+            fl: data.fl,
 
-      medical_records: data.medical_records,
-      specify: data.specify,
-      academic_status: data.academic_status,
-      psych_results: data.psych_results,
-    }), {
+            academic_track: data.academic_track,
+            other_track: data.other_track,
+            tech_voc: data.tech_voc,
+            other_techvoc: data.other_techvoc,
+            preferredCourse: data.preferredCourse,
+
+            medical_records: data.medical_records,
+            specify: data.specify,
+            academic_status: data.academic_status,
+            psych_results: data.psych_results,
+            top_one: res[0].industry,
+            top_two: res[1].industry,
+            top_three: res[2].industry,
+          });
+    },
+    {
       onSuccess: () => {
-        queryClient.invalidateQueries('careertrackingData');
-        console.log('Data invalidated');
-        queryClient.refetchQueries('careertrackingData');
-        console.log('Data refetched');
+        queryClient.invalidateQueries("careertrackingData");
+        console.log("Data invalidated");
+        queryClient.refetchQueries("careertrackingData");
+        console.log("Data refetched");
         reset();
         onClose();
+        setPage(1);
         console.log("Data submitted and table refreshed");
-      }, onError: (error) => {
+      },
+      onError: (error) => {
         console.error("Error submitting data", error);
       },
     }
@@ -511,7 +533,10 @@ const CareerTracking = ({initialData, onClose}) => {
 
   return (
     <form onSubmit={handleSubmit(submission)}>
-    <Card elevation={3} sx={{ padding: 2, maxWidth: "900px", margin: "20px auto" }}>
+      <Card
+        elevation={3}
+        sx={{ padding: 2, maxWidth: "900px", margin: "20px auto" }}
+      >
         <Typography variant="h5" gutterBottom align="center">
           CAREER TRACKING
         </Typography>
@@ -527,7 +552,12 @@ const CareerTracking = ({initialData, onClose}) => {
           {page === 1 && <PageOne control={control} />}
           {page === 2 && <PageTwo control={control} />}
           {page === 3 && <PageThree control={control} />}
-          <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 4 }}>
+          <Stack
+            direction="row"
+            spacing={2}
+            justifyContent="center"
+            sx={{ mt: 4 }}
+          >
             <IconButton onClick={handleBack} disabled={page === 1}>
               <ArrowBack />
             </IconButton>
@@ -536,7 +566,7 @@ const CareerTracking = ({initialData, onClose}) => {
             </IconButton>
           </Stack>
         </Paper>
-    </Card>
+      </Card>
     </form>
   );
 };

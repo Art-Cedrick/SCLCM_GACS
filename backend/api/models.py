@@ -120,6 +120,10 @@ class CareerTracking(models.Model):
     academic_status = models.JSONField(default=list)
     psych_results = models.CharField(max_length=255)
 
+    top_one = models.CharField(max_length=100, blank=True, null=True)
+    top_two = models.CharField(max_length=100, blank=True, null=True)
+    top_three = models.CharField(max_length=100, blank=True, null=True)
+
 class ConferenceForm(models.Model):
     type = models.JSONField(default=list, blank=True, null=True)
     name = models.CharField(max_length=255)
@@ -417,7 +421,7 @@ class Grade_Eleven(models.Model):
     section = models.CharField(max_length=255)
     warmth = models.CharField(max_length=255)
     reasoning= models.CharField(max_length=255)
-    emotional= models.CharField(max_length=255)
+    emotional= models.CharField(max_length=255, blank=True, null=True)
     dominance = models.CharField(max_length=255)
     liveliness = models.CharField(max_length=255)
     rule_consciousness = models.CharField(max_length=255)

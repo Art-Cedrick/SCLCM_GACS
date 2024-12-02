@@ -278,9 +278,14 @@ async function recommend(studentData) {
         { industry: null, score: 0 }
     );
 
+    // Sort industries by their scores in descending order
+    const sortedIndustries = Object.entries(resultScore)
+        .sort(([, scoreA], [, scoreB]) => scoreB - scoreA);
 
-    return {recommendationList: resultScore, recommended: highestIndustry};
-    // return highestIndustry.industry;
+    // Extract the top 3 industries
+    const topIndustries = sortedIndustries.slice(0, 3).map(([industry, score]) => ({ industry, score }));
+
+    return topIndustries 
 }
 
 export default recommend;
@@ -289,35 +294,6 @@ export default recommend;
 // TESTING 
 
 // Weighted Scoring Algorithm
-
-
-
-
-const student = {
-    "id": 40,
-    "name": "Art Platon",
-    "grade": "b5",
-    "section": "ckdbcisudc",
-    "cle": 6,
-    "english": 6,
-    "filipino": 6,
-    "ap": 6,
-    "science": 6,
-    "math": 6,
-    "mapeh": 6,
-    "tle": 6,
-    "computer": 6,
-    "fl": 6,
-    "academic_track": "ABM",
-    "other_track": "",
-    "tech_voc": "",
-    "other_techvoc": "",
-    "preferredCourse": "dscsd",
-    "medical_records": "With history of medical illness",
-    "specify": "",
-    "academic_status": "Average Student",
-    "psych_results": "csdcsxczxzx"
-}
 
 
 const studentData = {
@@ -339,8 +315,3 @@ const studentData = {
     medicalRecord: "No History of Illness", // "No History of Illness" or "Has History of Illness"
 };
 
-
-(async () => {    
-    const result = await recommend(studentData)
-    console.log(result);
-})();

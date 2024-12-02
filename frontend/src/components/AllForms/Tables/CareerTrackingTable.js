@@ -98,6 +98,9 @@ const CareerTrackingTable = () => {
       },
       { accessorKey: "academic_status", header: "Academic Status", size: 150 },
       { accessorKey: "psych_results", header: "Psychological Test Results", size: 150 },
+      { accessorKey: "top_one", header: "Career Recommendation 1", size: 150 },
+      { accessorKey: "top_two", header: "Career Recommendation 2", size: 150 },
+      { accessorKey: "top_three", header: "Career Recommendation 3", size: 150 },
     ],
     []
   );
