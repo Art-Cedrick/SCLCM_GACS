@@ -12,7 +12,7 @@ import { useQuery, useQueryClient } from "react-query";
 import AxiosInstance from "../Axios";
 import IndividualRecordForm from "../IndividualRecordForm";
 
-const fetchData = async (page) => {
+const fetchData = async () => {
   const response = await AxiosInstance.get(`/individual_record_form/`);
   console.log(response.data);
   return response.data;

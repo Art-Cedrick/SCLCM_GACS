@@ -255,8 +255,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import SingleSelect from './Forms/SingleSelect';
-import AxiosInstance from './Axios';
+import SingleSelect from "./Forms/SingleSelect"; // Ensure this path is correct
+import AxiosInstance from "./Axios"; // Ensure the AxiosInstance path is correct
 
 const Grade11 = () => {
   const defaultValues = {
@@ -270,6 +270,7 @@ const Grade11 = () => {
     top_3: "",
     warmth: "",
     reasoning: "",
+    emotional:"",
     dominance: "",
     liveliness: "",
     rule_consciousness: "",
@@ -302,6 +303,7 @@ const Grade11 = () => {
       top_3: data.top_3,
       warmth: data.warmth,
       reasoning: data.reasoning,
+      emotional: data.emotional,
       dominance: data.dominance,
       liveliness: data.liveliness,
       rule_consciousness: data.rule_consciousness,
@@ -526,6 +528,21 @@ const Grade11 = () => {
                 sx={{ flexWrap: "wrap" }}
               >
                 <Controller
+                  name="emotional"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      label="Emotional Stablity"
+                      {...field}
+                      sx={{
+                        flex: 1,
+                        minWidth: "200px",
+                        marginBottom: { xs: 2, sm: 0 },
+                      }}
+                    />
+                  )}
+                />
+                <Controller
                   name="dominance"
                   control={control}
                   render={({ field }) => (
@@ -555,12 +572,20 @@ const Grade11 = () => {
                     />
                   )}
                 />
+              </Stack>
+
+              {/* Social Boldness, Sensitivity, Vigilance */}
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={2}
+                sx={{ flexWrap: "wrap" }}
+              >
                 <Controller
                   name="rule_consciousness"
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      label="Rule Consciousness"
+                      label="Rule-Consciousness"
                       {...field}
                       sx={{
                         flex: 1,
@@ -570,14 +595,6 @@ const Grade11 = () => {
                     />
                   )}
                 />
-              </Stack>
-
-              {/* Social Boldness, Sensitivity, Vigilance */}
-              <Stack
-                direction={{ xs: "column", sm: "row" }}
-                spacing={2}
-                sx={{ flexWrap: "wrap" }}
-              >
                 <Controller
                   name="social_boldness"
                   control={control}
@@ -608,21 +625,6 @@ const Grade11 = () => {
                     />
                   )}
                 />
-                <Controller
-                  name="vigilance"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      label="Vigilance"
-                      {...field}
-                      sx={{
-                        flex: 1,
-                        minWidth: "200px",
-                        marginBottom: { xs: 2, sm: 0 },
-                      }}
-                    />
-                  )}
-                />
               </Stack>
 
               {/* Abstract, privateness, apprehension, openness, self_reliance, perfectionism, tension */}
@@ -632,11 +634,26 @@ const Grade11 = () => {
                 sx={{ flexWrap: "wrap" }}
               >
                 <Controller
-                  name="abstract"
+                  name="vigilance"
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      label="Abstract"
+                      label="vigilance"
+                      {...field}
+                      sx={{
+                        flex: 1,
+                        minWidth: "200px",
+                        marginBottom: { xs: 2, sm: 0 },
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name="abstractedness"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      label="Abstractedness"
                       {...field}
                       sx={{
                         flex: 1,
@@ -661,6 +678,13 @@ const Grade11 = () => {
                     />
                   )}
                 />
+              </Stack>
+
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={2}
+                sx={{ flexWrap: "wrap" }}
+              >
                 <Controller
                   name="apprehension"
                   control={control}
@@ -676,19 +700,12 @@ const Grade11 = () => {
                     />
                   )}
                 />
-              </Stack>
-
-              <Stack
-                direction={{ xs: "column", sm: "row" }}
-                spacing={2}
-                sx={{ flexWrap: "wrap" }}
-              >
                 <Controller
-                  name="openness"
+                  name="openess"
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      label="Openness"
+                      label="Openness to Change"
                       {...field}
                       sx={{
                         flex: 1,
@@ -699,7 +716,7 @@ const Grade11 = () => {
                   )}
                 />
                 <Controller
-                  name="self_reliance"
+                  name="selef_reliance"
                   control={control}
                   render={({ field }) => (
                     <TextField
@@ -713,7 +730,15 @@ const Grade11 = () => {
                     />
                   )}
                 />
-                <Controller
+              </Stack>
+
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={2}
+                sx={{ flexWrap: "wrap" }}
+              >
+
+<Controller
                   name="perfectionism"
                   control={control}
                   render={({ field }) => (
@@ -728,13 +753,6 @@ const Grade11 = () => {
                     />
                   )}
                 />
-              </Stack>
-
-              <Stack
-                direction={{ xs: "column", sm: "row" }}
-                spacing={2}
-                sx={{ flexWrap: "wrap" }}
-              >
                 <Controller
                   name="tension"
                   control={control}

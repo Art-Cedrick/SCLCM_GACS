@@ -62,24 +62,46 @@ const ThirdYearTable = () => {
 
   const columns = useMemo(
     () => [
-      { accessorKey: "studentname", header: "Student Name", size: 150 },
+      { accessorKey: "name", header: "Student Name", size: 150 },
       { accessorKey: "age", header: "Age", size: 150 },
       { accessorKey: "sex", header: "Sex", size: 200 },
-      { accessorKey: "gradelevel", header: "Grade Level", size: 150 },
+      { accessorKey: "yearLevel", header: "Year Level", size: 150 },
       { accessorKey: "course", header: "Course", size: 150 },
-      { accessorKey: "gstm", header: "(VI)GSTM", size: 150 },
-      { accessorKey: "nt", header: "(VI)NT", size: 200 },
-      { accessorKey: "epp", header: "(VI)EPP", size: 200 },
-      { accessorKey: "w", header: "(VI)W", size: 200 },
-      { accessorKey: "mc", header: "(VI)MC", size: 200 },
-      { accessorKey: "cu/ca", header: "(VI)CU/CA", size: 200 },
-      { accessorKey: "asm", header: "(VI)ASM", size: 200 },
-      { accessorKey: "nt", header: "NT", size: 200 },
-      { accessorKey: "epp", header: "EPP", size: 200 },
-      { accessorKey: "w", header: "W", size: 200 },
-      { accessorKey: "mc", header: "MC", size: 200 },
-      { accessorKey: "cu/ca", header: "CU/CA", size: 200 },
-      { accessorKey: "asm", header: "ASM", size: 200 },
+      { accessorKey: "hypochondriasis", header: "Hypchondriasis", size: 150 },
+      { accessorKey: "denial", header: "Denial", size: 200 },
+      {
+        accessorKey: "interpersonal_problems",
+        header: "Interpersonal Problems",
+        size: 200,
+      },
+      { accessorKey: "alienation", header: "Alienation", size: 200 },
+      {
+        accessorKey: "persecutory_ideas",
+        header: "Persecutory Ideas",
+        size: 200,
+      },
+      { accessorKey: "anxiety", header: "Anxiety", size: 200 },
+      {
+        accessorKey: "thinking_disorder",
+        header: "Thinking Disorder",
+        size: 200,
+      },
+      {
+        accessorKey: "impulse_expression",
+        header: "Impress Expression",
+        size: 200,
+      },
+      {
+        accessorKey: "social_isolation",
+        header: "Social  Isolation",
+        size: 200,
+      },
+      {
+        accessorKey: "self_depreciation",
+        header: "Self Depreciation",
+        size: 200,
+      },
+      { accessorKey: "deviation", header: "Deviation", size: 200 },
     ],
     []
   );

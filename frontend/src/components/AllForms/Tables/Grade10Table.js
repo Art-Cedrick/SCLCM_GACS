@@ -49,19 +49,19 @@ const Grade10Table = () => {
 
   const columns = useMemo(
     () => [
-      { accessorKey: "studentname", header: "Student Name", size: 150 },
+      { accessorKey: "name", header: "Student Name", size: 150 },
       { accessorKey: "age", header: " Age", size: 150 },
       { accessorKey: "sex", header: "Sex", size: 200 },
-      { accessorKey: "gradelevel", header: "Grade Level", size: 150 },
+      { accessorKey: "gradeLevel", header: "Grade Level", size: 150 },
       { accessorKey: "section", header: "Section", size: 150 },
-      { accessorKey: "rawscore", header: "Raw Score", size: 150 },
+      { accessorKey: "raws_core", header: "Raw Score", size: 150 },
       {
         accessorKey: "percentile",
         header: "Percentile",
         size: 200,
       },
       {
-        accessorKey: "verbalinterpretation",
+        accessorKey: "verbal_interpretation",
         header: "Verbal Interpretation",
         size: 200,
       },

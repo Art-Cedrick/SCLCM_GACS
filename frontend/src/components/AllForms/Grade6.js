@@ -193,8 +193,8 @@ import {
   TextField
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import SingleSelect from "./AllForms/Forms/SingleSelect"; // Ensure this path is correct
-import AxiosInstance from "./AllForms/Axios";
+import SingleSelect from "./Forms/SingleSelect"; // Ensure this path is correct
+import AxiosInstance from "./Axios";
 
 
 const Grade6 = () => {
